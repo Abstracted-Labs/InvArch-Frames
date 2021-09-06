@@ -291,4 +291,5 @@ impl<T: Config> Pallet<T> {
 
     // TODO : WIP
     // - Add `amend` function
+    // Add test commit inside InvArch
 }
