@@ -184,13 +184,17 @@ pub mod pallet {
                     Error::<T>::AmendWithoutChanging
                 );
 
-                ipt_info.replace(IptInfo {
+                let new_ipt_info = ipt_info.replace(IptInfo {
                     metadata: bounded_metadata,
                     owner: owner.clone(),
                     data,
                 });
 
-                Self::deposit_event(Event::Amended(owner, ipt_id, data));
+                let new_ipt_id = NextIptId::<T>::get();
+                IptStorage::<T>::insert(new_ipt_id, new_ipt_info);
+                IptByOwner::<T>::insert(owner.clone(), new_ipt_id, ());
+
+                Self::deposit_event(Event::Amended(owner, new_ipt_id, data));
 
                 Ok(().into())
             })
