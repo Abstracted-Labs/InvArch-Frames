@@ -53,6 +53,7 @@ pub enum AnyId<IpsId, IpfId> {
     IpfId(IpfId),
 }
 
+#[cfg(feature = "utils")]
 pub mod utils {
     use codec::{Decode, Encode};
     use sp_io::hashing::blake2_256;

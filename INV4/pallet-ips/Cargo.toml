@@ -21,7 +21,7 @@ smallvec = "1.6.1"
 scale-info = { version = "2.0.0", features = ["derive"], default-features = false }
 
 # InvArch dependencies
-primitives = { package = "invarch-primitives", path = "../../primitives", default-features = false }
+primitives = { package = "invarch-primitives", path = "../../primitives", default-features = false, features = ["utils"] }
 ipf = { package = "pallet-ipf", path = "../pallet-ipf", default-features = false }
 ipt = { package = "pallet-ipt", path = "../pallet-ipt", default-features = false }
 
