@@ -1,56 +1,44 @@
-//! Benchmarks for IPS Pallet
+//! Benchmarks for IPT Pallet
 #![cfg(feature = "runtime-benchmarks")]
 
 use crate::*;
 use frame_benchmarking::{benchmarks, impl_benchmark_test_suite, whitelisted_caller};
 use frame_system::RawOrigin;
 
-benchmarks!{
-  create_ips {
+benchmarks! {
+  mint {
     let s in 0 .. 100;
     let caller: T::AccountId = whitelisted_caller();
   }: _(RawOrigin::Signed(caller), s)
   verify {}
 
-  destroy {
+  burn {
       let s in 0 .. 100;
       let caller: T::AccountId = whitelisted_caller();
   }: _(RawOrigin::Signed(caller), s)
   verify {}
 
-  append {
+  operate_multisig {
       let s in 0 .. 100;
       let caller: T::AccountId = whitelisted_caller();
   }: _(RawOrigin::Signed(caller), s)
   verify {}
 
-  remove {
+  vote_multisig {
       let s in 0 .. 100;
       let caller: T::AccountId = whitelisted_caller();
   }: _(RawOrigin::Signed(caller), s)
   verify {}
 
-  allow_replica {
+  withdraw_vote_multisig {
       let s in 0 .. 100;
       let caller: T::AccountId = whitelisted_caller();
   }: _(RawOrigin::Signed(caller), s)
   verify {}
 
-  disallow_replica {
-      let s in 0 .. 100;
-      let caller: T::AccountId = whitelisted_caller();
-  }: _(RawOrigin::Signed(caller), s)
-  verify {}
-
-  create_replica {
+  create_sub_asset {
       let s in 0 .. 100;
       let caller: T::AccountId = whitelisted_caller();
   }: _(RawOrigin::Signed(caller), s)
   verify {}
 }
-
-impl_benchmark_test_suite!(
-  YourPallet,
-  crate::mock::new_test_ext(),
-  crate::mock::Test,
-);
