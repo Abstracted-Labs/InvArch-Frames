@@ -5,7 +5,7 @@ use crate::*;
 use frame_benchmarking::{benchmarks, impl_benchmark_test_suite, whitelisted_caller};
 use frame_system::RawOrigin;
 
-benchmarks!{
+benchmarks! {
   create_ips {
     let s in 0 .. 100;
     let caller: T::AccountId = whitelisted_caller();
@@ -49,8 +49,4 @@ benchmarks!{
   verify {}
 }
 
-impl_benchmark_test_suite!(
-  YourPallet,
-  crate::mock::new_test_ext(),
-  crate::mock::Test,
-);
+impl_benchmark_test_suite!(Ips, crate::mock::new_test_ext(), crate::mock::Test,);

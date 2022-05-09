@@ -42,3 +42,5 @@ benchmarks! {
   }: _(RawOrigin::Signed(caller), s)
   verify {}
 }
+
+impl_benchmark_test_suite!(Ipt, crate::mock::new_test_ext(), crate::mock::Test,);

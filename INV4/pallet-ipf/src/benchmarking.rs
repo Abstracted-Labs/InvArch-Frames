@@ -25,4 +25,4 @@ benchmarks! {
   verify {}
 }
 
-impl_benchmark_test_suite!(YourPallet, crate::mock::new_test_ext(), crate::mock::Test,);
+impl_benchmark_test_suite!(Ipf, crate::mock::new_test_ext(), crate::mock::Test,);
