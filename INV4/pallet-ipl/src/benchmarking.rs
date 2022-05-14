@@ -9,13 +9,13 @@ benchmarks! {
   set_permission {
     let s in 0 .. 100;
     let caller: T::AccountId = whitelisted_caller();
-  }: _(RawOrigin::Signed(caller), s)
+  }: _(RawOrigin::Signed(caller), s, _, _, _)
   verify {}
 
   set_asset_weight {
       let s in 0 .. 100;
       let caller: T::AccountId = whitelisted_caller();
-  }: _(RawOrigin::Signed(caller), s)
+  }: _(RawOrigin::Signed(caller), s, _, _)
   verify {}
 }
 

@@ -8,7 +8,6 @@ use sp_runtime::traits::{AtLeast32BitUnsigned, Member};
 
 pub use pallet::*;
 
-#[cfg(feature = "runtime-benchmarks")]
 pub mod benchmarking;
 
 pub trait LicenseList {

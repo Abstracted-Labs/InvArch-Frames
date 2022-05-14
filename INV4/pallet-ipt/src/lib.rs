@@ -19,7 +19,6 @@ pub use pallet::*;
 // #[cfg(test)]
 // mod tests;
 
-#[cfg(feature = "runtime-benchmarks")]
 pub mod benchmarking;
 
 type OpaqueCall<T> = WrapperKeepOpaque<<T as Config>::Call>;
