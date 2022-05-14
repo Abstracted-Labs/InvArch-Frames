@@ -36,7 +36,7 @@ use sp_std::{convert::TryInto, vec::Vec};
 // mod tests;
 
 #[cfg(feature = "runtime-benchmarks")]
-mod benchmarking;
+pub mod benchmarking;
 
 /// Import the primitives crate
 use primitives::IpsInfo;

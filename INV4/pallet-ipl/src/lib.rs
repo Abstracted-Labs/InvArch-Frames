@@ -9,7 +9,7 @@ use sp_runtime::traits::{AtLeast32BitUnsigned, Member};
 pub use pallet::*;
 
 #[cfg(feature = "runtime-benchmarks")]
-mod benchmarking;
+pub mod benchmarking;
 
 pub trait LicenseList {
     type IpfsHash: core::hash::Hash;
