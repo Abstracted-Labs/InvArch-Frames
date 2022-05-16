@@ -1,22 +1,23 @@
 //! Benchmarks for IPL Pallet
 #![cfg(feature = "runtime-benchmarks")]
 
-use crate::*;
+use super::*;
 use frame_benchmarking::{benchmarks, impl_benchmark_test_suite, whitelisted_caller};
 use frame_system::RawOrigin;
+use primitives::OneOrPercent;
 
 benchmarks! {
   set_permission {
-    let s in 0 .. 100;
-    let caller: T::AccountId = whitelisted_caller();
-  }: _(RawOrigin::Signed(caller), s, _, _, _)
-  verify {}
+      let s in 0 .. 100;
+      let caller: T::AccountId = whitelisted_caller();
+      let sub_asset: T::IplId = Default::default();
+  }: _(RawOrigin::Signed(caller), T::IplId::from(s), sub_asset, Default::default(), true)
 
   set_asset_weight {
       let s in 0 .. 100;
       let caller: T::AccountId = whitelisted_caller();
-  }: _(RawOrigin::Signed(caller), s, _, _)
-  verify {}
+      let sub_asset: T::IplId = Default::default();
+  }: _(RawOrigin::Signed(caller), T::IplId::from(s), sub_asset, OneOrPercent::One)
 }
 
 impl_benchmark_test_suite!(Ipl, crate::mock::new_test_ext(), crate::mock::Test,);
