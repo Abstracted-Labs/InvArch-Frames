@@ -14,10 +14,10 @@ use sp_std::vec::Vec;
 
 pub use pallet::*;
 
-// #[cfg(test)]
-// mod mock;
-// #[cfg(test)]
-// mod tests;
+#[cfg(test)]
+mod mock;
+#[cfg(test)]
+mod tests;
 
 pub mod benchmarking;
 
@@ -102,7 +102,7 @@ pub mod pallet {
         type MaxIptMetadata: Get<u32>;
     }
 
-    type SubAssetsWithEndowment<T> = Vec<(
+    pub type SubAssetsWithEndowment<T> = Vec<(
         SubIptInfo<
             <T as pallet::Config>::IptId,
             BoundedVec<u8, <T as pallet::Config>::MaxIptMetadata>,
