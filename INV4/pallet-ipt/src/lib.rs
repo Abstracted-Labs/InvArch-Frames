@@ -102,7 +102,7 @@ pub mod pallet {
         type MaxIptMetadata: Get<u32>;
     }
 
-    type SubAssetsWithEndowment<T> = Vec<(
+    pub type SubAssetsWithEndowment<T> = Vec<(
         SubIptInfo<
             <T as pallet::Config>::IptId,
             BoundedVec<u8, <T as pallet::Config>::MaxIptMetadata>,

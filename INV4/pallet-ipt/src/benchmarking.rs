@@ -1,46 +1,73 @@
 //! Benchmarks for IPT Pallet
 #![cfg(feature = "runtime-benchmarks")]
 
-use crate::*;
-use frame_benchmarking::{benchmarks, impl_benchmark_test_suite, whitelisted_caller};
+use super::*;
+use frame_benchmarking::{account, benchmarks, impl_benchmark_test_suite, whitelisted_caller};
 use frame_system::RawOrigin;
+use primitives::SubIptInfo;
+use sp_core::blake2_256;
+
+const SEED: u32 = 0;
 
 benchmarks! {
-  mint {
-    let s in 0 .. 100;
-    let caller: T::AccountId = whitelisted_caller();
-  }: _(RawOrigin::Signed(caller), s)
-  verify {}
+    where_clause {
+        where T: pallet::Config<Call = Call<T>>
+    }
 
-  burn {
-      let s in 0 .. 100;
-      let caller: T::AccountId = whitelisted_caller();
-  }: _(RawOrigin::Signed(caller), s)
-  verify {}
+   mint {
+        let s in 0 .. 100;
+        let caller: T::AccountId = whitelisted_caller();
+        let amount: <T as pallet::Config>::Balance = 300u32.into();
+        let target: T::AccountId = account("target", 0, SEED);
+    }: _(RawOrigin::Signed(caller), (T::IptId::from(s), None), amount, target)
 
-  operate_multisig {
-      let s in 0 .. 100;
-      let caller: T::AccountId = whitelisted_caller();
-  }: _(RawOrigin::Signed(caller), s)
-  verify {}
+    burn {
+        let s in 0 .. 100;
+        let caller: T::AccountId = whitelisted_caller();
+        let amount: <T as pallet::Config>::Balance = 300u32.into();
+        let target: T::AccountId = account("target", 0, SEED);
+    }: _(RawOrigin::Signed(caller), (T::IptId::from(s), None), amount, target)
 
-  vote_multisig {
-      let s in 0 .. 100;
-      let caller: T::AccountId = whitelisted_caller();
-  }: _(RawOrigin::Signed(caller), s)
-  verify {}
+    operate_multisig {
+        let s in 0 .. 100;
+        let caller: T::AccountId = whitelisted_caller();
+        let target: T::AccountId = account("target", 0, SEED);
+        let call = Call::mint::<T> {
+            ipt_id: (T::IptId::from(s), None),
+            amount: 1000u32.into(),
+            target,
+        };
+    }: _(RawOrigin::Signed(caller), false, (T::IptId::from(s), None), Box::new(call))
 
-  withdraw_vote_multisig {
-      let s in 0 .. 100;
-      let caller: T::AccountId = whitelisted_caller();
-  }: _(RawOrigin::Signed(caller), s)
-  verify {}
+    vote_multisig {
+        let s in 0 .. 100;
+        let caller: T::AccountId = whitelisted_caller();
+        let target: T::AccountId = account("target", 0, SEED);
+        let call = Call::mint::<T> {
+            ipt_id: (T::IptId::from(s), None),
+            amount: 1000u32.into(),
+            target,
+        };
+    }: _(RawOrigin::Signed(caller), (T::IptId::from(s), None), blake2_256(&call.encode()))
 
-  create_sub_asset {
-      let s in 0 .. 100;
-      let caller: T::AccountId = whitelisted_caller();
-  }: _(RawOrigin::Signed(caller), s)
-  verify {}
+    withdraw_vote_multisig {
+        let s in 0 .. 100;
+        let caller: T::AccountId = whitelisted_caller();
+        let target: T::AccountId = account("target", 0, SEED);
+        let call = Call::mint::<T> {
+            ipt_id: (T::IptId::from(s), None),
+            amount: 1000u32.into(),
+            target,
+        };
+    }: _(RawOrigin::Signed(caller), (T::IptId::from(s), None), blake2_256(&call.encode()))
+
+    create_sub_asset {
+        let s in 0 .. 100;
+        let caller: T::AccountId = whitelisted_caller();
+        let sub_assets: SubAssetsWithEndowment<T> = vec![(
+            SubIptInfo {id: T::IptId::from(s), metadata: Default::default()}, (account("target", 0, SEED), 500u32.into())
+        )];
+    }: _(RawOrigin::Signed(caller), T::IptId::from(s), sub_assets)
 }
 
 impl_benchmark_test_suite!(Ipt, crate::mock::new_test_ext(), crate::mock::Test,);
