@@ -2,10 +2,12 @@
 #![cfg(feature = "runtime-benchmarks")]
 
 use super::*;
-use frame_benchmarking::{account, benchmarks, impl_benchmark_test_suite, whitelisted_caller};
+use frame_benchmarking::{
+    account, benchmarks, impl_benchmark_test_suite, vec, whitelisted_caller, Box,
+};
 use frame_system::RawOrigin;
 use primitives::SubIptInfo;
-use sp_core::blake2_256;
+use sp_io::hashing::blake2_256;
 
 const SEED: u32 = 0;
 
