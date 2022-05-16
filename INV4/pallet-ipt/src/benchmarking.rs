@@ -1,7 +1,7 @@
 //! Benchmarks for IPT Pallet
 #![cfg(feature = "runtime-benchmarks")]
 
-use super::*;
+pub use super::*;
 use frame_benchmarking::{
     account, benchmarks, impl_benchmark_test_suite, vec, whitelisted_caller, Box,
 };

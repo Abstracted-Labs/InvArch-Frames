@@ -1,7 +1,7 @@
 //! Benchmarks for IPS Pallet
 #![cfg(feature = "runtime-benchmarks")]
 
-use crate::*;
+pub use super::*;
 use frame_benchmarking::{benchmarks, impl_benchmark_test_suite, vec, whitelisted_caller};
 use frame_system::RawOrigin;
 use ipl::LicenseList;

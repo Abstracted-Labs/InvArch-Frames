@@ -1,7 +1,7 @@
 //! Benchmarks for IPF Pallet
 #![cfg(feature = "runtime-benchmarks")]
 
-use super::*;
+pub use super::*;
 use frame_benchmarking::{benchmarks, impl_benchmark_test_suite, vec, whitelisted_caller};
 use frame_system::{Config, RawOrigin};
 use sp_core::H256;

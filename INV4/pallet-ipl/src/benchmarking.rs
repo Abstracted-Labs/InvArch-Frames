@@ -1,7 +1,7 @@
 //! Benchmarks for IPL Pallet
 #![cfg(feature = "runtime-benchmarks")]
 
-use super::*;
+pub use super::*;
 use frame_benchmarking::{benchmarks, impl_benchmark_test_suite, whitelisted_caller};
 use frame_system::RawOrigin;
 use primitives::OneOrPercent;
