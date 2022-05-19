@@ -3,6 +3,50 @@
 use codec::{Decode, Encode, MaxEncodedLen};
 use scale_info::TypeInfo;
 use sp_runtime::Percent;
+use sp_std::{vec, vec::Vec};
+
+type Hash = sp_core::H256;
+
+pub trait LicenseList {
+    type IpfsHash: core::hash::Hash;
+    type LicenseMetadata;
+
+    fn get_hash_and_metadata(&self) -> (Self::LicenseMetadata, Self::IpfsHash);
+}
+
+#[derive(Debug, Clone, Encode, Decode, TypeInfo, Eq, PartialEq)]
+pub enum InvArchLicenses {
+    Apache2,
+    GPLv3,
+    Custom(Vec<u8>, Hash),
+}
+
+impl LicenseList for InvArchLicenses {
+    type IpfsHash = Hash; // License IPFS hash.
+    type LicenseMetadata = Vec<u8>; // License name.
+
+    fn get_hash_and_metadata(&self) -> (Self::LicenseMetadata, Self::IpfsHash) {
+        match self {
+            InvArchLicenses::Apache2 => (
+                vec![65, 112, 97, 99, 104, 97, 32, 118, 50, 46, 48],
+                [
+                    7, 57, 92, 251, 234, 183, 217, 144, 220, 196, 201, 132, 176, 249, 18, 224, 237,
+                    201, 2, 113, 146, 78, 111, 152, 92, 71, 16, 228, 87, 39, 81, 142,
+                ]
+                .into(),
+            ),
+            InvArchLicenses::GPLv3 => (
+                vec![71, 78, 85, 32, 71, 80, 76, 32, 118, 51],
+                [
+                    72, 7, 169, 24, 30, 7, 200, 69, 232, 27, 10, 138, 130, 253, 91, 158, 210, 95,
+                    127, 37, 85, 41, 106, 136, 66, 116, 64, 35, 252, 195, 69, 253,
+                ]
+                .into(),
+            ),
+            InvArchLicenses::Custom(metadata, hash) => (metadata.clone(), *hash),
+        }
+    }
+}
 
 #[derive(Encode, Decode, Clone, Copy, Eq, PartialEq, MaxEncodedLen, Debug, TypeInfo)]
 pub enum OneOrPercent {
