@@ -24,6 +24,8 @@ benchmarks! {
         let caller: T::AccountId = whitelisted_caller();
         let amount: <T as pallet::Config>::Balance = 300u32.into();
         let target: T::AccountId = account("target", 0, SEED);
+
+        Pallet::<T>::mint(RawOrigin::Signed(caller.clone()).into(), (T::IptId::from(s), None), amount, target.clone())?;
     }: _(RawOrigin::Signed(caller), (T::IptId::from(s), None), amount, target)
 
     operate_multisig {
