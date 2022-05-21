@@ -1,7 +1,7 @@
 use sp_std::convert::TryInto;
 
 use frame_support::{assert_noop, assert_ok};
-use primitives::{utils::multi_account_id, OneOrPercent, LicenseList};
+use primitives::{utils::multi_account_id, LicenseList, OneOrPercent};
 
 use crate::{
     mock::{ExtBuilder, InvArchLicenses, Ipl, Origin, Runtime, ALICE, BOB},

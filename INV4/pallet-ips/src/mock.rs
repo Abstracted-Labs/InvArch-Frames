@@ -8,8 +8,8 @@ use frame_support::{
         WeightToFeePolynomial,
     },
 };
-use primitives::LicenseList;
 use pallet_balances::AccountData;
+use primitives::LicenseList;
 use smallvec::smallvec;
 use sp_core::H256;
 use sp_runtime::{testing::Header, traits::IdentityLookup, Perbill};
