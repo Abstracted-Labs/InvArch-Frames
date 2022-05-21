@@ -8,7 +8,7 @@ use frame_support::{
         WeightToFeePolynomial,
     },
 };
-use ipl::LicenseList;
+use primitives::LicenseList;
 use pallet_balances::AccountData;
 use smallvec::smallvec;
 use sp_core::H256;

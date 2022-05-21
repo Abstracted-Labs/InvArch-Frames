@@ -9,7 +9,7 @@ use frame_support::{
     },
 };
 use pallet_balances::AccountData;
-use pallet_ipl::LicenseList;
+use primitives::LicenseList;
 use smallvec::smallvec;
 use sp_core::H256;
 use sp_runtime::{testing::Header, traits::IdentityLookup, Perbill};

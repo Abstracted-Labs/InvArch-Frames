@@ -1,11 +1,11 @@
 use sp_std::convert::TryInto;
 
 use frame_support::{assert_noop, assert_ok};
-use primitives::{utils::multi_account_id, OneOrPercent};
+use primitives::{utils::multi_account_id, OneOrPercent, LicenseList};
 
 use crate::{
     mock::{ExtBuilder, InvArchLicenses, Ipl, Origin, Runtime, ALICE, BOB},
-    AssetWeight, Config, Error, Ipl as IplStorage, IplInfoOf, LicenseList, Permissions,
+    AssetWeight, Config, Error, Ipl as IplStorage, IplInfoOf, Permissions,
 };
 use sp_runtime::{DispatchError, Percent};
 

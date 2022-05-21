@@ -1,4 +1,4 @@
-use super::LicenseList;
+use primitives::LicenseList;
 use frame_support::{
     construct_runtime, parameter_types,
     traits::Contains,
