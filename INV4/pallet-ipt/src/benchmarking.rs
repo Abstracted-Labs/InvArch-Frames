@@ -12,11 +12,7 @@ use sp_io::hashing::blake2_256;
 const SEED: u32 = 0;
 
 benchmarks! {
-    where_clause {
-        where T: pallet::Config<Call = Call<T>>
-    }
-
-   mint {
+    mint {
         let s in 0 .. 100;
         let caller: T::AccountId = whitelisted_caller();
         let amount: <T as pallet::Config>::Balance = 300u32.into();
@@ -31,36 +27,27 @@ benchmarks! {
     }: _(RawOrigin::Signed(caller), (T::IptId::from(s), None), amount, target)
 
     operate_multisig {
-        let s in 0 .. 100;
+        let s in 0 .. 100_000;
         let caller: T::AccountId = whitelisted_caller();
-        let target: T::AccountId = account("target", 0, SEED);
-        let call = Call::mint::<T> {
-            ipt_id: (T::IptId::from(s), None),
-            amount: 1000u32.into(),
-            target,
-        };
+        let call: <T as pallet::Config>::Call = frame_system::Call::<T>::remark {
+            remark: vec![0; s as usize],
+        }.into();
     }: _(RawOrigin::Signed(caller), false, (T::IptId::from(s), None), Box::new(call))
 
     vote_multisig {
-        let s in 0 .. 100;
+        let s in 0 .. 100_000;
         let caller: T::AccountId = whitelisted_caller();
-        let target: T::AccountId = account("target", 0, SEED);
-        let call = Call::mint::<T> {
-            ipt_id: (T::IptId::from(s), None),
-            amount: 1000u32.into(),
-            target,
-        };
+        let call: <T as pallet::Config>::Call = frame_system::Call::<T>::remark {
+            remark: vec![0; s as usize],
+        }.into();
     }: _(RawOrigin::Signed(caller), (T::IptId::from(s), None), blake2_256(&call.encode()))
 
     withdraw_vote_multisig {
-        let s in 0 .. 100;
+        let s in 0 .. 100_000;
         let caller: T::AccountId = whitelisted_caller();
-        let target: T::AccountId = account("target", 0, SEED);
-        let call = Call::mint::<T> {
-            ipt_id: (T::IptId::from(s), None),
-            amount: 1000u32.into(),
-            target,
-        };
+        let call: <T as pallet::Config>::Call = frame_system::Call::<T>::remark {
+            remark: vec![0; s as usize],
+        }.into();
     }: _(RawOrigin::Signed(caller), (T::IptId::from(s), None), blake2_256(&call.encode()))
 
     create_sub_asset {

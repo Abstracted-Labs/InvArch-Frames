@@ -10,13 +10,6 @@ pub use pallet::*;
 
 pub mod benchmarking;
 
-pub trait LicenseList {
-    type IpfsHash: core::hash::Hash;
-    type LicenseMetadata;
-
-    fn get_hash_and_metadata(&self) -> (Self::LicenseMetadata, Self::IpfsHash);
-}
-
 #[cfg(test)]
 mod mock;
 #[cfg(test)]
@@ -26,8 +19,7 @@ mod tests;
 pub mod pallet {
     use super::*;
     use core::iter::Sum;
-    use primitives::OneOrPercent;
-    use primitives::{utils::multi_account_id, IplInfo};
+    use primitives::{utils::multi_account_id, IplInfo, LicenseList, OneOrPercent};
     use scale_info::prelude::fmt::Display;
     use sp_std::convert::TryInto;
     use sp_std::vec::Vec;
