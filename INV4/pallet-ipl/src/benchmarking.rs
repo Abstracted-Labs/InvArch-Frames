@@ -17,6 +17,8 @@ benchmarks! {
       let s in 0 .. 100;
       let caller: T::AccountId = whitelisted_caller();
       let sub_asset: T::IplId = Default::default();
+
+      Pallet::<T>::set_permission(RawOrigin::Signed(caller.clone()).into(),T::IplId::from(s), sub_asset, Default::default(), true)?;
   }: _(RawOrigin::Signed(caller), T::IplId::from(s), sub_asset, OneOrPercent::One)
 }
 
