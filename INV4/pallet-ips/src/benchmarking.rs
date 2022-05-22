@@ -25,6 +25,8 @@ benchmarks! {
         let metadata: Vec<u8> = vec![1];
         let data: Vec<<T as ipf::Config>::IpfId> = vec![];
         let license = InvArchLicenses::GPLv3;
+
+        //crate::Ipf::<T>::mint(RawOrigin::Signed(caller.clone()).into(), metadata, data)?;
     }: _(RawOrigin::Signed(caller), metadata, data, true, None, license, percent!(50), One, false)
 
     destroy {
