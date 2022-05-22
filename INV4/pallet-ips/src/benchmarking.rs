@@ -8,7 +8,13 @@ use primitives::{
     InvArchLicenses,
     OneOrPercent::{One, ZeroPoint},
 };
+use sp_core::H256;
 use sp_runtime::Percent;
+
+const MOCK_DATA: [u8; 32] = [
+    12, 47, 182, 72, 140, 51, 139, 219, 171, 74, 247, 18, 123, 28, 200, 236, 221, 85, 25, 12, 218,
+    0, 230, 247, 32, 73, 152, 66, 243, 27, 92, 95,
+];
 
 macro_rules! percent {
     ($x:expr) => {
@@ -18,15 +24,16 @@ macro_rules! percent {
 
 benchmarks! {
     where_clause {
-        where T: ipl::Config<Licenses = InvArchLicenses>
+        where T: ipl::Config<Licenses = InvArchLicenses> + frame_system::Config<Hash = H256>
     }
     create_ips {
         let caller: T::AccountId = whitelisted_caller();
         let metadata: Vec<u8> = vec![1];
         let data: Vec<<T as ipf::Config>::IpfId> = vec![];
+        let ipf_data = H256::from(MOCK_DATA);
         let license = InvArchLicenses::GPLv3;
 
-        //crate::Ipf::<T>::mint(RawOrigin::Signed(caller.clone()).into(), metadata, data)?;
+        ipf::Pallet::<T>::mint(RawOrigin::Signed(caller.clone()).into(), metadata.clone(), ipf_data)?;
     }: _(RawOrigin::Signed(caller), metadata, data, true, None, license, percent!(50), One, false)
 
     destroy {
@@ -44,9 +51,10 @@ benchmarks! {
         let caller: T::AccountId = whitelisted_caller();
         let metadata: Vec<u8> = vec![1];
         let data: Vec<<T as ipf::Config>::IpfId> = vec![];
+        let ipf_data = H256::from(MOCK_DATA);
         let license = InvArchLicenses::GPLv3;
 
-        //crate::Ipf::<T>::mint(RawOrigin::Signed(caller.clone()).into(), metadata, data)?;
+        ipf::Pallet::<T>::mint(RawOrigin::Signed(caller.clone()).into(), metadata.clone(), ipf_data)?;
 
         Pallet::<T>::create_ips(RawOrigin::Signed(caller.clone()).into(), metadata, data, true, None, license, percent!(50), One, false)?;
 
