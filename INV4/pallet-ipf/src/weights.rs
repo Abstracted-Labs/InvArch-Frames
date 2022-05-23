@@ -40,14 +40,14 @@ impl<T: frame_system::Config> pallet_ipf::WeightInfo for WeightInfo<T> {
 	// Storage: Ipf IpfByOwner (r:0 w:1)
 	// Storage: Ipf IpfStorage (r:0 w:1)
 	fn mint() -> Weight {
-		(14_407_000 as Weight)
+		(17_563_000 as Weight)
 			.saturating_add(T::DbWeight::get().reads(1 as Weight))
 			.saturating_add(T::DbWeight::get().writes(3 as Weight))
 	}
 	// Storage: Ipf IpfStorage (r:1 w:1)
 	// Storage: Ipf IpfByOwner (r:0 w:1)
 	fn burn() -> Weight {
-		(14_076_000 as Weight)
+		(17_272_000 as Weight)
 			.saturating_add(T::DbWeight::get().reads(1 as Weight))
 			.saturating_add(T::DbWeight::get().writes(2 as Weight))
 	}
