@@ -9,12 +9,19 @@ use primitives::{
     OneOrPercent::{One, ZeroPoint},
 };
 use sp_core::H256;
-use sp_runtime::Percent;
+use sp_runtime::{traits::UniqueSaturatedInto, Percent};
 
 const MOCK_DATA: [u8; 32] = [
     12, 47, 182, 72, 140, 51, 139, 219, 171, 74, 247, 18, 123, 28, 200, 236, 221, 85, 25, 12, 218,
     0, 230, 247, 32, 73, 152, 66, 243, 27, 92, 95,
 ];
+
+pub type Balance = u128;
+
+fn dollar(d: u32) -> Balance {
+	let d: Balance = d.into();
+	d.saturating_mul(1_000_000_000_000_000_000)
+}
 
 macro_rules! percent {
     ($x:expr) => {
@@ -32,6 +39,9 @@ benchmarks! {
         let data: Vec<<T as ipf::Config>::IpfId> = vec![];
         let ipf_data = H256::from(MOCK_DATA);
         let license = InvArchLicenses::GPLv3;
+        let base_currency_amount = dollar(1000);
+
+        <T as pallet::Config>::Currency::make_free_balance_be(&caller, base_currency_amount.unique_saturated_into());
 
         ipf::Pallet::<T>::mint(RawOrigin::Signed(caller.clone()).into(), metadata.clone(), ipf_data)?;
     }: _(RawOrigin::Signed(caller), metadata, data, true, None, license, percent!(50), One, false)
