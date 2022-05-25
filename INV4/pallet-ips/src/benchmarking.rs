@@ -19,8 +19,8 @@ const MOCK_DATA: [u8; 32] = [
 pub type Balance = u128;
 
 fn dollar(d: u32) -> Balance {
-	let d: Balance = d.into();
-	d.saturating_mul(1_000_000_000_000_000_000)
+    let d: Balance = d.into();
+    d.saturating_mul(1_000_000_000_000_000_000)
 }
 
 macro_rules! percent {
