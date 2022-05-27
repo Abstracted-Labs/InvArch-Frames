@@ -105,7 +105,6 @@ benchmarks! {
     allow_replica {
         let s in 0 .. 100;
         let caller: T::AccountId = whitelisted_caller();
-
         let metadata: Vec<u8> = vec![1];
         let data: Vec<<T as ipf::Config>::IpfId> = vec![];
         let ipf_data = H256::from(MOCK_DATA);
@@ -120,21 +119,45 @@ benchmarks! {
 
         // TODO: set permision WIP
 
-
     }: _(RawOrigin::Signed(caller), T::IpsId::from(s))
 
     disallow_replica {
-        let s in 0 .. 100;
         let caller: T::AccountId = whitelisted_caller();
-    }: _(RawOrigin::Signed(caller), T::IpsId::from(s))
+        let metadata: Vec<u8> = vec![1];
+        let data: Vec<<T as ipf::Config>::IpfId> = vec![];
+        let ipf_data = H256::from(MOCK_DATA);
+        let license = InvArchLicenses::GPLv3;
+        let base_currency_amount = dollar(1000);
+
+        <T as pallet::Config>::Currency::make_free_balance_be(&caller, base_currency_amount.unique_saturated_into());
+
+        ipf::Pallet::<T>::mint(RawOrigin::Signed(caller.clone()).into(), metadata.clone(), ipf_data)?;
+
+        Pallet::<T>::create_ips(RawOrigin::Signed(caller.clone()).into(), metadata, data, true, None, license, percent!(50), One, false)?;
+
+        // TODO: set permision WIP
+        
+    }: _(RawOrigin::Signed(caller), T::IpsId::from(0u32))
 
     create_replica {
-        let s in 0 .. 100;
         let caller: T::AccountId = whitelisted_caller();
+        let metadata: Vec<u8> = vec![1];
+        let data: Vec<<T as ipf::Config>::IpfId> = vec![];
+        let ipf_data = H256::from(MOCK_DATA);
         let license = InvArchLicenses::GPLv3;
+        let base_currency_amount = dollar(1000);
 
-        Pallet::<T>::allow_replica(RawOrigin::Signed(caller.clone()).into(), T::IpsId::from(s))?;
-    }: _(RawOrigin::Signed(caller), T::IpsId::from(s), license, percent!(50), One, false)
+        <T as pallet::Config>::Currency::make_free_balance_be(&caller, base_currency_amount.unique_saturated_into());
+
+        ipf::Pallet::<T>::mint(RawOrigin::Signed(caller.clone()).into(), metadata.clone(), ipf_data)?;
+
+        Pallet::<T>::create_ips(RawOrigin::Signed(caller.clone()).into(), metadata, data, true, None, license.clone(), percent!(50), One, false)?;
+
+        Pallet::<T>::allow_replica(RawOrigin::Signed(caller.clone()).into(), T::IpsId::from(0u32))?;
+
+        // TODO: set permision WIP
+
+    }: _(RawOrigin::Signed(caller), T::IpsId::from(0u32), license, percent!(50), One, false)
 }
 
 impl_benchmark_test_suite!(Ips, crate::mock::new_test_ext(), crate::mock::Test,);
