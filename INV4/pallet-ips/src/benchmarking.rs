@@ -136,7 +136,7 @@ benchmarks! {
         Pallet::<T>::create_ips(RawOrigin::Signed(caller.clone()).into(), metadata, data, true, None, license, percent!(50), One, false)?;
 
         // TODO: set permision WIP
-        
+
     }: _(RawOrigin::Signed(caller), T::IpsId::from(0u32))
 
     create_replica {
