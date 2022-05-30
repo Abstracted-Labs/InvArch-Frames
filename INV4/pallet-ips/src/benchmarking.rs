@@ -5,8 +5,10 @@ pub use super::*;
 use frame_benchmarking::{benchmarks, impl_benchmark_test_suite, vec, whitelisted_caller};
 use frame_system::RawOrigin;
 use primitives::{
-    InvArchLicenses,
+    utils::multi_account_id,
+    AnyId, InvArchLicenses, IpsType, IptInfo,
     OneOrPercent::{One, ZeroPoint},
+    Parentage,
 };
 use sp_core::H256;
 use sp_runtime::{traits::UniqueSaturatedInto, Percent};
@@ -48,6 +50,7 @@ benchmarks! {
 
     destroy {
         let caller: T::AccountId = whitelisted_caller();
+        let multi_account = Parentage::Parent(multi_account_id::<T, T::IpsId>(T::IpsId::from(0u32), None));
         let metadata: Vec<u8> = vec![1];
         let data: Vec<<T as ipf::Config>::IpfId> = vec![];
         let ipf_data = H256::from(MOCK_DATA);
@@ -62,7 +65,9 @@ benchmarks! {
 
         // TODO: set permision WIP
 
-    }: _(RawOrigin::Signed(caller), T::IpsId::from(0u32))
+        IpsStorage::<T>::get(T::IpsId::from(0u32)).ok_or(Error::IpsNotFound);
+
+    }: _(RawOrigin::Signed(multi_account).into(), T::IpsId::from(0u32))
 
     append {
         let s in 0 .. 100;
