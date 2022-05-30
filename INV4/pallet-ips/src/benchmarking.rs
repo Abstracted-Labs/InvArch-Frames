@@ -4,9 +4,9 @@
 pub use super::*;
 use frame_benchmarking::{benchmarks, impl_benchmark_test_suite, vec, whitelisted_caller};
 use frame_system::RawOrigin;
-use primitives::{ 
+use primitives::{
     InvArchLicenses,
-    OneOrPercent::{One, ZeroPoint}
+    OneOrPercent::{One, ZeroPoint},
 };
 use sp_core::H256;
 use sp_runtime::{traits::UniqueSaturatedInto, Percent};
