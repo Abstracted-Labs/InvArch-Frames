@@ -125,11 +125,11 @@ benchmarks! {
 
         ipf::Pallet::<T>::mint(RawOrigin::Signed(caller.clone()).into(), metadata.clone(), ipf_data)?;
 
-        Pallet::<T>::create_ips(RawOrigin::Signed(caller.clone()).into(), metadata, data, true, None, license, percent!(50), One, false)?;
+        Pallet::<T>::create_ips(RawOrigin::Signed(caller.clone()).into(), metadata, data, true, None, license, percent!(50), One, true)?;
 
-        // TODO: set permision WIP
+        // TODO: change value
 
-    }: _(RawOrigin::Signed(ips_account), T::IpsId::from(s))
+    }: _(RawOrigin::Signed(ips_account), T::IpsId::from(ips_id))
 
     disallow_replica {
         let caller: T::AccountId = whitelisted_caller();
@@ -148,8 +148,6 @@ benchmarks! {
         ipf::Pallet::<T>::mint(RawOrigin::Signed(caller.clone()).into(), metadata.clone(), ipf_data)?;
 
         Pallet::<T>::create_ips(RawOrigin::Signed(caller.clone()).into(), metadata, data, true, None, license, percent!(50), One, false)?;
-
-        // TODO: set permision WIP
 
     }: _(RawOrigin::Signed(ips_account), T::IpsId::from(0u32))
 
@@ -171,11 +169,11 @@ benchmarks! {
 
         Pallet::<T>::create_ips(RawOrigin::Signed(caller.clone()).into(), metadata, data, true, None, license.clone(), percent!(50), One, false)?;
 
-        Pallet::<T>::allow_replica(RawOrigin::Signed(caller.clone()).into(), T::IpsId::from(0u32))?;
+        Pallet::<T>::allow_replica(RawOrigin::Signed(ips_account.clone()).into(), T::IpsId::from(0u32))?;
 
-        // TODO: set permision WIP
+        // TODO: change value
 
-    }: _(RawOrigin::Signed(ips_account), T::IpsId::from(0u32), license, percent!(50), One, false)
+    }: _(RawOrigin::Signed(ips_account), T::IpsId::from(ips_id), license, percent!(50), One, true)
 }
 
 impl_benchmark_test_suite!(Ips, crate::mock::new_test_ext(), crate::mock::Test,);
