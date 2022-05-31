@@ -116,6 +116,10 @@ benchmarks! {
         let ipf_data = H256::from(MOCK_DATA);
         let license = InvArchLicenses::GPLv3;
         let base_currency_amount = dollar(1000);
+        let ips_id = T::IpsId::from(0u32);
+        let ips_account = primitives::utils::multi_account_id::<T, <T as Config>::IpsId>(
+            ips_id, None,
+        );
 
         <T as pallet::Config>::Currency::make_free_balance_be(&caller, base_currency_amount.unique_saturated_into());
 
@@ -125,7 +129,7 @@ benchmarks! {
 
         // TODO: set permision WIP
 
-    }: _(RawOrigin::Signed(caller), T::IpsId::from(s))
+    }: _(RawOrigin::Signed(ips_account), T::IpsId::from(s))
 
     disallow_replica {
         let caller: T::AccountId = whitelisted_caller();
@@ -134,6 +138,10 @@ benchmarks! {
         let ipf_data = H256::from(MOCK_DATA);
         let license = InvArchLicenses::GPLv3;
         let base_currency_amount = dollar(1000);
+        let ips_id = T::IpsId::from(0u32);
+        let ips_account = primitives::utils::multi_account_id::<T, <T as Config>::IpsId>(
+            ips_id, None,
+        );
 
         <T as pallet::Config>::Currency::make_free_balance_be(&caller, base_currency_amount.unique_saturated_into());
 
@@ -143,7 +151,7 @@ benchmarks! {
 
         // TODO: set permision WIP
 
-    }: _(RawOrigin::Signed(caller), T::IpsId::from(0u32))
+    }: _(RawOrigin::Signed(ips_account), T::IpsId::from(0u32))
 
     create_replica {
         let caller: T::AccountId = whitelisted_caller();
@@ -152,6 +160,10 @@ benchmarks! {
         let ipf_data = H256::from(MOCK_DATA);
         let license = InvArchLicenses::GPLv3;
         let base_currency_amount = dollar(1000);
+        let ips_id = T::IpsId::from(0u32);
+        let ips_account = primitives::utils::multi_account_id::<T, <T as Config>::IpsId>(
+            ips_id, None,
+        );
 
         <T as pallet::Config>::Currency::make_free_balance_be(&caller, base_currency_amount.unique_saturated_into());
 
@@ -163,7 +175,7 @@ benchmarks! {
 
         // TODO: set permision WIP
 
-    }: _(RawOrigin::Signed(caller), T::IpsId::from(0u32), license, percent!(50), One, false)
+    }: _(RawOrigin::Signed(ips_account), T::IpsId::from(0u32), license, percent!(50), One, false)
 }
 
 impl_benchmark_test_suite!(Ips, crate::mock::new_test_ext(), crate::mock::Test,);
