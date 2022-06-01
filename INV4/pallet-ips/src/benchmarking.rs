@@ -7,6 +7,7 @@ use frame_system::RawOrigin;
 use primitives::{
     InvArchLicenses,
     OneOrPercent::{One, ZeroPoint},
+    Parentage, IpsInfo, IpsType
 };
 use sp_core::H256;
 use sp_runtime::{traits::UniqueSaturatedInto, Percent};
@@ -107,7 +108,6 @@ benchmarks! {
     }: _(RawOrigin::Signed(ips_account), T::IpsId::from(0u32), Default::default(), Some(vec![s.try_into().unwrap()]))
 
     allow_replica {
-        let s in 0 .. 100;
         let caller: T::AccountId = whitelisted_caller();
         let metadata: Vec<u8> = vec![1];
         let data: Vec<<T as ipf::Config>::IpfId> = vec![];
@@ -118,6 +118,13 @@ benchmarks! {
         let ips_account = primitives::utils::multi_account_id::<T, <T as Config>::IpsId>(
             ips_id, None,
         );
+        // let ips_info = IpsInfo::<T>::from(
+        //     Parentage::Parent(ips_account),
+        //     metadata,
+        //     data,
+        //     IpsType::Normal,
+        //     true,
+        // );
 
         <T as pallet::Config>::Currency::make_free_balance_be(&caller, base_currency_amount.unique_saturated_into());
 
@@ -126,6 +133,9 @@ benchmarks! {
         Pallet::<T>::create_ips(RawOrigin::Signed(caller.clone()).into(), metadata, data, true, None, license, percent!(50), One, true)?;
 
         // TODO: change value
+
+        // Pallet::<T>::allow_replica(RawOrigin::Signed(ips_account.clone()).into(), T::IpsId::from(ips_info))?;
+
 
     }: _(RawOrigin::Signed(ips_account), T::IpsId::from(ips_id))
 
