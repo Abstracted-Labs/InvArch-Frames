@@ -104,8 +104,6 @@ benchmarks! {
 
         Pallet::<T>::append(RawOrigin::Signed(caller.clone()).into(), T::IpsId::from(0u32), Default::default(), Some(vec![s.try_into().unwrap()]))?;
 
-        // TODO: set permision WIP
-
     }: _(RawOrigin::Signed(ips_account), T::IpsId::from(0u32), Default::default(), Some(vec![s.try_into().unwrap()]))
 
     allow_replica {
