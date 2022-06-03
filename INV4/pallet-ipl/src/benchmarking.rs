@@ -32,12 +32,17 @@ benchmarks! {
   }: _(RawOrigin::Signed(ipl_account), T::IplId::from(0u32), sub_asset, Default::default(), true)
 
   set_asset_weight {
-      let s in 0 .. 100;
-      let caller: T::AccountId = whitelisted_caller();
+      let caller: T::AccountId = account("caller", 0, SEED);
       let sub_asset: T::IplId = Default::default();
+      let ipl_id = T::IplId::from(0u32);
+      let ipl_account = primitives::utils::multi_account_id::<T, <T as Config>::IplId>(
+          ipl_id, None,
+      );
 
-      Pallet::<T>::set_permission(RawOrigin::Signed(caller.clone()).into(),T::IplId::from(s), sub_asset, Default::default(), true)?;
-  }: _(RawOrigin::Signed(caller), T::IplId::from(s), sub_asset, One)
+      Pallet::<T>::create(T::IplId::from(ipl_id), InvArchLicenses::GPLv3, percent!(50), One, false);
+
+      Pallet::<T>::set_permission(RawOrigin::Signed(ipl_account.clone()).into(),T::IplId::from(0u32), sub_asset, Default::default(), true)?;
+  }: _(RawOrigin::Signed(ipl_account), T::IplId::from(0u32), sub_asset, percent!(30))
 }
 
 impl_benchmark_test_suite!(Ipl, crate::mock::new_test_ext(), crate::mock::Test,);

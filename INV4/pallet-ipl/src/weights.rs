@@ -17,7 +17,7 @@
 // --pallet
 // pallet-ipl
 // --extrinsic
-// set_permission
+// *
 // --steps
 // 20
 // --repeat
@@ -39,7 +39,14 @@ impl<T: frame_system::Config> pallet_ipl::WeightInfo for WeightInfo<T> {
 	// Storage: Ipl Ipl (r:1 w:0)
 	// Storage: Ipl Permissions (r:0 w:1)
 	fn set_permission() -> Weight {
-		(14_678_000 as Weight)
+		(14_457_000 as Weight)
+			.saturating_add(T::DbWeight::get().reads(1 as Weight))
+			.saturating_add(T::DbWeight::get().writes(1 as Weight))
+	}
+	// Storage: Ipl Ipl (r:1 w:0)
+	// Storage: Ipl AssetWeight (r:0 w:1)
+	fn set_asset_weight() -> Weight {
+		(14_728_000 as Weight)
 			.saturating_add(T::DbWeight::get().reads(1 as Weight))
 			.saturating_add(T::DbWeight::get().writes(1 as Weight))
 	}
