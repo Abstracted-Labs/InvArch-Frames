@@ -6,20 +6,45 @@ use frame_benchmarking::{
     account, benchmarks, impl_benchmark_test_suite, vec, whitelisted_caller, Box,
 };
 use frame_system::RawOrigin;
-use primitives::SubIptInfo;
+use primitives::{InvArchLicenses, OneOrPercent::*, SubIptInfo};
 use sp_io::hashing::blake2_256;
+use sp_runtime::{traits::UniqueSaturatedInto, Percent};
+
+pub type Balance = u128;
+pub type ExistentialDeposit = u128;
+
+macro_rules! percent {
+    ($x:expr) => {
+        ZeroPoint(Percent::from_percent($x))
+    };
+}
 
 const SEED: u32 = 0;
 
+fn dollar(d: u32) -> Balance {
+    let d: Balance = d.into();
+    d.saturating_mul(1_000_000_000_000_000_000)
+}
+
 benchmarks! {
+    where_clause {
+        where T: pallet::Config<Licenses = InvArchLicenses>
+    }
+
     mint {
-        let s in 0 .. 100;
         let caller: T::AccountId = whitelisted_caller();
         let amount: <T as pallet::Config>::Balance = 300u32.into();
         let target: T::AccountId = account("target", 0, SEED);
+        let base_currency_amount = dollar(1000);
+        let endowed_accounts = vec![(caller.clone(), amount)];
+        let ipt_sub_assets = vec![SubIptInfo<0, <0, 100>, 10>];
 
-        Pallet::<T>::internal_mint((T::IptId::from(s), None), target.clone(), amount.clone())?;
-    }: _(RawOrigin::Signed(caller), (T::IptId::from(s), None), amount, target)
+        <T as pallet::Config>::Currency::make_free_balance_be(&caller, base_currency_amount.unique_saturated_into());
+
+
+        Pallet::<T>::create(caller.clone(), T::IptId::from(0u32), endowed_accounts, ipt_sub_assets, InvArchLicenses::GPLv3, percent!(50), One, false);
+
+    }: _(RawOrigin::Signed(caller), (T::IptId::from(0u32), None), amount, target)
 
     burn {
         let s in 0 .. 100;
