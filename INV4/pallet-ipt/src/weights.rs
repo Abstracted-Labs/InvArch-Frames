@@ -17,7 +17,7 @@
 // --pallet
 // pallet-ipt
 // --extrinsic
-// mint
+// burn
 // --steps
 // 20
 // --repeat
@@ -38,8 +38,8 @@ pub struct WeightInfo<T>(PhantomData<T>);
 impl<T: frame_system::Config> pallet_ipt::WeightInfo for WeightInfo<T> {
 	// Storage: Ipt Ipt (r:1 w:1)
 	// Storage: Ipt Balance (r:1 w:1)
-	fn mint() -> Weight {
-		(20_464_000 as Weight)
+	fn burn() -> Weight {
+		(21_371_000 as Weight)
 			.saturating_add(T::DbWeight::get().reads(2 as Weight))
 			.saturating_add(T::DbWeight::get().writes(2 as Weight))
 	}

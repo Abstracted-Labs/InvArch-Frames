@@ -40,21 +40,26 @@ benchmarks! {
 
         <T as pallet::Config>::Currency::make_free_balance_be(&caller, base_currency_amount.unique_saturated_into());
 
-
         Pallet::<T>::create(caller.clone(), T::IptId::from(0u32), endowed_accounts, Default::default(), InvArchLicenses::GPLv3, percent!(50), One, false);
 
     }: _(RawOrigin::Signed(caller), (T::IptId::from(0u32), None), amount, target)
 
     burn {
-        let s in 0 .. 100;
         let caller: T::AccountId = whitelisted_caller();
         let amount: <T as pallet::Config>::Balance = 300u32.into();
         let target: T::AccountId = account("target", 0, SEED);
+        let base_currency_amount = dollar(1000);
+        let endowed_accounts = vec![(caller.clone(), amount)];
 
-        Pallet::<T>::internal_mint((T::IptId::from(s), None), target.clone(), amount.clone())?;
+        <T as pallet::Config>::Currency::make_free_balance_be(&caller, base_currency_amount.unique_saturated_into());
 
-        Pallet::<T>::mint(RawOrigin::Signed(caller.clone()).into(), (T::IptId::from(s), None), amount, target.clone())?;
-    }: _(RawOrigin::Signed(caller), (T::IptId::from(s), None), amount, target)
+        Pallet::<T>::create(caller.clone(), T::IptId::from(0u32), endowed_accounts, Default::default(), InvArchLicenses::GPLv3, percent!(50), One, false);
+
+        Pallet::<T>::internal_mint((T::IptId::from(0u32), None), target.clone(), amount.clone())?;
+
+        Pallet::<T>::mint(RawOrigin::Signed(caller.clone()).into(), (T::IptId::from(0u32), None), amount, target.clone())?;
+
+    }: _(RawOrigin::Signed(caller), (T::IptId::from(0u32), None), amount, target)
 
     operate_multisig {
         let s in 0 .. 100_000;
