@@ -36,7 +36,7 @@ benchmarks! {
         let amount: <T as pallet::Config>::Balance = 300u32.into();
         let target: T::AccountId = account("target", 0, SEED);
         let base_currency_amount = dollar(1000);
-        let endowed_accounts = vec![(caller.clone(), amount)];    
+        let endowed_accounts = vec![(caller.clone(), amount)];
 
         <T as pallet::Config>::Currency::make_free_balance_be(&caller, base_currency_amount.unique_saturated_into());
 
