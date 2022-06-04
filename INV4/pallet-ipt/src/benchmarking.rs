@@ -36,13 +36,12 @@ benchmarks! {
         let amount: <T as pallet::Config>::Balance = 300u32.into();
         let target: T::AccountId = account("target", 0, SEED);
         let base_currency_amount = dollar(1000);
-        let endowed_accounts = vec![(caller.clone(), amount)];
-        let ipt_sub_assets = vec![SubIptInfo<0, <0, 100>, 10>];
+        let endowed_accounts = vec![(caller.clone(), amount)];    
 
         <T as pallet::Config>::Currency::make_free_balance_be(&caller, base_currency_amount.unique_saturated_into());
 
 
-        Pallet::<T>::create(caller.clone(), T::IptId::from(0u32), endowed_accounts, ipt_sub_assets, InvArchLicenses::GPLv3, percent!(50), One, false);
+        Pallet::<T>::create(caller.clone(), T::IptId::from(0u32), endowed_accounts, Default::default(), InvArchLicenses::GPLv3, percent!(50), One, false);
 
     }: _(RawOrigin::Signed(caller), (T::IptId::from(0u32), None), amount, target)
 
