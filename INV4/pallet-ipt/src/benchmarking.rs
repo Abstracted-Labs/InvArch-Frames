@@ -150,7 +150,7 @@ benchmarks! {
         let amount: <T as pallet::Config>::Balance = 300u32.into();
         let target: T::AccountId = account("target", 0, SEED);
         let sub_assets: SubAssetsWithEndowment<T> = vec![(
-            SubIptInfo {id: T::IptId::from(0u32), metadata: Default::default()}, (account("target", 0, SEED), 500u32.into()) 
+            SubIptInfo {id: T::IptId::from(0u32), metadata: Default::default()}, (account("target", 0, SEED), 500u32.into())
         )];
         let base_currency_amount = dollar(1000);
         let endowed_accounts = vec![
