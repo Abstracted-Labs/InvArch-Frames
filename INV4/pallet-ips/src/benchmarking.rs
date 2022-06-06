@@ -170,7 +170,7 @@ benchmarks! {
     disallow_replica {
         let caller: T::AccountId = whitelisted_caller();
         let metadata: Vec<u8> = vec![1];
-        let data: Vec<<T as ipf::Config>::IpfId> = vec![];
+        let data = vec![T::IpfId::from(0u32)];
         let ipf_data = H256::from(MOCK_DATA);
         let license = InvArchLicenses::GPLv3;
         let base_currency_amount = dollar(1000);
@@ -183,7 +183,7 @@ benchmarks! {
 
         ipf::Pallet::<T>::mint(RawOrigin::Signed(caller.clone()).into(), metadata.clone(), ipf_data)?;
 
-        Pallet::<T>::create_ips(RawOrigin::Signed(caller.clone()).into(), metadata, data, true, None, license, percent!(50), One, false)?;
+        Pallet::<T>::create_ips(RawOrigin::Signed(caller.clone()).into(), metadata, data, true, None, license, percent!(5), One, false)?;
 
     }: _(RawOrigin::Signed(ips_account), T::IpsId::from(0u32))
 
