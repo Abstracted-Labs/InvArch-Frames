@@ -2,12 +2,11 @@
 #![cfg(feature = "runtime-benchmarks")]
 
 pub use super::*;
-use frame_benchmarking::{
-    account, benchmarks, impl_benchmark_test_suite, vec, whitelisted_caller};
+use frame_benchmarking::{account, benchmarks, impl_benchmark_test_suite, vec, whitelisted_caller};
 use frame_system::RawOrigin;
 use primitives::{
-    InvArchLicenses, 
     AnyId,
+    InvArchLicenses,
     // IpsInfo, IpsType,
     OneOrPercent::{One, ZeroPoint},
     // Parentage,
