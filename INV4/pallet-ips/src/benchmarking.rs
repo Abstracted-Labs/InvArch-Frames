@@ -91,21 +91,32 @@ benchmarks! {
     }: _(RawOrigin::Signed(ips_account), T::IpsId::from(0u32))
 
     append {
-        let s in 0 .. 100;
-        let caller: T::AccountId = whitelisted_caller();
-        let metadata: Vec<u8> = vec![1];
-        let data: Vec<<T as ipf::Config>::IpfId> = vec![];
-        let ipf_data = H256::from(MOCK_DATA);
+        let alice: T::AccountId = account("Alice", 0, SEED);
+        let metadata_1: Vec<u8> = MOCK_METADATA.to_vec();
+        let metadata_2: Vec<u8> = MOCK_METADATA_SECONDARY.to_vec();
+        let data = vec![T::IpfId::from(0u32)];
+        let ipf_data_1 = H256::from(MOCK_DATA);
+        let ipf_data_2 = H256::from(MOCK_DATA_SECONDARY);
         let license = InvArchLicenses::GPLv3;
         let base_currency_amount = dollar(1000);
+        let ips_id = T::IpsId::from(0u32);
+        let ips_account = primitives::utils::multi_account_id::<T, <T as Config>::IpsId>(
+            ips_id, None,
+        );
+        let amount: <T as pallet::Config>::Balance = 300u32.into();
+        let target: T::AccountId = account("target", 0, SEED);
 
-        <T as pallet::Config>::Currency::make_free_balance_be(&caller, base_currency_amount.unique_saturated_into());
+        <T as pallet::Config>::Currency::make_free_balance_be(&alice, base_currency_amount.unique_saturated_into());
 
-        ipf::Pallet::<T>::mint(RawOrigin::Signed(caller.clone()).into(), metadata.clone(), ipf_data)?;
+        ipf::Pallet::<T>::mint(RawOrigin::Signed(alice.clone()).into(), metadata_1.clone(), ipf_data_1)?;
 
-        Pallet::<T>::create_ips(RawOrigin::Signed(caller.clone()).into(), metadata, data, true, None, license, percent!(50), One, false)?;
+        ipf::Pallet::<T>::mint(RawOrigin::Signed(alice.clone()).into(), metadata_2, ipf_data_2)?;
 
-    }: _(RawOrigin::Signed(caller), T::IpsId::from(0u32), Default::default(), Some(vec![s.try_into().unwrap()]))
+        Pallet::<T>::create_ips(RawOrigin::Signed(alice.clone()).into(), metadata_1, data, true, None, license, percent!(50), One, false)?;
+
+        // ipt::Pallet::<T>::mint(RawOrigin::Signed(ips_account).into(), (T::IptId::from(0u32), None), amount, target)?;
+
+    }: _(RawOrigin::Signed(alice), T::IpsId::from(0u32), Default::default(), Some(vec![0.try_into().unwrap()]))
 
     remove {
         let s in 0 .. 100;
