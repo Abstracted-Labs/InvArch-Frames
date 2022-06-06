@@ -71,9 +71,9 @@ benchmarks! {
     }: _(RawOrigin::Signed(bob), metadata_1, data, true, None, license, percent!(50), One, false)
 
     destroy {
-        let caller: T::AccountId = whitelisted_caller();
-        let metadata: Vec<u8> = vec![1];
-        let data: Vec<<T as ipf::Config>::IpfId> = vec![];
+        let bob: T::AccountId = account("Bob", 0, SEED);
+        let metadata: Vec<u8> = MOCK_METADATA.to_vec();
+        let data = vec![T::IpfId::from(0u32)];
         let ipf_data = H256::from(MOCK_DATA);
         let license = InvArchLicenses::GPLv3;
         let base_currency_amount = dollar(1000);
@@ -82,11 +82,11 @@ benchmarks! {
             ips_id, None,
         );
 
-        <T as pallet::Config>::Currency::make_free_balance_be(&caller, base_currency_amount.unique_saturated_into());
+        <T as pallet::Config>::Currency::make_free_balance_be(&bob, base_currency_amount.unique_saturated_into());
 
-        ipf::Pallet::<T>::mint(RawOrigin::Signed(caller.clone()).into(), metadata.clone(), ipf_data)?;
+        ipf::Pallet::<T>::mint(RawOrigin::Signed(bob.clone()).into(), metadata.clone(), ipf_data)?;
 
-        Pallet::<T>::create_ips(RawOrigin::Signed(caller.clone()).into(), metadata, data, true, None, license, percent!(50), One, false)?;
+        Pallet::<T>::create_ips(RawOrigin::Signed(bob.clone()).into(), metadata, data, true, None, license, percent!(50), One, false)?;
 
     }: _(RawOrigin::Signed(ips_account), T::IpsId::from(0u32))
 

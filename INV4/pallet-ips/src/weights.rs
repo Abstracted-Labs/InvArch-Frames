@@ -39,7 +39,7 @@ impl<T: frame_system::Config> pallet_ips::WeightInfo for WeightInfo<T> {
 	// Storage: Ips IpsStorage (r:1 w:1)
 	// Storage: Ips IpsByOwner (r:0 w:1)
 	fn destroy() -> Weight {
-		(18_578_000 as Weight)
+		(18_509_000 as Weight)
 			.saturating_add(T::DbWeight::get().reads(1 as Weight))
 			.saturating_add(T::DbWeight::get().writes(2 as Weight))
 	}
