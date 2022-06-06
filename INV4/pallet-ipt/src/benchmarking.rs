@@ -114,28 +114,34 @@ benchmarks! {
     }: _(RawOrigin::Signed(alice), (T::IptId::from(0u32), None), blake2_256(&call.encode()))
 
     withdraw_vote_multisig {
-        let caller: T::AccountId = whitelisted_caller();
+        let alice: T::AccountId = account("Alice", 0, SEED);
+        let bob: T::AccountId = account("Bob", 0, SEED);
+        let vader: T::AccountId = account("Vader", 0, SEED);
         let amount: <T as pallet::Config>::Balance = 300u32.into();
         let target: T::AccountId = account("target", 0, SEED);
         let call: <T as pallet::Config>::Call = frame_system::Call::<T>::remark {
             remark: vec![0; 0 as usize],
         }.into();
         let base_currency_amount = dollar(1000);
-        let endowed_accounts = vec![(caller.clone(), amount)];
+        let endowed_accounts = vec![
+            (alice.clone(), amount),
+            (bob.clone(), amount),
+            (vader.clone(), amount)
+            ];
 
-        <T as pallet::Config>::Currency::make_free_balance_be(&caller, base_currency_amount.unique_saturated_into());
+        <T as pallet::Config>::Currency::make_free_balance_be(&alice, base_currency_amount.unique_saturated_into());
 
-        Pallet::<T>::create(caller.clone(), T::IptId::from(0u32), endowed_accounts, Default::default(), InvArchLicenses::GPLv3, percent!(50), One, false);
+        Pallet::<T>::create(alice.clone(), T::IptId::from(0u32), endowed_accounts, Default::default(), InvArchLicenses::GPLv3, percent!(50), One, false);
 
         Pallet::<T>::internal_mint((T::IptId::from(0u32), None), target.clone(), amount.clone())?;
 
-        Pallet::<T>::mint(RawOrigin::Signed(caller.clone()).into(), (T::IptId::from(0u32), None), amount, target.clone())?;
+        Pallet::<T>::mint(RawOrigin::Signed(alice.clone()).into(), (T::IptId::from(0u32), None), amount, target.clone())?;
 
-        Pallet::<T>::operate_multisig(RawOrigin::Signed(caller.clone()).into(), false, (T::IptId::from(0u32), None), Box::new(call.clone()))?;
+        Pallet::<T>::operate_multisig(RawOrigin::Signed(alice.clone()).into(), false, (T::IptId::from(0u32), None), Box::new(call.clone()))?;
 
-        // Pallet::<T>::vote_multisig(RawOrigin::Signed(caller.clone()).into(), (T::IptId::from(0u32), None), blake2_256(&call.encode()))?;
+        Pallet::<T>::vote_multisig(RawOrigin::Signed(alice.clone()).into(), (T::IptId::from(0u32), None), blake2_256(&call.encode()))?;
 
-    }: _(RawOrigin::Signed(caller), (T::IptId::from(0u32), None), blake2_256(&call.encode()))
+    }: _(RawOrigin::Signed(alice), (T::IptId::from(0u32), None), blake2_256(&call.encode()))
 
     create_sub_asset {
         let s in 0 .. 100;
