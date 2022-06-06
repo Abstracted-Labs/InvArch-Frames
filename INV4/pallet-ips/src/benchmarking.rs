@@ -169,7 +169,7 @@ benchmarks! {
 
     disallow_replica {
         let caller: T::AccountId = whitelisted_caller();
-        let metadata: Vec<u8> = vec![1];
+        let metadata: Vec<u8> = MOCK_METADATA.to_vec();
         let data = vec![T::IpfId::from(0u32)];
         let ipf_data = H256::from(MOCK_DATA);
         let license = InvArchLicenses::GPLv3;
@@ -190,14 +190,11 @@ benchmarks! {
     create_replica {
         let caller: T::AccountId = whitelisted_caller();
         let metadata: Vec<u8> = vec![1];
-        let data: Vec<<T as ipf::Config>::IpfId> = vec![];
+        let data = vec![T::IpfId::from(0u32)];
         let ipf_data = H256::from(MOCK_DATA);
         let license = InvArchLicenses::GPLv3;
         let base_currency_amount = dollar(1000);
         let ips_id = T::IpsId::from(0u32);
-        let ips_account = primitives::utils::multi_account_id::<T, <T as Config>::IpsId>(
-            ips_id, None,
-        );
 
         <T as pallet::Config>::Currency::make_free_balance_be(&caller, base_currency_amount.unique_saturated_into());
 
@@ -205,11 +202,7 @@ benchmarks! {
 
         Pallet::<T>::create_ips(RawOrigin::Signed(caller.clone()).into(), metadata, data, true, None, license.clone(), percent!(50), One, false)?;
 
-        Pallet::<T>::allow_replica(RawOrigin::Signed(ips_account.clone()).into(), T::IpsId::from(0u32))?;
-
-        // TODO: change value
-
-    }: _(RawOrigin::Signed(ips_account), T::IpsId::from(ips_id), license, percent!(50), One, true)
+    }: _(RawOrigin::Signed(caller), T::IpsId::from(ips_id), license, percent!(50), One, false)
 }
 
 impl_benchmark_test_suite!(Ips, crate::mock::new_test_ext(), crate::mock::Test,);
