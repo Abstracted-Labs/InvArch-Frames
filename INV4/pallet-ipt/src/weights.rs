@@ -17,7 +17,7 @@
 // --pallet
 // pallet-ipt
 // --extrinsic
-// operate_multisig
+// vote_multisig
 // --steps
 // 20
 // --repeat
@@ -36,13 +36,13 @@ use sp_std::marker::PhantomData;
 /// Weight functions for `pallet_ipt`.
 pub struct WeightInfo<T>(PhantomData<T>);
 impl<T: frame_system::Config> pallet_ipt::WeightInfo for WeightInfo<T> {
+	// Storage: Ipt Multisig (r:1 w:1)
 	// Storage: Ipt Ipt (r:1 w:0)
+	// Storage: Ipt Balance (r:1 w:0)
 	// Storage: Ipt SubAssets (r:1 w:0)
 	// Storage: Ipl Ipl (r:1 w:0)
-	// Storage: Ipt Balance (r:1 w:0)
-	// Storage: Ipt Multisig (r:1 w:1)
-	fn operate_multisig() -> Weight {
-		(31_560_000 as Weight)
+	fn vote_multisig() -> Weight {
+		(33_352_000 as Weight)
 			.saturating_add(T::DbWeight::get().reads(5 as Weight))
 			.saturating_add(T::DbWeight::get().writes(1 as Weight))
 	}
