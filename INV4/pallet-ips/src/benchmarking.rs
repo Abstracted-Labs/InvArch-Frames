@@ -56,7 +56,7 @@ benchmarks! {
         let alice: T::AccountId = account("Alice", 0, SEED);
         let metadata_1: Vec<u8> = MOCK_METADATA.to_vec();
         let metadata_2: Vec<u8> = MOCK_METADATA_SECONDARY.to_vec();
-        let data = vec![];
+        let data = vec![T::IpfId::from(0u32)];
         let ipf_data_1 = H256::from(MOCK_DATA);
         let ipf_data_2 = H256::from(MOCK_DATA_SECONDARY);
         let license = InvArchLicenses::GPLv3;

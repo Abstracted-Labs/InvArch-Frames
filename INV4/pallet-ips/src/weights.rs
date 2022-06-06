@@ -17,7 +17,7 @@
 // --pallet
 // pallet-ips
 // --extrinsic
-// create_ips
+// destroy
 // --steps
 // 20
 // --repeat
@@ -36,16 +36,11 @@ use sp_std::marker::PhantomData;
 /// Weight functions for `pallet_ips`.
 pub struct WeightInfo<T>(PhantomData<T>);
 impl<T: frame_system::Config> pallet_ips::WeightInfo for WeightInfo<T> {
-	// Storage: Ips NextIpsId (r:1 w:1)
-	// Storage: System Account (r:2 w:2)
-	// Storage: Ipt Balance (r:0 w:1)
-	// Storage: Ipt Ipt (r:0 w:1)
-	// Storage: Ipl Ipl (r:0 w:1)
+	// Storage: Ips IpsStorage (r:1 w:1)
 	// Storage: Ips IpsByOwner (r:0 w:1)
-	// Storage: Ips IpsStorage (r:0 w:1)
-	fn create_ips() -> Weight {
-		(50_147_000 as Weight)
-			.saturating_add(T::DbWeight::get().reads(3 as Weight))
-			.saturating_add(T::DbWeight::get().writes(8 as Weight))
+	fn destroy() -> Weight {
+		(18_578_000 as Weight)
+			.saturating_add(T::DbWeight::get().reads(1 as Weight))
+			.saturating_add(T::DbWeight::get().writes(2 as Weight))
 	}
 }
