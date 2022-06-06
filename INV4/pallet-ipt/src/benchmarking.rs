@@ -144,12 +144,32 @@ benchmarks! {
     }: _(RawOrigin::Signed(alice), (T::IptId::from(0u32), None), blake2_256(&call.encode()))
 
     create_sub_asset {
-        let s in 0 .. 100;
-        let caller: T::AccountId = whitelisted_caller();
+        let alice: T::AccountId = account("Alice", 0, SEED);
+        let bob: T::AccountId = account("Bob", 0, SEED);
+        let vader: T::AccountId = account("Vader", 0, SEED);
+        let amount: <T as pallet::Config>::Balance = 300u32.into();
+        let target: T::AccountId = account("target", 0, SEED);
         let sub_assets: SubAssetsWithEndowment<T> = vec![(
-            SubIptInfo {id: T::IptId::from(s), metadata: Default::default()}, (account("target", 0, SEED), 500u32.into())
+            SubIptInfo {id: T::IptId::from(0u32), metadata: Default::default()}, (account("target", 0, SEED), 500u32.into()) 
         )];
-    }: _(RawOrigin::Signed(caller), T::IptId::from(s), sub_assets)
+        let base_currency_amount = dollar(1000);
+        let endowed_accounts = vec![
+            (alice.clone(), amount),
+            (bob.clone(), amount),
+            (vader.clone(), amount)
+        ];
+
+        <T as pallet::Config>::Currency::make_free_balance_be(&alice, base_currency_amount.unique_saturated_into());
+
+        Pallet::<T>::create(alice.clone(), T::IptId::from(0u32), endowed_accounts, Default::default(), InvArchLicenses::GPLv3, percent!(50), One, false);
+
+        Pallet::<T>::internal_mint((T::IptId::from(0u32), None), target.clone(), amount.clone())?;
+
+        Pallet::<T>::mint(RawOrigin::Signed(alice.clone()).into(), (T::IptId::from(0u32), None), amount, target.clone())?;
+
+
+
+    }: _(RawOrigin::Signed(alice), T::IptId::from(0u32), sub_assets)
 }
 
 impl_benchmark_test_suite!(Ipt, crate::mock::new_test_ext(), crate::mock::Test,);
