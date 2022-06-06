@@ -17,7 +17,7 @@
 // --pallet
 // pallet-ips
 // --extrinsic
-// create_replica
+// *
 // --steps
 // 20
 // --repeat
@@ -37,6 +37,51 @@ use sp_std::marker::PhantomData;
 pub struct WeightInfo<T>(PhantomData<T>);
 impl<T: frame_system::Config> pallet_ips::WeightInfo for WeightInfo<T> {
 	// Storage: Ips NextIpsId (r:1 w:1)
+	// Storage: Ipf IpfByOwner (r:1 w:2)
+	// Storage: Ipf IpfStorage (r:1 w:1)
+	// Storage: System Account (r:2 w:2)
+	// Storage: Ipt Balance (r:0 w:1)
+	// Storage: Ipt Ipt (r:0 w:1)
+	// Storage: Ipl Ipl (r:0 w:1)
+	// Storage: Ips IpsByOwner (r:0 w:1)
+	// Storage: Ips IpsStorage (r:0 w:1)
+	fn create_ips() -> Weight {
+		(61_574_000 as Weight)
+			.saturating_add(T::DbWeight::get().reads(5 as Weight))
+			.saturating_add(T::DbWeight::get().writes(11 as Weight))
+	}
+	// Storage: Ips IpsStorage (r:1 w:1)
+	// Storage: Ips IpsByOwner (r:0 w:1)
+	fn destroy() -> Weight {
+		(15_829_000 as Weight)
+			.saturating_add(T::DbWeight::get().reads(1 as Weight))
+			.saturating_add(T::DbWeight::get().writes(2 as Weight))
+	}
+	// Storage: Ips IpsStorage (r:1 w:1)
+	fn append() -> Weight {
+		(18_144_000 as Weight)
+			.saturating_add(T::DbWeight::get().reads(1 as Weight))
+			.saturating_add(T::DbWeight::get().writes(1 as Weight))
+	}
+	// Storage: Ips IpsStorage (r:1 w:1)
+	fn remove() -> Weight {
+		(15_799_000 as Weight)
+			.saturating_add(T::DbWeight::get().reads(1 as Weight))
+			.saturating_add(T::DbWeight::get().writes(1 as Weight))
+	}
+	// Storage: Ips IpsStorage (r:1 w:1)
+	fn allow_replica() -> Weight {
+		(14_106_000 as Weight)
+			.saturating_add(T::DbWeight::get().reads(1 as Weight))
+			.saturating_add(T::DbWeight::get().writes(1 as Weight))
+	}
+	// Storage: Ips IpsStorage (r:1 w:1)
+	fn disallow_replica() -> Weight {
+		(14_527_000 as Weight)
+			.saturating_add(T::DbWeight::get().reads(1 as Weight))
+			.saturating_add(T::DbWeight::get().writes(1 as Weight))
+	}
+	// Storage: Ips NextIpsId (r:1 w:1)
 	// Storage: Ips IpsStorage (r:1 w:1)
 	// Storage: System Account (r:1 w:1)
 	// Storage: Ipt Balance (r:0 w:1)
@@ -44,7 +89,7 @@ impl<T: frame_system::Config> pallet_ips::WeightInfo for WeightInfo<T> {
 	// Storage: Ipl Ipl (r:0 w:1)
 	// Storage: Ips IpsByOwner (r:0 w:1)
 	fn create_replica() -> Weight {
-		(52_309_000 as Weight)
+		(50_874_000 as Weight)
 			.saturating_add(T::DbWeight::get().reads(3 as Weight))
 			.saturating_add(T::DbWeight::get().writes(7 as Weight))
 	}
