@@ -5,7 +5,6 @@ pub use super::*;
 use frame_benchmarking::{account, benchmarks, impl_benchmark_test_suite, vec, whitelisted_caller};
 use frame_system::RawOrigin;
 use primitives::{
-    AnyId,
     InvArchLicenses,
     // IpsInfo, IpsType,
     OneOrPercent::{One, ZeroPoint},
@@ -93,7 +92,6 @@ benchmarks! {
     }: _(RawOrigin::Signed(ips_account), T::IpsId::from(0u32))
 
     append {
-        let alice: T::AccountId = account("Alice", 0, SEED);
         let caller: T::AccountId = whitelisted_caller();
         let metadata_1: Vec<u8> = MOCK_METADATA.to_vec();
         let metadata_2: Vec<u8> = MOCK_METADATA_SECONDARY.to_vec();
@@ -126,7 +124,6 @@ benchmarks! {
     }: _(RawOrigin::Signed(ips_account), T::IpsId::from(0u32), ips_data, Some(vec![0.try_into().unwrap()]))
 
     remove {
-        let s in 0 .. 100;
         let caller: T::AccountId = whitelisted_caller();
         let metadata: Vec<u8> = vec![1];
         let data: Vec<<T as ipf::Config>::IpfId> = vec![];
@@ -142,11 +139,13 @@ benchmarks! {
 
         ipf::Pallet::<T>::mint(RawOrigin::Signed(caller.clone()).into(), metadata.clone(), ipf_data)?;
 
-        Pallet::<T>::create_ips(RawOrigin::Signed(caller.clone()).into(), metadata, data, true, None, license, percent!(50), One, false)?;
+        Pallet::<T>::create_ips(RawOrigin::Signed(caller.clone()).into(), metadata, data, true, None, license.clone(), percent!(50), One, false)?;
 
-        Pallet::<T>::append(RawOrigin::Signed(caller.clone()).into(), T::IpsId::from(0u32), Default::default(), Some(vec![s.try_into().unwrap()]))?;
+        Pallet::<T>::create_replica(RawOrigin::Signed(caller.clone()).into(), ips_id, license, percent!(50), One, false)?;
 
-    }: _(RawOrigin::Signed(ips_account), T::IpsId::from(0u32), Default::default(), Some(vec![s.try_into().unwrap()]))
+        Pallet::<T>::append(RawOrigin::Signed(caller.clone()).into(), T::IpsId::from(0u32), Default::default(), Some(vec![0.try_into().unwrap()]))?;
+
+    }: _(RawOrigin::Signed(ips_account), T::IpsId::from(0u32), Default::default(), Some(vec![0.try_into().unwrap()]))
 
     allow_replica {
         let caller: T::AccountId = whitelisted_caller();
