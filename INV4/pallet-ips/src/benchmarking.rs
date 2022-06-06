@@ -2,7 +2,7 @@
 #![cfg(feature = "runtime-benchmarks")]
 
 pub use super::*;
-use frame_benchmarking::{benchmarks, impl_benchmark_test_suite, vec, whitelisted_caller};
+use frame_benchmarking::{account, benchmarks, impl_benchmark_test_suite, vec, whitelisted_caller};
 use frame_system::RawOrigin;
 use primitives::{
     InvArchLicenses, IpsInfo, IpsType,
@@ -16,6 +16,23 @@ const MOCK_DATA: [u8; 32] = [
     12, 47, 182, 72, 140, 51, 139, 219, 171, 74, 247, 18, 123, 28, 200, 236, 221, 85, 25, 12, 218,
     0, 230, 247, 32, 73, 152, 66, 243, 27, 92, 95,
 ];
+
+pub const MOCK_DATA_SECONDARY: [u8; 32] = [
+    47, 182, 72, 140, 51, 139, 219, 171, 74, 247, 18, 123, 28, 200, 236, 221, 85, 25, 12, 218, 0,
+    230, 247, 32, 73, 152, 66, 243, 27, 92, 95, 12,
+];
+
+pub const MOCK_METADATA: &'static [u8] = &[
+    12, 47, 182, 72, 140, 51, 139, 219, 171, 74, 247, 18, 123, 28, 200, 236, 221, 85, 25, 12, 218,
+    0, 230, 247, 32, 73, 152, 66, 243, 27, 92, 95,
+];
+
+pub const MOCK_METADATA_SECONDARY: &'static [u8] = &[
+    47, 182, 72, 140, 51, 139, 219, 171, 74, 247, 18, 123, 28, 200, 236, 221, 85, 25, 12, 218, 0,
+    230, 247, 32, 73, 152, 66, 243, 27, 92, 95, 12,
+];
+
+const SEED: u32 = 0;
 
 pub type Balance = u128;
 
@@ -35,17 +52,23 @@ benchmarks! {
         where T: ipl::Config<Licenses = InvArchLicenses> + frame_system::Config<Hash = H256>
     }
     create_ips {
-        let caller: T::AccountId = whitelisted_caller();
-        let metadata: Vec<u8> = vec![1];
-        let data: Vec<<T as ipf::Config>::IpfId> = vec![];
-        let ipf_data = H256::from(MOCK_DATA);
+        let bob: T::AccountId = account("Bob", 0, SEED);
+        let alice: T::AccountId = account("Alice", 0, SEED);
+        let metadata_1: Vec<u8> = MOCK_METADATA.to_vec();
+        let metadata_2: Vec<u8> = MOCK_METADATA_SECONDARY.to_vec();
+        let data = vec![];
+        let ipf_data_1 = H256::from(MOCK_DATA);
+        let ipf_data_2 = H256::from(MOCK_DATA_SECONDARY);
         let license = InvArchLicenses::GPLv3;
         let base_currency_amount = dollar(1000);
 
-        <T as pallet::Config>::Currency::make_free_balance_be(&caller, base_currency_amount.unique_saturated_into());
+        <T as pallet::Config>::Currency::make_free_balance_be(&bob, base_currency_amount.unique_saturated_into());
 
-        ipf::Pallet::<T>::mint(RawOrigin::Signed(caller.clone()).into(), metadata.clone(), ipf_data)?;
-    }: _(RawOrigin::Signed(caller), metadata, data, true, None, license, percent!(50), One, false)
+        ipf::Pallet::<T>::mint(RawOrigin::Signed(bob.clone()).into(), metadata_1.clone(), ipf_data_1)?;
+
+        ipf::Pallet::<T>::mint(RawOrigin::Signed(alice).into(), metadata_2, ipf_data_2)?;
+
+    }: _(RawOrigin::Signed(bob), metadata_1, data, true, None, license, percent!(50), One, false)
 
     destroy {
         let caller: T::AccountId = whitelisted_caller();
