@@ -126,7 +126,7 @@ benchmarks! {
     remove {
         let caller: T::AccountId = whitelisted_caller();
         let metadata: Vec<u8> = vec![1];
-        let data: Vec<<T as ipf::Config>::IpfId> = vec![];
+        let data = vec![T::IpfId::from(0u32)];
         let ipf_data = H256::from(MOCK_DATA);
         let license = InvArchLicenses::GPLv3;
         let base_currency_amount = dollar(1000);
@@ -150,7 +150,7 @@ benchmarks! {
     allow_replica {
         let caller: T::AccountId = whitelisted_caller();
         let metadata: Vec<u8> = vec![1];
-        let data: Vec<<T as ipf::Config>::IpfId> = vec![];
+        let data = vec![T::IpfId::from(0u32)];
         let ipf_data = H256::from(MOCK_DATA);
         let license = InvArchLicenses::GPLv3;
         let base_currency_amount = dollar(1000);
@@ -158,24 +158,12 @@ benchmarks! {
         let ips_account = primitives::utils::multi_account_id::<T, <T as Config>::IpsId>(
             ips_id, None,
         );
-        // let ips_info = IpsInfo::<T>::from(
-        //     Parentage::Parent(ips_account),
-        //     metadata,
-        //     data,
-        //     IpsType::Normal,
-        //     true,
-        // );
 
         <T as pallet::Config>::Currency::make_free_balance_be(&caller, base_currency_amount.unique_saturated_into());
 
         ipf::Pallet::<T>::mint(RawOrigin::Signed(caller.clone()).into(), metadata.clone(), ipf_data)?;
 
-        Pallet::<T>::create_ips(RawOrigin::Signed(caller.clone()).into(), metadata, data, true, None, license, percent!(50), One, true)?;
-
-        // TODO: change value
-
-        // Pallet::<T>::allow_replica(RawOrigin::Signed(ips_account.clone()).into(), T::IpsId::from(ips_info))?;
-
+        Pallet::<T>::create_ips(RawOrigin::Signed(caller.clone()).into(), metadata, data, false, None, license, percent!(50), One, false)?;
 
     }: _(RawOrigin::Signed(ips_account), T::IpsId::from(ips_id))
 
