@@ -1,0 +1,18 @@
+[package]
+name = 'pallet-ip-staking'
+authors = ['InvArchitects <https://github.com/InvArch>']
+description = 'FRAME pallet to IP staking'
+edition = '2018'
+homepage = 'https://invarch.network'
+license = 'GPLv3'
+repository = 'https://github.com/InvArch/InvArch-Pallet-Library/'
+version = '0.1.0-dev'
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+
+[dependencies]
+
+[features]
+default = ["std"]
+std = []
