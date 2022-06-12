@@ -1,7 +1,7 @@
 [package]
-name = 'pallet-ip-staking'
+name = 'pallet-ip-donations'
 authors = ['InvArchitects <https://github.com/InvArch>']
-description = 'FRAME pallet to IP staking'
+description = 'FRAME pallet to IP donations'
 edition = '2018'
 homepage = 'https://invarch.network'
 license = 'GPLv3'
