@@ -18,6 +18,10 @@
 #![allow(clippy::unused_unit)]
 
 pub use pallet::*;
+use sp-runtime::{ModuleId, traits::AccountIdConversion};
+use frame_support::traits::{OnUnbalanced, Imbalance};
+
+const PALLET_ID: PalletId = PalletId(*b"Donation");
 
 // #[cfg(test)]
 // mod mock;
@@ -63,6 +67,48 @@ pub mod pallet {
 	// Dispatchable functions
 	#[pallet::call]
 	impl<T: Config> Pallet<T> {
-		// TODO:
+		/// Donate extrinsic which accepts the amount to be donated as parameter
+		/// 
+		fn donate(
+			origin,
+			amount: BalanceOf<T>
+	) -> DispatchResult {
+			let donor = ensure_signed(origin)?;
+
+			let _ = T::Currency::transfer(&donor, &Self::account_id(), amount, AllowDeath);
+
+			Self::deposit_event(RawEvent::DonationReceived(donor, amount, Self::pot()));
+			Ok(())
+		}
 	}
+
+	impl<T: Config> Pallet<T> {
+    /// The account ID that holds the Donation's funds
+    pub fn account_id() -> T::AccountId {
+        PALLET_ID.into_account()
+    }
+
+    /// The Donations's balance
+    fn pot() -> BalanceOf<T> {
+        T::Currency::free_balance(&Self::account_id())
+    }
+	}
+
+	type NegativeImbalanceOf<T> = <<T as Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::NegativeImbalance;
+
+	impl<T: Config> OnUnbalanced<NegativeImbalanceOf<T>> for Module<T> {
+			fn on_nonzero_unbalanced(amount: NegativeImbalanceOf<T>) {
+					let numeric_amount = amount.peek();
+
+					// Must resolve into existing but better to be safe.
+					let _ = T::Currency::resolve_creating(&Self::account_id(), amount);
+
+					Self::deposit_event(RawEvent::ImbalanceAbsorbed(numeric_amount, Self::pot()));
+			}
+	}
+
+	// TODO: Allocating Funds
+	//
+	// In order for the treasury to affect change with the funds it has collected it must be able to allocate those funds. Our IP Donation pallet abstracts the governance of where funds will be allocated to the rest of the runtime. Funds can be allocated by a root call to the `allocate` extrinsic. One good example of a governance mechanism for such decisions is Substrate's own
+
 }
