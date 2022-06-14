@@ -109,3 +109,12 @@ pub mod utils {
             .expect("infinite length input; no invalid inputs for type; qed")
     }
 }
+
+/// Donation Info
+#[derive(Encode, Decode, Clone, Eq, PartialEq, MaxEncodedLen, Debug, TypeInfo)]
+pub struct DonationInfo<AccountId, Amount> {
+    /// Donor
+    pub donor: AccountId,
+    /// Amount
+    pub amount: Amount,
+}
