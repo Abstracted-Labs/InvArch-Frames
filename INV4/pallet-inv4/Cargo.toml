@@ -16,6 +16,7 @@ sp-arithmetic = { git = "https://github.com/paritytech/substrate", branch = "pol
 sp-std = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.22", default-features = false }
 frame-support = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.22", default-features = false }
 frame-system = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.22", default-features = false }
+frame-benchmarking = { git = "https://github.com/paritytech/substrate", optional = true, branch = "polkadot-v0.9.22", default-features = false }
 pallet-assets = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.22", default-features = false }
 smallvec = "1.6.1"
 
@@ -51,9 +52,15 @@ std = [
 	"sp-std/std",
 	"frame-support/std",
 	"frame-system/std",
+	"frame-benchmarking/std",
   "sp-io/std",
   "scale-info/std",
   "pallet-balances/std",
   "pallet-assets/std"
+]
+runtime-benchmarks = [
+	"frame-benchmarking",
+	"frame-support/runtime-benchmarks",
+	"frame-system/runtime-benchmarks"
 ]
 try-runtime = ["frame-support/try-runtime"]
