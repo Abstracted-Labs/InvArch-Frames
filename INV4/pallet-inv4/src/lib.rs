@@ -43,6 +43,8 @@ pub mod ipl;
 pub mod ips;
 pub mod ipt;
 
+pub mod benchmarking;
+
 #[frame_support::pallet]
 pub mod pallet {
     use super::*;
