@@ -1,7 +1,6 @@
 pub use super::pallet::*;
 use frame_support::pallet_prelude::*;
-use frame_system::ensure_signed;
-use frame_system::pallet_prelude::*;
+use frame_system::{ensure_signed, pallet_prelude::*};
 use primitives::{OneOrPercent, Parentage};
 
 use parity_wasm::elements::{ExportEntry, ImportEntry};
@@ -25,6 +24,12 @@ impl<T: Config> Pallet<T> {
         permission: BoolOrWasm<T>,
     ) -> DispatchResult {
         let owner = ensure_signed(owner)?;
+
+        // Wasm permissions disabled for now. Too new for Tinkernet.
+        ensure!(
+            matches!(permission, BoolOrWasm::<T>::Bool(_)),
+            Error::<T>::WasmPermissionsDisabled
+        );
 
         let ip = IpStorage::<T>::get(ipl_id).ok_or(Error::<T>::IpDoesntExist)?;
 

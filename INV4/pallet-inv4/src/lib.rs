@@ -30,9 +30,7 @@ use frame_support::{
 };
 use frame_system::pallet_prelude::*;
 use sp_runtime::traits::{AtLeast32BitUnsigned, Member};
-use sp_std::boxed::Box;
-use sp_std::convert::TryInto;
-use sp_std::vec::Vec;
+use sp_std::{boxed::Box, convert::TryInto, vec::Vec};
 
 /// Import the primitives crate
 use primitives::IpInfo;
@@ -52,9 +50,7 @@ pub mod pallet {
     use scale_info::prelude::fmt::Display;
     use sp_std::iter::Sum;
 
-    pub use super::ipl;
-    pub use super::ips;
-    pub use super::ipt;
+    pub use super::{ipl, ips, ipt};
 
     use crate::ipl::LicenseList;
 
@@ -311,29 +307,40 @@ pub mod pallet {
         /// Replicas of this IPS are not allowed
         ReplicaNotAllowed,
 
+        /// IP not found
         IpDoesntExist,
         NotEnoughAmount,
+        /// Max amount of multisig signers reached
         TooManySignatories,
         UnexistentBalance,
         MultisigOperationUninitialized,
         CouldntDecodeCall,
+        /// Multisig operation already exists and is available for voting
         MultisigOperationAlreadyExists,
         NotAVoter,
         UnknownError,
+        /// Sub-asset not found
         SubAssetNotFound,
+        /// Sub-asset already exists
         SubAssetAlreadyExists,
+        /// Max amount of sub-assets reached
         TooManySubAssets,
+        /// This sub-asset has no permission to execute this call
         SubAssetHasNoPermission,
         FailedDivision,
         CallHasTooFewBytes,
 
+        /// IPS inside of another IPS is disabled temporarily
         IpsInsideIpsDisabled,
+        /// Wasm IPL Permissions are disabled temporarily
+        WasmPermissionsDisabled,
 
         CantExecuteThisCall,
 
         InvalidWasmPermission,
         WasmPermissionFailedExecution,
 
+        /// Division by 0 happened somewhere, maybe you have IPT assets with no decimal points?
         DivisionByZero,
     }
 
