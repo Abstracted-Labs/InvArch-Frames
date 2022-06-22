@@ -28,6 +28,8 @@ mod mock;
 #[cfg(test)]
 mod tests;
 
+pub mod benchmarking;
+
 pub use pallet::*;
 
 #[frame_support::pallet]
