@@ -1,7 +1,7 @@
 #![cfg_attr(not(feature = "std"), no_std)]
+#![feature(specialization)]
 
-use codec;
-use codec::{Decode, Encode};
+use codec::{self, Decode, Encode};
 use frame_support::BoundedVec;
 use frame_system::ensure_signed;
 use scale_info::TypeInfo;
@@ -15,6 +15,9 @@ use sp_std::{marker::PhantomData, prelude::*};
 
 pub use pallet::*;
 
+mod traits;
+pub use traits::*;
+
 extern crate alloc;
 
 use alloc::string::String;
@@ -22,7 +25,7 @@ use alloc::string::String;
 #[frame_support::pallet]
 pub mod pallet {
     use super::*;
-    use frame_support::pallet_prelude::*;
+    use frame_support::{dispatch::Dispatchable, pallet_prelude::*};
     use frame_system::pallet_prelude::*;
 
     #[pallet::config]
@@ -30,11 +33,7 @@ pub mod pallet {
         /// The overarching event type.
         type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
 
-        #[pallet::constant]
-        type MaxVec: Get<u32>;
-
-        #[pallet::constant]
-        type MaxInstructions: Get<u32>;
+        type Call: Parameter + Dispatchable + Encode + Rule;
     }
 
     #[pallet::pallet]
@@ -46,11 +45,26 @@ pub mod pallet {
         #[pallet::weight(1_000_000_000)]
         pub fn new_rule(
             origin: OriginFor<T>,
-            code: Vec<Instruction>,
+            rule: <<T as Config>::Call as Rule>::CallRule,
         ) -> DispatchResultWithPostInfo {
             let origin = ensure_signed(origin)?;
 
             Self::deposit_event(Event::EvalResult { result: false });
+
+            Ok(().into())
+        }
+
+        #[pallet::weight(1_000_000_000)]
+        pub fn check_rule(
+            origin: OriginFor<T>,
+            call: Box<<T as Config>::Call>,
+            rule: Box<<<T as Config>::Call as Rule>::CallRule>,
+        ) -> DispatchResultWithPostInfo {
+            let origin = ensure_signed(origin)?;
+
+            Self::deposit_event(Event::EvalResult {
+                result: call.check_rule(*rule),
+            });
 
             Ok(().into())
         }
