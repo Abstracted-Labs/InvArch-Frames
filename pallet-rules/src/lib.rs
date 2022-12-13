@@ -17,6 +17,8 @@ pub use pallet::*;
 
 mod traits;
 pub use traits::*;
+mod macros;
+pub use macros::*;
 
 extern crate alloc;
 
