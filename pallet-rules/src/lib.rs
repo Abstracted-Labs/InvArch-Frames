@@ -1,28 +1,19 @@
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(incomplete_features)]
 #![feature(specialization)]
 
 use codec::{self, Decode, Encode};
-use frame_support::BoundedVec;
 use frame_system::ensure_signed;
 use scale_info::TypeInfo;
-use sp_runtime::{
-    traits::{Bounded, DispatchInfoOf, SaturatedConversion, Saturating, SignedExtension},
-    transaction_validity::{
-        InvalidTransaction, TransactionValidity, TransactionValidityError, ValidTransaction,
-    },
-};
-use sp_std::{marker::PhantomData, prelude::*};
+use sp_std::prelude::*;
 
 pub use pallet::*;
 
-mod traits;
+pub mod traits;
 pub use traits::*;
-mod macros;
-pub use macros::*;
+pub mod macros;
 
 extern crate alloc;
-
-use alloc::string::String;
 
 #[frame_support::pallet]
 pub mod pallet {
@@ -56,7 +47,7 @@ pub mod pallet {
             origin: OriginFor<T>,
             rule: <<T as Config>::Call as Rule>::CallRule,
         ) -> DispatchResultWithPostInfo {
-            let origin = ensure_signed(origin)?;
+            let _ = ensure_signed(origin)?;
 
             let hash = (rule.get_id(), rule.clone())
                 .using_encoded(<<T as frame_system::Config>::Hashing as Hash>::hash);
@@ -74,7 +65,7 @@ pub mod pallet {
             call: Box<<T as Config>::Call>,
             rule: Box<<<T as Config>::Call as Rule>::CallRule>,
         ) -> DispatchResultWithPostInfo {
-            let origin = ensure_signed(origin)?;
+            let _ = ensure_signed(origin)?;
 
             Self::deposit_event(Event::EvalResult {
                 result: call.check_rule(*rule),
@@ -89,7 +80,7 @@ pub mod pallet {
             call: Box<<T as Config>::Call>,
             hash: T::Hash,
         ) -> DispatchResultWithPostInfo {
-            let origin = ensure_signed(origin)?;
+            let _ = ensure_signed(origin)?;
 
             Self::deposit_event(Event::EvalResult {
                 result: call.check_rule(*Rules::<T>::get(hash).ok_or(Error::<T>::HashNotFound)?),
