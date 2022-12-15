@@ -4,21 +4,29 @@ use scale_info::TypeInfo;
 use sp_std::vec::Vec;
 
 pub trait Rule {
-    type CallRule: Encode
+    type CallRule: Encode + Decode + TypeInfo + Debug + Clone + PartialEq + Eq;
+
+    type RuleSet: Encode
         + Decode
         + TypeInfo
-        + Debug
         + Clone
         + PartialEq
         + Eq
-        + GetRuleId<Self::CallId>;
-    type CallId: Encode + Decode + TypeInfo + Debug + Clone + PartialEq + Eq;
+        + RulesetManagement<Self::CallRule>;
 
-    fn check_rule(&self, rule: Self::CallRule) -> bool;
+    fn check_rule(&self, rule_set: &Self::RuleSet) -> bool;
 }
 
-pub trait GetRuleId<Id> {
-    fn get_id(&self) -> Id;
+#[derive(Encode, Decode, TypeInfo, Debug, Clone, PartialEq, Eq)]
+pub enum RuleWrapper<RuleType> {
+    Simple(bool),
+    Rule(RuleType),
+}
+
+pub trait RulesetManagement<CallRule> {
+    fn new() -> Self;
+
+    fn add_rule(&mut self, rule: CallRule);
 }
 
 #[derive(Encode, Decode, TypeInfo, Debug, Clone, PartialEq, Eq)]
