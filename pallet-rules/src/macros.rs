@@ -15,10 +15,17 @@ macro_rules! build_call_rules {
             use $crate::traits::{Rule, CompRule, Process, RulesetManagement, RuleWrapper};
 
             paste! {
+                // $(
+                //     #[derive(Encode, Decode, TypeInfo, Debug, Clone, PartialEq, Eq)]
+                //     pub enum [<CallRules $pallet>] {
+                //         $($function { $( $field : CompRule<$typ>, )* },)*
+                //     }
+                // )*
+
                 $(
                     #[derive(Encode, Decode, TypeInfo, Debug, Clone, PartialEq, Eq)]
                     pub enum [<CallRules $pallet>] {
-                        $($function { $( $field : CompRule<$typ>, )* },)*
+                        $($function ( RuleWrapper< [<CallRules $pallet $function:camel>] > ),)*
                     }
                 )*
 
@@ -40,7 +47,7 @@ macro_rules! build_call_rules {
                 pub struct RuleSet {
                     $(
                         $(
-                            [<$pallet:lower _ $function>] : Option<[<CallRules $pallet $function:camel>]>,
+                            [<$pallet:lower _ $function>] : Option< RuleWrapper< [<CallRules $pallet $function:camel>] >>,
                         )*
                     )*
                 }
@@ -55,10 +62,9 @@ macro_rules! build_call_rules {
                         match rule {
                             $(
                                 $(
-                                CallRules:: $pallet ( [<CallRules $pallet>] :: $function { $( $field , )* }) => {
-                                        self.[<$pallet:lower _ $function>] = Some( [<CallRules $pallet $function:camel>] {
-                                            $( $field , )*
-                                        })
+                                CallRules:: $pallet ( [<CallRules $pallet>] :: $function (wrapper)) => {
+
+                                        self.[<$pallet:lower _ $function>] = Some(wrapper)
                                     },
                                 )*
                             )*
@@ -77,8 +83,14 @@ macro_rules! build_call_rules {
                                 $(
                                     $runtime_call :: $pallet ($pallet_module ::Call:: $function { $( $field , )* })
                                         => {
-                                            if let Some( rule_set ) = &rule_set.[<$pallet:lower _ $function>] {
-                                                $( rule_set. $field  .process( & $field ) )&&*
+                                            if let Some( wrapper ) = &rule_set.[<$pallet:lower _ $function>] {
+
+                                                match wrapper.clone() {
+                                                    RuleWrapper::Simple(b) => b,
+                                                    RuleWrapper::Rule(r) => {
+                                                        $( r. $field  .process(  $field ) )&&*
+                                                    }
+                                                }
                                             } else { false } }
                                 )*
                             )*
