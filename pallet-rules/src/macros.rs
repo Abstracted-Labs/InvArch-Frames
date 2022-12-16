@@ -15,12 +15,6 @@ macro_rules! build_call_rules {
             use $crate::traits::{Rule, CompRule, Process, RulesetManagement, RuleWrapper};
 
             paste! {
-                // $(
-                //     #[derive(Encode, Decode, TypeInfo, Debug, Clone, PartialEq, Eq)]
-                //     pub enum [<CallRules $pallet>] {
-                //         $($function { $( $field : CompRule<$typ>, )* },)*
-                //     }
-                // )*
 
                 $(
                     #[derive(Encode, Decode, TypeInfo, Debug, Clone, PartialEq, Eq)]
