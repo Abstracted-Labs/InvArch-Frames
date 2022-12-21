@@ -40,7 +40,10 @@ pub use pallet::*;
 pub mod ipl;
 pub mod ips;
 pub mod ipt;
+pub mod traits;
 pub mod util;
+
+pub use traits::*;
 
 #[frame_support::pallet]
 pub mod pallet {
@@ -108,6 +111,11 @@ pub mod pallet {
             + Encode;
 
         type WeightToFee: WeightToFee;
+
+        type PermissionSource: Permissions<
+            Id = (Self::IpId, Self::IpId),
+            Call = <Self as pallet::Config>::Call,
+        >;
 
         /// The maximum numbers of caller accounts on a single Multisig call
         #[pallet::constant]
@@ -230,10 +238,10 @@ pub mod pallet {
     /// What pallet functions a sub token has permission to call
     ///
     /// Key: (Ip Set ID, sub token ID), call metadata
-    #[pallet::storage]
-    #[pallet::getter(fn permissions)]
-    pub type Permissions<T: Config> =
-        StorageDoubleMap<_, Blake2_128Concat, (T::IpId, T::IpId), Blake2_128Concat, [u8; 2], bool>;
+    //   #[pallet::storage]
+    //   #[pallet::getter(fn permissions)]
+    //   pub type Permissions<T: Config> =
+    //      StorageDoubleMap<_, Blake2_128Concat, (T::IpId, T::IpId), Blake2_128Concat, [u8; 2], bool>;
 
     #[pallet::event]
     #[pallet::generate_deposit(pub(crate) fn deposit_event)]
@@ -432,6 +440,8 @@ pub mod pallet {
         DivisionByZero,
 
         Overflow,
+
+        PermissionsError,
     }
 
     /// Dispatch functions
@@ -600,16 +610,16 @@ pub mod pallet {
             Pallet::<T>::inner_create_sub_token(caller, ips_id, sub_tokens)
         }
 
-        #[pallet::weight(200_000_000)] // TODO: Set correct weight
-        pub fn set_permission(
-            owner: OriginFor<T>,
-            ips_id: T::IpId,
-            sub_token_id: T::IpId,
-            call_index: [u8; 2],
-            permission: bool,
-        ) -> DispatchResult {
-            Pallet::<T>::inner_set_permission(owner, ips_id, sub_token_id, call_index, permission)
-        }
+        // #[pallet::weight(200_000_000)] // TODO: Set correct weight
+        // pub fn set_permission(
+        //     owner: OriginFor<T>,
+        //     ips_id: T::IpId,
+        //     sub_token_id: T::IpId,
+        //     call_index: [u8; 2],
+        //     permission: bool,
+        // ) -> DispatchResult {
+        //     Pallet::<T>::inner_set_permission(owner, ips_id, sub_token_id, call_index, permission)
+        // }
 
         #[pallet::weight(200_000_000)] // TODO: Set correct weight
         pub fn set_sub_token_weight(

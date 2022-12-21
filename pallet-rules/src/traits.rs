@@ -71,3 +71,9 @@ impl<P: PartialEq + Eq> Process<P> for CompRule<P> {
         }
     }
 }
+
+pub trait ToMainId {
+    type MainId;
+
+    fn to_main_id(&self) -> Self::MainId;
+}

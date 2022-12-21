@@ -15,36 +15,36 @@ pub trait LicenseList<T: Config> {
 
 impl<T: Config> Pallet<T> {
     /// Set yes/no permission for a sub token to start/vote on a specific multisig call
-    pub(crate) fn inner_set_permission(
-        owner: OriginFor<T>,
-        ips_id: T::IpId,
-        sub_token_id: T::IpId,
-        call_index: [u8; 2],
-        permission: bool,
-    ) -> DispatchResult {
-        let owner = ensure_signed(owner)?;
+    // pub(crate) fn inner_set_permission(
+    //     owner: OriginFor<T>,
+    //     ips_id: T::IpId,
+    //     sub_token_id: T::IpId,
+    //     call_index: [u8; 2],
+    //     permission: bool,
+    // ) -> DispatchResult {
+    //     let owner = ensure_signed(owner)?;
 
-        let ip = IpStorage::<T>::get(ips_id).ok_or(Error::<T>::IpDoesntExist)?;
+    //     let ip = IpStorage::<T>::get(ips_id).ok_or(Error::<T>::IpDoesntExist)?;
 
-        // Only the top-level IP Set can set permissions
-        match ip.parentage {
-            Parentage::Parent(ips_account) => {
-                ensure!(ips_account == owner, Error::<T>::NoPermission)
-            }
-            Parentage::Child(..) => return Err(Error::<T>::NotParent.into()),
-        }
+    //     // Only the top-level IP Set can set permissions
+    //     match ip.parentage {
+    //         Parentage::Parent(ips_account) => {
+    //             ensure!(ips_account == owner, Error::<T>::NoPermission)
+    //         }
+    //         Parentage::Child(..) => return Err(Error::<T>::NotParent.into()),
+    //     }
 
-        Permissions::<T>::insert((ips_id, sub_token_id), call_index, permission);
+    //     Permissions::<T>::insert((ips_id, sub_token_id), call_index, permission);
 
-        Self::deposit_event(Event::PermissionSet {
-            ips_id,
-            sub_token_id,
-            call_index,
-            permission,
-        });
+    //     Self::deposit_event(Event::PermissionSet {
+    //         ips_id,
+    //         sub_token_id,
+    //         call_index,
+    //         permission,
+    //     });
 
-        Ok(())
-    }
+    //     Ok(())
+    // }
 
     /// Set the voting weight for a sub token
     pub(crate) fn inner_set_sub_token_weight(
@@ -87,19 +87,19 @@ impl<T: Config> Pallet<T> {
             .or_else(|| IpStorage::<T>::get(ips_id).map(|ips| ips.default_asset_weight))
     }
 
-    /// Check if a sub token has permission to iniate/vote on an extrinsic via the multisig.
-    /// `call_metadata`: 1st byte = pallet index, 2nd byte = function index
-    pub fn has_permission(
-        ips_id: T::IpId,
-        sub_token_id: T::IpId,
-        call_index: [u8; 2],
-    ) -> Result<bool, Error<T>> {
-        Ok(
-            Permissions::<T>::get((ips_id, sub_token_id), call_index).unwrap_or(
-                IpStorage::<T>::get(ips_id)
-                    .map(|ips| ips.default_permission)
-                    .ok_or(Error::<T>::IpDoesntExist)?,
-            ),
-        )
-    }
+    //  /// Check if a sub token has permission to iniate/vote on an extrinsic via the multisig.
+    //  /// `call_metadata`: 1st byte = pallet index, 2nd byte = function index
+    // pub fn has_permission(
+    //     ips_id: T::IpId,
+    //     sub_token_id: T::IpId,
+    //     call_index: [u8; 2],
+    // ) -> Result<bool, Error<T>> {
+    //     Ok(
+    //         Permissions::<T>::get((ips_id, sub_token_id), call_index).unwrap_or(
+    //             IpStorage::<T>::get(ips_id)
+    //                 .map(|ips| ips.default_permission)
+    //                 .ok_or(Error::<T>::IpDoesntExist)?,
+    //         ),
+    //     )
+    // }
 }

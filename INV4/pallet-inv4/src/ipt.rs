@@ -1,5 +1,5 @@
 use super::pallet::{self, *};
-use crate::util::derive_ips_account;
+use crate::{traits::Permissions, util::derive_ips_account};
 use core::convert::TryInto;
 use frame_support::{
     dispatch::{CallMetadata, Dispatchable, GetCallMetadata, GetDispatchInfo, RawOrigin},
@@ -215,7 +215,12 @@ impl<T: Config> Pallet<T> {
             // Function called with some sub token
             if let Some(sub_asset) = ipt_id.1 {
                 ensure!(
-                    Pallet::<T>::has_permission(ipt_id.0, sub_asset, call_metadata,)?,
+                    //  Pallet::<T>::has_permission(ipt_id.0, sub_asset, call_metadata,)?,
+                    <T as pallet::Config>::PermissionSource::check_permission(
+                        (ipt_id.0, sub_asset),
+                        call.clone()
+                    )
+                    .map_err(|_| Error::<T>::PermissionsError)?,
                     Error::<T>::SubAssetHasNoPermission
                 );
 
@@ -349,12 +354,22 @@ impl<T: Config> Pallet<T> {
                 .take()
                 .ok_or(Error::<T>::MultisigOperationUninitialized)?;
 
+            let actual_call = old_data
+                .actual_call
+                .try_decode()
+                .ok_or(Error::<T>::CouldntDecodeCall)?;
+
             // Get caller balance of `ipt_id` token, weight adjusted
             let voter_balance = if let OneOrPercent::ZeroPoint(percent) = {
                 // Function called with some sub token
                 if let Some(sub_asset) = ipt_id.1 {
                     ensure!(
-                        Pallet::<T>::has_permission(ipt_id.0, sub_asset, old_data.call_metadata,)?,
+                        // Pallet::<T>::has_permission(ipt_id.0, sub_asset, old_data.call_metadata,)?,
+                        <T as pallet::Config>::PermissionSource::check_permission(
+                            (ipt_id.0, sub_asset),
+                            Box::new(actual_call.clone())
+                        )
+                        .map_err(|_| Error::<T>::PermissionsError)?,
                         Error::<T>::SubAssetHasNoPermission
                     );
 
@@ -451,21 +466,17 @@ impl<T: Config> Pallet<T> {
                 *data = None;
 
                 // Actually dispatch this call and return the result of it
-                let dispatch_result = old_data
-                    .actual_call
-                    .try_decode()
-                    .ok_or(Error::<T>::CouldntDecodeCall)?
-                    .dispatch(
-                        RawOrigin::Signed(derive_ips_account::<T>(
-                            ipt_id.0,
-                            if old_data.include_original_caller {
-                                Some(&old_data.original_caller)
-                            } else {
-                                None
-                            },
-                        ))
-                        .into(),
-                    );
+                let dispatch_result = actual_call.dispatch(
+                    RawOrigin::Signed(derive_ips_account::<T>(
+                        ipt_id.0,
+                        if old_data.include_original_caller {
+                            Some(&old_data.original_caller)
+                        } else {
+                            None
+                        },
+                    ))
+                    .into(),
+                );
 
                 Self::deposit_event(Event::MultisigExecuted {
                     ips_id: ipt_id.0,
@@ -749,6 +760,10 @@ impl<T: Config> Pallet<T> {
                     !SubAssets::<T>::contains_key(ipt_id, sub.0.id),
                     Error::<T>::SubAssetAlreadyExists
                 );
+
+                <T as pallet::Config>::PermissionSource::initialize_permission_set((
+                    ipt_id, sub.0.id,
+                ))?;
 
                 SubAssets::<T>::insert(ipt_id, sub.0.id, &sub.0);
 
