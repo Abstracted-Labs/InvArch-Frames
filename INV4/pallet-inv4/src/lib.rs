@@ -23,9 +23,10 @@
 
 pub use pallet::*;
 
+mod impls;
 pub mod inv4_core;
 mod lookup;
-pub mod migrations;
+//pub mod migrations;
 pub mod multisig;
 pub mod permissions;
 pub mod util;
@@ -44,7 +45,7 @@ pub mod pallet {
         dispatch::{Dispatchable, GetDispatchInfo, PostDispatchInfo},
         pallet_prelude::*,
         storage::Key,
-        traits::{Currency, Get, GetCallMetadata, ReservableCurrency},
+        traits::{fungibles, Currency, Get, GetCallMetadata, ReservableCurrency},
         BoundedVec, Parameter,
     };
     use frame_system::pallet_prelude::*;
@@ -100,6 +101,13 @@ pub mod pallet {
 
         #[pallet::constant]
         type CoreSeedBalance: Get<BalanceOf<Self>>;
+
+        type AssetsProvider: fungibles::Inspect<Self::AccountId, AssetId = (Self::CoreId, Self::CoreId)>
+            + fungibles::Mutate<Self::AccountId, AssetId = (Self::CoreId, Self::CoreId)>
+            + fungibles::Transfer<Self::AccountId, AssetId = (Self::CoreId, Self::CoreId)>
+            + fungibles::Create<Self::AccountId, AssetId = (Self::CoreId, Self::CoreId)>
+            + fungibles::Destroy<Self::AccountId, AssetId = (Self::CoreId, Self::CoreId)>
+            + fungibles::metadata::Mutate<Self::AccountId, AssetId = (Self::CoreId, Self::CoreId)>;
     }
 
     /// The current storage version.
@@ -283,7 +291,10 @@ pub mod pallet {
             call_hash: T::Hash,
         },
         /// One of more sub tokens were created
-        SubTokenCreated { id: T::CoreId, metadata: Vec<u8> },
+        AssetCreated {
+            id: (T::CoreId, T::CoreId),
+            metadata: multisig::AssetMetadata,
+        },
         /// Permission for a given function was just set for a sub token
         ///
         /// Params: IP Set ID, Sub token ID, call_metadata(pallet index, function index), true/false permission
@@ -446,13 +457,13 @@ pub mod pallet {
         /// Create one or more sub tokens for an IP Set
         #[pallet::call_index(6)]
         #[pallet::weight(200_000_000)]
-        pub fn create_sub_token(
+        pub fn create_asset(
             caller: OriginFor<T>,
             core_id: T::CoreId,
-            sub_token_id: T::CoreId,
-            sub_token_metadata: Vec<u8>,
+            asset_id: T::CoreId,
+            asset_metadata: multisig::AssetMetadata,
         ) -> DispatchResultWithPostInfo {
-            Pallet::<T>::inner_create_sub_token(caller, core_id, sub_token_id, sub_token_metadata)
+            Pallet::<T>::inner_create_asset(caller, core_id, asset_id, asset_metadata)
         }
 
         #[pallet::call_index(7)]

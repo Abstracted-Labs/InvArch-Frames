@@ -7,17 +7,27 @@ use core::{convert::TryInto, iter::Sum};
 use frame_support::{
     dispatch::{Dispatchable, GetDispatchInfo, RawOrigin},
     pallet_prelude::*,
-    traits::{Currency, VoteTally, WrapperKeepOpaque},
+    traits::{
+        fungibles::{metadata::Mutate, Create},
+        Currency, VoteTally, WrapperKeepOpaque,
+    },
 };
 use frame_system::{ensure_signed, pallet_prelude::*};
 use primitives::SubTokenInfo;
 use sp_runtime::{
-    traits::{CheckedAdd, CheckedSub, Hash, Zero},
+    traits::{CheckedAdd, CheckedSub, Hash, One, Zero},
     Perbill, Saturating,
 };
 use sp_std::{boxed::Box, vec::Vec};
 
 pub type OpaqueCall<T> = WrapperKeepOpaque<<T as Config>::RuntimeCall>;
+
+#[derive(Encode, Decode, Clone, Eq, PartialEq, Debug, TypeInfo)]
+pub struct AssetMetadata {
+    pub name: Vec<u8>,
+    pub symbol: Vec<u8>,
+    pub decimals: u8,
+}
 
 /// Details of a multisig operation
 #[derive(Clone, Encode, Decode, RuntimeDebug, MaxEncodedLen, TypeInfo)]
@@ -414,11 +424,11 @@ where
     }
 
     /// Create one or more sub tokens for an IP Set
-    pub(crate) fn inner_create_sub_token(
+    pub(crate) fn inner_create_asset(
         caller: OriginFor<T>,
         core_id: T::CoreId,
-        sub_token_id: T::CoreId,
-        sub_token_metadata: Vec<u8>,
+        asset_id: T::CoreId,
+        asset_metadata: AssetMetadata,
     ) -> DispatchResultWithPostInfo {
         CoreStorage::<T>::try_mutate_exists(core_id, |ipt| -> DispatchResultWithPostInfo {
             let caller = ensure_signed(caller.clone())?;
@@ -427,26 +437,26 @@ where
 
             ensure!(old_ipt.account == caller, Error::<T>::NoPermission);
 
-            let metadata: BoundedVec<u8, T::MaxMetadata> = sub_token_metadata
-                .clone()
-                .try_into()
-                .map_err(|_| Error::<T>::MaxMetadataExceeded)?;
+            let metadata_clone = asset_metadata.clone();
 
-            ensure!(
-                !SubAssets::<T>::contains_key(core_id, sub_token_id),
-                Error::<T>::SubAssetAlreadyExists
-            );
+            T::AssetsProvider::create(
+                (core_id, asset_id),
+                old_ipt.account.clone(),
+                true,
+                One::one(),
+            )?;
 
-            let sub_token_info = SubTokenInfo {
-                id: sub_token_id,
-                metadata,
-            };
+            T::AssetsProvider::set(
+                (core_id, asset_id),
+                &old_ipt.account,
+                asset_metadata.name,
+                asset_metadata.symbol,
+                asset_metadata.decimals,
+            )?;
 
-            SubAssets::<T>::insert(core_id, sub_token_id, sub_token_info);
-
-            Self::deposit_event(Event::SubTokenCreated {
-                id: sub_token_id,
-                metadata: sub_token_metadata,
+            Self::deposit_event(Event::AssetCreated {
+                id: (core_id, asset_id),
+                metadata: metadata_clone,
             });
 
             Ok(().into())
