@@ -124,7 +124,12 @@ pub mod pallet {
 
         type AssetsProvider: fungibles::Inspect<Self::AccountId, Balance = BalanceOf<Self>, AssetId = Self::CoreId>
             + fungibles::Mutate<Self::AccountId, AssetId = Self::CoreId>
-            + fungibles::Transfer<Self::AccountId, AssetId = Self::CoreId>;
+            + fungibles::Transfer<Self::AccountId, AssetId = Self::CoreId>
+            + fungibles::InspectHold<
+                Self::AccountId,
+                Balance = BalanceOf<Self>,
+                AssetId = Self::CoreId,
+            >;
 
         type CreationFeeHandler: OnUnbalanced<
             <Self::Currency as Currency<Self::AccountId>>::NegativeImbalance,

@@ -12,7 +12,7 @@ use frame_support::{
     dispatch::GetDispatchInfo,
     pallet_prelude::*,
     traits::{
-        fungibles::{Inspect, Mutate},
+        fungibles::{Inspect, InspectHold, Mutate},
         Currency, VoteTally, WrapperKeepOpaque,
     },
     BoundedBTreeMap,
@@ -20,7 +20,7 @@ use frame_support::{
 use frame_system::{ensure_signed, pallet_prelude::*};
 use sp_runtime::{
     traits::{Hash, Zero},
-    Perbill,
+    Perbill, Saturating,
 };
 use sp_std::{boxed::Box, collections::btree_map::BTreeMap, vec::Vec};
 
@@ -101,7 +101,8 @@ where
     ) -> DispatchResultWithPostInfo {
         let owner = ensure_signed(caller)?;
 
-        let owner_balance: BalanceOf<T> = T::AssetsProvider::balance(core_id, &owner);
+        let owner_balance: BalanceOf<T> = T::AssetsProvider::balance(core_id, &owner)
+            .saturating_sub(T::AssetsProvider::balance_on_hold(core_id, &owner));
 
         ensure!(!owner_balance.is_zero(), Error::<T>::NoPermission);
 
@@ -203,7 +204,8 @@ where
         Multisig::<T>::try_mutate_exists(core_id, call_hash, |data| {
             let owner = ensure_signed(caller.clone())?;
 
-            let voter_balance: BalanceOf<T> = T::AssetsProvider::balance(core_id, &owner);
+            let voter_balance: BalanceOf<T> = T::AssetsProvider::balance(core_id, &owner)
+                .saturating_sub(T::AssetsProvider::balance_on_hold(core_id, &owner));
 
             ensure!(!voter_balance.is_zero(), Error::<T>::NoPermission);
 
