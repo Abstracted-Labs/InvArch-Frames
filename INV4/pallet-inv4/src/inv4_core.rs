@@ -29,8 +29,11 @@ where
     >: From<<T as frame_system::Config>::RuntimeOrigin>,
 {
     /// Create IP Set
+    // SBP-M3 review: Too long function, refactor suggested.
     pub(crate) fn inner_create_core(
         origin: OriginFor<T>,
+        // SBP-M3 review: Make sure you pass bounded vec to extrinsic
+        // It is high security issue.
         metadata: Vec<u8>,
         minimum_support: Perbill,
         required_approval: Perbill,
@@ -39,6 +42,7 @@ where
         NextCoreId::<T>::try_mutate(|next_id| -> DispatchResult {
             let creator = ensure_signed(origin)?;
 
+            // SBP-M3 review: Make extrinsic parameter as BoundedVec instead of verifying it here.
             let bounded_metadata: BoundedVec<u8, T::MaxMetadata> = metadata
                 .clone()
                 .try_into()
@@ -69,6 +73,9 @@ where
                 frozen_tokens: true,
             };
 
+            // SBP-M3 review: Logic for `FeeCharger` should be implemented somewhere else.
+            // When you provide traits for pallets, you should require some action to be taken
+            // Like calling some API, instead of implementing it here.
             T::FeeCharger::handle_creation_fee(match creation_fee_asset {
                 FeeAsset::TNKR => {
                     FeeAssetNegativeImbalance::TNKR(<T as Config>::Currency::withdraw(
@@ -124,6 +131,7 @@ where
             }
 
             if let Some(m) = metadata.clone() {
+                // SBP-M3 review: this check should be on extrinsic level.
                 c.metadata = m.try_into().map_err(|_| Error::<T>::MaxMetadataExceeded)?;
             }
 

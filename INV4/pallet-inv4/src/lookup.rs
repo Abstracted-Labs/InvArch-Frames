@@ -28,6 +28,7 @@ impl<T: Config> StaticLookup for INV4Lookup<T> {
     }
 
     fn unlookup(a: Self::Target) -> Self::Source {
+        // SBP-M3 review: I prefer `match` clause to `if else`
         if let Some(core_id) = CoreByAccount::<T>::get(&a) {
             MultiAddress::Index(core_id)
         } else {

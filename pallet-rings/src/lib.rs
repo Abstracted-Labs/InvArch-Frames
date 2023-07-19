@@ -111,6 +111,7 @@ pub mod pallet {
 
         [u8; 32]: From<<T as frame_system::Config>::AccountId>,
     {
+        // SBP-M3 review: Maintenance mode should be separated as a pallet that blocks execution of the whole chain
         #[pallet::call_index(0)]
         #[pallet::weight((<T as Config>::WeightInfo::set_maintenance_status(), Pays::No))]
         pub fn set_maintenance_status(
@@ -118,6 +119,7 @@ pub mod pallet {
             chain: <T as Config>::Chains,
             under_maintenance: bool,
         ) -> DispatchResult {
+            // SBP-M3 review: I would think about some onchain governance mechanism instead of using just Sudo...
             ensure_root(origin)?;
 
             ChainsUnderMaintenance::<T>::insert(chain.get_location(), under_maintenance);
@@ -137,12 +139,14 @@ pub mod pallet {
                     .min(T::MaxWeightedLength::get())
             )
         )]
+        // SBP-M3 review: too long function, refactor needed
         pub fn send_call(
             origin: OriginFor<T>,
             destination: <T as pallet::Config>::Chains,
             weight: u64,
             fee_asset: <<T as pallet::Config>::Chains as ChainList>::ChainAssets,
             fee: u128,
+            // SBP-M3 review: use BoundedVec
             call: Vec<u8>,
         ) -> DispatchResult {
             let core = ensure_multisig::<T, OriginFor<T>>(origin)?;
@@ -180,6 +184,7 @@ pub mod pallet {
                 Instruction::WithdrawAsset(fee_multiasset.clone().into()),
                 Instruction::BuyExecution {
                     fees: fee_multiasset,
+                    // SBP-M3 review: you should set some limit...
                     weight_limit: WeightLimit::Unlimited,
                 },
                 Instruction::Transact {
@@ -269,6 +274,7 @@ pub mod pallet {
                 Instruction::WithdrawAsset(fee_multiasset.clone().into()),
                 Instruction::BuyExecution {
                     fees: fee_multiasset,
+                    // SBP-M3 review: you should set some limit
                     weight_limit: WeightLimit::Unlimited,
                 },
                 // Actual transfer instruction
@@ -301,6 +307,7 @@ pub mod pallet {
 
         #[pallet::call_index(3)]
         #[pallet::weight(<T as Config>::WeightInfo::bridge_assets())]
+        // SBP-M3 review: too long function, refactor needed
         pub fn bridge_assets(
             origin: OriginFor<T>,
             asset: <<T as pallet::Config>::Chains as ChainList>::ChainAssets,
@@ -335,6 +342,7 @@ pub mod pallet {
             let inverted_destination = dest
                 .inverted(&from_chain_location)
                 .map(|inverted| {
+                    // SBP-M3 review: I would use `match` clause
                     if let (ml, Some(Junction::OnlyChild) | None) =
                         inverted.clone().split_last_interior()
                     {
@@ -360,6 +368,7 @@ pub mod pallet {
                 .reanchored(&dest, &from_chain_location)
                 .map(|mut reanchored| {
                     if let AssetId::Concrete(ref mut m) = reanchored.id {
+                        // SBP-M3 review: I would use `match` clause
                         if let (ml, Some(Junction::OnlyChild) | None) =
                             m.clone().split_last_interior()
                         {
@@ -400,6 +409,7 @@ pub mod pallet {
                     WithdrawAsset(vec![fee_multiasset.clone(), multiasset.clone()].into()),
                     Instruction::BuyExecution {
                         fees: fee_multiasset,
+                        // SBP-M3 review: set some Weight limit...
                         weight_limit: WeightLimit::Unlimited,
                     },
                     InitiateReserveWithdraw {
@@ -408,6 +418,7 @@ pub mod pallet {
                         xcm: Xcm(vec![
                             Instruction::BuyExecution {
                                 fees: reanchored_multiasset,
+                                // SBP-M3 review: set some Weight limit...
                                 weight_limit: WeightLimit::Unlimited,
                             },
                             Instruction::DepositAsset {
@@ -436,6 +447,7 @@ pub mod pallet {
                     Instruction::WithdrawAsset(fee_multiasset.clone().into()),
                     Instruction::BuyExecution {
                         fees: fee_multiasset,
+                        // SBP-M3 review: set Weight Limit
                         weight_limit: WeightLimit::Unlimited,
                     },
                     // Actual reserve transfer instruction
@@ -445,6 +457,7 @@ pub mod pallet {
                         xcm: Xcm(vec![
                             Instruction::BuyExecution {
                                 fees: reanchored_multiasset,
+                                // SBP-M3 review: set Weight Limit
                                 weight_limit: WeightLimit::Unlimited,
                             },
                             Instruction::DepositAsset {

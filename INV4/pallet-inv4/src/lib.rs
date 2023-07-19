@@ -133,6 +133,8 @@ pub mod pallet {
         #[pallet::constant]
         type CoreCreationFee: Get<BalanceOf<Self>>;
 
+        // SBP-M3 review: I would not use KSM* in names just to make it more "generic"
+
         #[pallet::constant]
         type KSMCoreCreationFee: Get<
             <<Self as Config>::Tokens as Inspect<<Self as frame_system::Config>::AccountId>>::Balance,
@@ -329,6 +331,7 @@ pub mod pallet {
         #[pallet::weight(<T as Config>::WeightInfo::create_core(metadata.len() as u32))]
         pub fn create_core(
             owner: OriginFor<T>,
+            // SBP-M3 review: use BoundedVec instead of unbounded one.
             metadata: Vec<u8>,
             minimum_support: Perbill,
             required_approval: Perbill,
@@ -380,6 +383,7 @@ pub mod pallet {
         pub fn operate_multisig(
             caller: OriginFor<T>,
             core_id: T::CoreId,
+            // SBP-M3 review: use BoundedVec.
             metadata: Option<Vec<u8>>,
             fee_asset: FeeAsset,
             call: Box<<T as pallet::Config>::RuntimeCall>,
@@ -423,6 +427,7 @@ pub mod pallet {
         ))]
         pub fn set_parameters(
             origin: OriginFor<T>,
+            // SBP-M3 review: use BoundedVec
             metadata: Option<Vec<u8>>,
             minimum_support: Option<Perbill>,
             required_approval: Option<Perbill>,

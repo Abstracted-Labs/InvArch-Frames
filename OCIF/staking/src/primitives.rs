@@ -90,6 +90,7 @@ impl<Balance: AtLeast32BitUnsigned + Copy + MaxEncodedLen> StakerInfo<Balance> {
     }
 
     pub(crate) fn stake(&mut self, current_era: Era, value: Balance) -> Result<(), &str> {
+        // SBP-M3 review: many if else clauses, consider refactoring...
         if let Some(era_stake) = self.stakes.last_mut() {
             if era_stake.era > current_era {
                 return Err("Unexpected era");
@@ -119,6 +120,7 @@ impl<Balance: AtLeast32BitUnsigned + Copy + MaxEncodedLen> StakerInfo<Balance> {
     }
 
     pub(crate) fn unstake(&mut self, current_era: Era, value: Balance) -> Result<(), &str> {
+        // SBP-M3 review: same as above
         if let Some(era_stake) = self.stakes.last_mut() {
             if era_stake.era > current_era {
                 return Err("Unexpected era");

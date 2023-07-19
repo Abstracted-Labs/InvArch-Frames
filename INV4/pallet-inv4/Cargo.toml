@@ -8,6 +8,8 @@ name = 'pallet-inv4'
 repository = 'https://github.com/InvArch/InvArch-Pallet-Library/ips'
 version = '0.1.0-dev'
 
+# SBP-M3 review: update your Substrate/Cumulus/Polkadot version
+
 [dependencies]
 serde = { version = "1.0.132", optional = true }
 codec = { package = "parity-scale-codec", version = "3.0.0", default-features = false }

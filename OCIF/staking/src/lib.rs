@@ -314,6 +314,7 @@ pub mod pallet {
 
     #[pallet::hooks]
     impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {
+        // SBP-M3 review: you must be sure about proper Weight for each execution path
         fn on_initialize(now: BlockNumberFor<T>) -> Weight {
             if Self::is_halted() {
                 return T::DbWeight::get().reads(1);
@@ -364,6 +365,7 @@ pub mod pallet {
         )]
         pub fn register_core(
             origin: OriginFor<T>,
+            // SBP-M3 review: use BoundedVec instead of Vec...
             name: Vec<u8>,
             description: Vec<u8>,
             image: Vec<u8>,
@@ -379,6 +381,7 @@ pub mod pallet {
                 Error::<T>::CoreAlreadyRegistered,
             );
 
+            // SBP-M3 review: use BoundedVec as extrinsic parameter...
             let bounded_name: BoundedVec<u8, T::MaxNameLength> = name
                 .clone()
                 .try_into()
@@ -423,7 +426,8 @@ pub mod pallet {
             <T as Config>::WeightInfo::unregister_core() +
                 <T as Config>::MaxStakersPerCore::get().div(100) * <T as Config>::WeightInfo::unstake()
         )]
-        pub fn unregister_core(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
+        // SBP-M3 review: too long function, refactor needed.
+         pub fn unregister_core(origin: OriginFor<T>) -> DispatchResultWithPostInfo {
             Self::ensure_not_halted()?;
 
             let core = ensure_multisig::<T, OriginFor<T>>(origin)?;
@@ -441,6 +445,7 @@ pub mod pallet {
 
             let mut corrected_staker_length_fee = Zero::zero();
 
+            // SBP-M3 review: make sure the loop will not exceed block resources. 
             for staker in staker_info_prefix {
                 let mut core_stake_info =
                     Self::core_stake_info(core_id, current_era).unwrap_or_default();
@@ -508,6 +513,7 @@ pub mod pallet {
         )]
         pub fn change_core_metadata(
             origin: OriginFor<T>,
+            // SBP-M3 review: use BoundedVec instead of Vec...
             name: Vec<u8>,
             description: Vec<u8>,
             image: Vec<u8>,
@@ -520,6 +526,7 @@ pub mod pallet {
             RegisteredCore::<T>::try_mutate(core_id, |core| {
                 let mut new_core = core.take().ok_or(Error::<T>::NotRegistered)?;
 
+                // SBP-M3 review: these parameters should be passed as BoundedVec in extrinsic
                 let bounded_name: BoundedVec<u8, T::MaxNameLength> = name
                     .clone()
                     .try_into()
@@ -900,6 +907,7 @@ pub mod pallet {
         }
 
         fn update_ledger(staker: &T::AccountId, ledger: AccountLedger<BalanceOf<T>>) {
+            // SBP-M3 review: I would use `match` clause
             if ledger.is_empty() {
                 Ledger::<T>::remove(staker);
                 <T as pallet::Config>::Currency::remove_lock(LOCK_ID, staker);
@@ -1009,6 +1017,7 @@ pub mod pallet {
 
             let mut new_active_stake: BalanceOf<T> = Zero::zero();
 
+            // SBP-M3 review: make sure it will not exceed block resources and is properly handled in Weights.
             for core_id in RegisteredCore::<T>::iter_keys() {
                 consumed_weight = consumed_weight.saturating_add(T::DbWeight::get().reads(1));
 

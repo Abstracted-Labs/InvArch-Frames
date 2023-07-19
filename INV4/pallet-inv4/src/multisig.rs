@@ -25,6 +25,8 @@ use sp_runtime::{
 use sp_std::{boxed::Box, collections::btree_map::BTreeMap, vec::Vec};
 
 /// Maximum size of call we store is 4mb.
+// SBP-M3 review: I would configure it via Runtime Constant
+// Check: https://docs.substrate.io/reference/how-to-guides/basics/configure-runtime-constants/
 pub const MAX_SIZE: u32 = 4 * 1024 * 1024;
 
 pub type BoundedCallBytes = BoundedVec<u8, ConstU32<MAX_SIZE>>;
@@ -95,6 +97,7 @@ where
     }
 
     /// Initiates a multisig transaction. If `caller` has enough votes, execute `call` immediately, otherwise a vote begins.
+    // SBP-M3 review: too long function, refactor needed.
     pub(crate) fn inner_operate_multisig(
         caller: OriginFor<T>,
         core_id: T::CoreId,
@@ -108,6 +111,8 @@ where
 
         ensure!(!owner_balance.is_zero(), Error::<T>::NoPermission);
 
+        // SBP-M3 review: it should be verified on extrinsic level, not here.
+        // SBP-M3 review: `match` clause would look much better.
         let bounded_metadata: Option<BoundedVec<u8, T::MaxMetadata>> = if let Some(vec) = metadata {
             Some(
                 vec.try_into()
@@ -132,6 +137,8 @@ where
 
         // If `caller` has enough balance to meet/exeed the threshold, then go ahead and execute the `call` now.
         if Perbill::from_rational(owner_balance, total_issuance) >= minimum_support {
+            // SBP-M3 review: make sure that there is no security risk in dispatching call
+            // Like exceeding block time etc.
             let dispatch_result =
                 crate::dispatch::dispatch_call::<T>(core_id, &fee_asset, *call.clone());
 
@@ -147,7 +154,8 @@ where
                 call: *call,
                 result: dispatch_result.map(|_| ()).map_err(|e| e.error),
             });
-        } else {
+        } else {a
+            // SBP-M3 review: should be verified on extrinsic level.
             let bounded_call: BoundedCallBytes = (*call)
                 .encode()
                 .try_into()
@@ -227,6 +235,9 @@ where
             let decoded_call = <T as Config>::RuntimeCall::decode(&mut &old_data.actual_call[..])
                 .map_err(|_| Error::<T>::FailedDecodingCall)?;
 
+            // SBP-M3 review: refactor needed.
+            // There should be only 1 function responsible for dispatching call
+            // Instead of maintaining many places with the same code.
             if (support >= minimum_support) && (approval >= required_approval) {
                 // Multisig storage records are removed when the transaction is executed or the vote on the transaction is withdrawn
                 *data = None;
@@ -300,6 +311,9 @@ where
                 voter: owner,
                 votes_removed: old_vote,
                 call_hash,
+                // SBP-M3 review: I would remove call bytes from event
+                // And leave only call_hash
+                // There should be a possibility to reading that call bytes from storage.
                 call: decoded_call,
             });
 

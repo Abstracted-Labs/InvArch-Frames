@@ -123,6 +123,7 @@ pub mod pallet {
     where
         BalanceOf<T>: CheckedSub,
     {
+        // SBP-M3 review: too long function, refactor needed
         fn on_initialize(now: BlockNumberFor<T>) -> Weight {
             let previous_era = Self::current_era();
             let next_era_starting_block = Self::next_era_starting_block();
@@ -169,7 +170,8 @@ pub mod pallet {
                         minted: inflation_per_era,
                     });
                 }
-
+                // SBP-M3 review: are you sure that Weight is correct?
+                // Additionally, you have some options for execution paths like `if` `else`
                 T::DbWeight::get().reads_writes(7, 3)
             } else {
                 let inflation_per_era = Self::inflation_per_era();
@@ -236,6 +238,8 @@ pub mod pallet {
                             }
                         }
 
+                        // SBP-M3 review: are you sure that Weight is correct?
+                        // Additionally, you have some options for execution paths like `if` `else`                        
                         T::DbWeight::get().reads_writes(8, 2)
                     } else {
                         T::DbWeight::get().reads_writes(6, 2)
@@ -250,6 +254,7 @@ pub mod pallet {
     #[pallet::call]
     impl<T: Config> Pallet<T> {
         #[pallet::call_index(0)]
+        // SBP-M3 review: missing benchmarking...
         #[pallet::weight(100_000_000)]
         pub fn set_first_year_supply(root: OriginFor<T>) -> DispatchResult {
             ensure_root(root)?;
@@ -261,7 +266,8 @@ pub mod pallet {
             Ok(())
         }
 
-        #[pallet::call_index(1)]
+        #[pallet::call_index(1)]      
+        // SBP-M3 review: missing benchmarking...
         #[pallet::weight(100_000_000)]
         pub fn halt_unhalt_pallet(root: OriginFor<T>, halt: bool) -> DispatchResult {
             ensure_root(root)?;
