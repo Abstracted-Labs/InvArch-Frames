@@ -9,12 +9,12 @@ use frame_support::{error::BadOrigin, RuntimeDebug};
 use scale_info::TypeInfo;
 use sp_io::hashing::blake2_256;
 use sp_runtime::traits::{AtLeast32BitUnsigned, TrailingZeroInput};
-use xcm::latest::Junction;
+use xcm::latest::{Junction, NetworkId};
 
 #[derive(PartialEq, Eq, Encode, Decode, TypeInfo, MaxEncodedLen, Clone, RuntimeDebug)]
 pub enum Chain {
     /// Relay chain
-    Relay,
+    Relay(NetworkId),
     /// Parachain with ParaId
     Parachain(u32),
 }
@@ -49,6 +49,8 @@ pub struct NftLocation {
     pub nft: Nft,
 }
 
+use sp_std::boxed::Box;
+
 impl NftLocation {
     pub fn new<T: Config>(
         para_id: u32,
@@ -69,23 +71,23 @@ impl NftLocation {
 
     pub fn derive_account<AccountId: Decode>(&self) -> AccountId {
         let chain = match self.chain {
-            Chain::Relay => "relay".encode(),
-            Chain::Parachain(para_id) => ["para-".encode(), para_id.encode()].concat(),
+            Chain::Relay(network_id) => (b"relay", network_id).encode(),
+            Chain::Parachain(para_id) => (b"para", para_id).encode(),
         };
 
         let collection = match self.collection {
-            Collection::Id(id) => ["id-".encode(), id.encode()].concat(),
-            Collection::Contract20(key) => ["contract20-".encode(), key.encode()].concat(),
-            Collection::Contract32(key) => ["contract32-".encode(), key.encode()].concat(),
+            Collection::Id(id) => (b"id", id).encode(),
+            Collection::Contract20(key) => (b"contract20", key).encode(),
+            Collection::Contract32(key) => (b"contract32", key).encode(),
         };
 
         let nft = match self.nft {
-            Nft::Id(id) => ["id-".encode(), id.encode()].concat(),
-            Nft::Key20(key) => ["key20-".encode(), key.encode()].concat(),
-            Nft::Key32(key) => ["key32-".encode(), key.encode()].concat(),
+            Nft::Id(id) => (b"id", id).encode(),
+            Nft::Key20(key) => (b"key20", key).encode(),
+            Nft::Key32(key) => (b"key32", key).encode(),
         };
 
-        let entropy = (chain, collection, nft).using_encoded(blake2_256);
+        let entropy = blake2_256(&[chain, collection, nft].concat());
 
         AccountId::decode(&mut TrailingZeroInput::new(entropy.as_ref()))
             .expect("infinite length input; no invalid inputs for type; qed")
