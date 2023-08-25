@@ -1,0 +1,58 @@
+[package]
+name = 'pallet-nft-origins'
+authors = ['InvArchitects <https://github.com/InvArch>']
+description = ''
+edition = '2021'
+homepage = 'https://invarch.network'
+license = 'GPLv3'
+repository = 'https://github.com/InvArch/InvArch-Frames/'
+version = '0.1.0-dev'
+
+[package.metadata.docs.rs]
+targets = ["x86_64-unknown-linux-gnu"]
+
+[dependencies]
+log = { version = "0.4.14", default-features = false }
+codec = { package = "parity-scale-codec", version = "3.0.0", features = ["derive"], default-features = false }
+scale-info = { version = "2.1.0", default-features = false, features = ["derive"] }
+serde = { version = "1.0.140", features = ["derive"], optional = true }
+
+frame-support = { git = "https://github.com/paritytech/substrate", default-features = false , branch = "polkadot-v0.9.43" }
+frame-system = { git = "https://github.com/paritytech/substrate", default-features = false , branch = "polkadot-v0.9.43" }
+sp-arithmetic = { git = "https://github.com/paritytech/substrate", default-features = false , branch = "polkadot-v0.9.43" }
+sp-core = { git = "https://github.com/paritytech/substrate", default-features = false , branch = "polkadot-v0.9.43" }
+sp-io = { git = "https://github.com/paritytech/substrate", default-features = false , branch = "polkadot-v0.9.43" }
+sp-runtime = { git = "https://github.com/paritytech/substrate", default-features = false , branch = "polkadot-v0.9.43" }
+sp-std = { git = "https://github.com/paritytech/substrate", default-features = false , branch = "polkadot-v0.9.43" }
+
+pallet-xcm = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "release-v0.9.43" }
+xcm = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "release-v0.9.43" }
+xcm-executor = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "release-v0.9.43" }
+
+frame-benchmarking = { git = 'https://github.com/paritytech/substrate.git', default-features = false, optional = true, branch = "polkadot-v0.9.43" }
+
+[dev-dependencies]
+xcm-builder = { git = "https://github.com/paritytech/polkadot", default-features = false, branch = "release-v0.9.43" }
+
+[features]
+default = ["std"]
+std = [
+	"serde",
+	"codec/std",
+	"scale-info/std",
+	"sp-core/std",
+	"sp-runtime/std",
+	"sp-arithmetic/std",
+	"sp-io/std",
+	"sp-std/std",
+	"frame-support/std",
+	"frame-system/std",
+  "xcm/std",
+  "xcm-builder/std",
+]
+runtime-benchmarks = [
+	"frame-benchmarking/runtime-benchmarks",
+	"sp-runtime/runtime-benchmarks",
+	"frame-system/runtime-benchmarks",
+]
+try-runtime = ["frame-support/try-runtime"]
