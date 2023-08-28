@@ -13,10 +13,20 @@ use xcm::latest::{Junction, NetworkId};
 
 #[derive(PartialEq, Eq, Encode, Decode, TypeInfo, MaxEncodedLen, Clone, RuntimeDebug)]
 pub enum Chain {
-    /// Relay chain
     Relay(NetworkId),
-    /// Parachain with ParaId
     Parachain(u32),
+}
+
+impl Chain {
+    pub fn new_parachain_verified<T: Config>(
+        para_id: u32,
+        verifier_junction: Junction,
+    ) -> Option<Self> {
+        <<T as Config>::Chains as ChainVerifier>::get_chain_from_verifier(
+            para_id,
+            verifier_junction,
+        )
+    }
 }
 
 #[derive(PartialEq, Eq, Encode, Decode, TypeInfo, MaxEncodedLen, Clone, RuntimeDebug)]
@@ -49,10 +59,8 @@ pub struct NftLocation {
     pub nft: Nft,
 }
 
-use sp_std::boxed::Box;
-
 impl NftLocation {
-    pub fn new<T: Config>(
+    pub fn new_verified<T: Config>(
         para_id: u32,
         verifier_junction: Junction,
         collection: Collection,
@@ -67,6 +75,14 @@ impl NftLocation {
             collection,
             nft,
         })
+    }
+
+    pub fn new(chain: Chain, collection: Collection, nft: Nft) -> Self {
+        Self {
+            chain,
+            collection,
+            nft,
+        }
     }
 
     pub fn derive_account<AccountId: Decode>(&self) -> AccountId {

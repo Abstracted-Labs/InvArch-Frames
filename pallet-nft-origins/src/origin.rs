@@ -1,23 +1,33 @@
 use crate::{
-    location::NftLocation,
-    pallet::{self, Origin},
-    Config,
+    location::{Chain, NftLocation},
+    pallet, Config,
 };
 use codec::{Decode, Encode, MaxEncodedLen};
-use core::marker::PhantomData;
 use frame_support::{error::BadOrigin, RuntimeDebug};
 use scale_info::TypeInfo;
-use sp_runtime::traits::AtLeast32BitUnsigned;
 
 #[derive(PartialEq, Eq, Encode, Decode, TypeInfo, MaxEncodedLen, Clone, RuntimeDebug)]
-pub struct NftOrigin(pub NftLocation);
+pub enum NftOrigin {
+    Nft(NftLocation),
+    Verifier(Chain),
+}
 
 pub fn ensure_nft<T: Config, OuterOrigin>(o: OuterOrigin) -> Result<NftLocation, BadOrigin>
 where
     OuterOrigin: Into<Result<pallet::Origin, OuterOrigin>>,
 {
     match o.into() {
-        Ok(NftOrigin(internal)) => Ok(internal),
+        Ok(NftOrigin::Nft(nft_location)) => Ok(nft_location),
+        _ => Err(BadOrigin),
+    }
+}
+
+pub fn ensure_verifier<T: Config, OuterOrigin>(o: OuterOrigin) -> Result<Chain, BadOrigin>
+where
+    OuterOrigin: Into<Result<pallet::Origin, OuterOrigin>>,
+{
+    match o.into() {
+        Ok(NftOrigin::Verifier(chain)) => Ok(chain),
         _ => Err(BadOrigin),
     }
 }
