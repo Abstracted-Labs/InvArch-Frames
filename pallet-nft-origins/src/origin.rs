@@ -1,5 +1,5 @@
 use crate::{
-    location::{Chain, NftLocation},
+    location::{NftLocation, Parachain},
     pallet, Config,
 };
 use codec::{Decode, Encode, MaxEncodedLen};
@@ -9,7 +9,7 @@ use scale_info::TypeInfo;
 #[derive(PartialEq, Eq, Encode, Decode, TypeInfo, MaxEncodedLen, Clone, RuntimeDebug)]
 pub enum NftOrigin {
     Nft(NftLocation),
-    Verifier(Chain),
+    Verifier(Parachain),
 }
 
 pub fn ensure_nft<T: Config, OuterOrigin>(o: OuterOrigin) -> Result<NftLocation, BadOrigin>
@@ -22,7 +22,7 @@ where
     }
 }
 
-pub fn ensure_verifier<T: Config, OuterOrigin>(o: OuterOrigin) -> Result<Chain, BadOrigin>
+pub fn ensure_verifier<T: Config, OuterOrigin>(o: OuterOrigin) -> Result<Parachain, BadOrigin>
 where
     OuterOrigin: Into<Result<pallet::Origin, OuterOrigin>>,
 {

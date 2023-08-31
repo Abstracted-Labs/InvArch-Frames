@@ -6,7 +6,7 @@ pub mod origin;
 pub mod xcm_converters;
 
 pub use chains::ChainVerifier;
-pub use location::{Chain, Collection, Nft, NftLocation};
+pub use location::{Collection, Nft, NftLocation, Parachain};
 pub use origin::NftOrigin;
 pub use xcm_converters::*;
 
@@ -16,7 +16,7 @@ pub use pallet::*;
 pub mod pallet {
     use crate::{
         chains::ChainVerifier,
-        location::{Collection, Nft, NftLocation},
+        location::{Collection, Nft, NftLocation, Parachain},
         origin::NftOrigin,
     };
     use frame_support::{
@@ -40,8 +40,18 @@ pub mod pallet {
             + From<frame_system::Call<Self>>
             + IsType<<Self as frame_system::Config>::RuntimeCall>;
 
+        type RegisteredCalls: Parameter
+            + Dispatchable<
+                RuntimeOrigin = <Self as Config>::RuntimeOrigin,
+                PostInfo = PostDispatchInfo,
+            > + GetDispatchInfo;
+
         type RuntimeOrigin: From<Origin> + From<<Self as frame_system::Config>::RuntimeOrigin>;
     }
+
+    #[pallet::storage]
+    #[pallet::getter(fn get_registered_chain)]
+    pub type RegisteredChains<T: Config> = StorageMap<_, Twox128, xcm::latest::Junction, Parachain>;
 
     #[pallet::pallet]
     pub struct Pallet<T>(_);
@@ -53,9 +63,6 @@ pub mod pallet {
     pub enum Error<T> {
         SendingFailed,
     }
-
-    #[pallet::hooks]
-    impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {}
 
     #[pallet::event]
     #[pallet::generate_deposit(pub(crate) fn deposit_event)]
@@ -72,6 +79,68 @@ pub mod pallet {
             From<<T as frame_system::Config>::RuntimeOrigin>,
     {
         #[pallet::call_index(0)]
+        #[pallet::weight({
+            let dispatch_info = call.get_dispatch_info();
+			      (
+				        dispatch_info.weight,
+				        dispatch_info.class,
+			      )
+		    })]
+        pub fn dispatch_as_nft(
+            verifier: OriginFor<T>,
+            collection: Collection,
+            nft: Nft,
+            call: Box<<T as Config>::RuntimeCall>,
+        ) -> DispatchResultWithPostInfo {
+            let chain = crate::origin::ensure_verifier::<
+                T,
+                <T as frame_system::Config>::RuntimeOrigin,
+            >(verifier)?;
+
+            let nft_location = NftLocation::new(chain, collection, nft);
+
+            (*call).dispatch(NftOrigin::Nft(nft_location).into())
+        }
+
+        #[pallet::call_index(1)]
+        #[pallet::weight({
+            let dispatch_info = registered_call.get_dispatch_info();
+			      (
+				        dispatch_info.weight,
+				        dispatch_info.class,
+			      )
+		    })]
+        pub fn dispatch_registered_call_as_nft(
+            verifier: OriginFor<T>,
+            collection: Collection,
+            nft: Nft,
+            registered_call: Box<<T as Config>::RegisteredCalls>,
+        ) -> DispatchResultWithPostInfo {
+            let chain = crate::origin::ensure_verifier::<
+                T,
+                <T as frame_system::Config>::RuntimeOrigin,
+            >(verifier)?;
+
+            let nft_location = NftLocation::new(chain, collection, nft);
+
+            (*registered_call).dispatch(NftOrigin::Nft(nft_location).into())
+        }
+
+        #[pallet::call_index(2)]
+        #[pallet::weight(1)]
+        pub fn set_registered_chain(
+            _: OriginFor<T>,
+            verifier: xcm::latest::Junction,
+            chain: Option<Parachain>,
+        ) -> DispatchResult {
+            RegisteredChains::<T>::set(verifier, chain);
+
+            Ok(())
+        }
+
+        // \/ TEST CALLS \/
+
+        #[pallet::call_index(90)]
         #[pallet::weight(1)]
         pub fn test_nft_location(nft: OriginFor<T>) -> DispatchResult {
             let nft_location =
@@ -82,7 +151,7 @@ pub mod pallet {
             Ok(())
         }
 
-        #[pallet::call_index(1)]
+        #[pallet::call_index(91)]
         #[pallet::weight(1)]
         pub fn test_send_xcm_as_nft(
             _: OriginFor<T>,
@@ -110,7 +179,7 @@ pub mod pallet {
             Ok(())
         }
 
-        #[pallet::call_index(2)]
+        #[pallet::call_index(92)]
         #[pallet::weight(1)]
         pub fn test_send_xcm_as_verifier(
             _: OriginFor<T>,
@@ -134,30 +203,6 @@ pub mod pallet {
                 .map_err(|_| Error::<T>::SendingFailed)?;
 
             Ok(())
-        }
-
-        #[pallet::call_index(3)]
-        #[pallet::weight({
-            let dispatch_info = call.get_dispatch_info();
-			      (
-				        dispatch_info.weight,
-				        dispatch_info.class,
-			      )
-		    })]
-        pub fn dispatch_as_nft(
-            verifier: OriginFor<T>,
-            collection: Collection,
-            nft: Nft,
-            call: Box<<T as Config>::RuntimeCall>,
-        ) -> DispatchResultWithPostInfo {
-            let chain = crate::origin::ensure_verifier::<
-                T,
-                <T as frame_system::Config>::RuntimeOrigin,
-            >(verifier)?;
-
-            let nft_location = NftLocation::new(chain, collection, nft);
-
-            (*call).dispatch(NftOrigin::Nft(nft_location).into())
         }
     }
 }

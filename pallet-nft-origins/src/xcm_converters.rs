@@ -1,5 +1,5 @@
 use crate::{
-    location::{Chain, Collection, Nft, NftLocation},
+    location::{Collection, Nft, NftLocation, Parachain},
     origin::NftOrigin,
     Config,
 };
@@ -7,7 +7,7 @@ use core::marker::PhantomData;
 use frame_support::traits::OriginTrait;
 use xcm::latest::{
     Junction,
-    Junctions::{X2, X4},
+    Junctions::{X1, X2, X4},
     MultiLocation, OriginKind,
 };
 use xcm_executor::traits::ConvertOrigin;
@@ -44,7 +44,7 @@ impl<RuntimeOrigin: OriginTrait + From<crate::pallet::Origin>, T: Config>
                 para_id,
                 verifier_junction,
                 Collection::Contract20(collection_key),
-                Nft::Id(nft_id),
+                Nft::U128Id(nft_id),
             )
             .map(|location| NftOrigin::Nft(location).into())
             .ok_or(origin),
@@ -64,20 +64,17 @@ impl<RuntimeOrigin: OriginTrait + From<crate::pallet::Origin>, T: Config>
         kind: OriginKind,
     ) -> Result<RuntimeOrigin, MultiLocation> {
         let origin = origin.into();
-        log::trace!(target: "xcm::origin_conversion", "ParentAsSuperuser origin: {:?}, kind: {:?}", origin, kind);
+        log::trace!(target: "xcm::origin_conversion", "VerifierMultilocationAsOrigin origin: {:?}, kind: {:?}", origin, kind);
 
-        match (kind, origin) {
-            (
-                OriginKind::Native,
-                MultiLocation {
-                    parents: 1,
-                    interior: X2(Junction::Parachain(para_id), verifier_junction),
-                },
-            ) => Chain::new_parachain_verified::<T>(para_id, verifier_junction)
+        match origin {
+            MultiLocation {
+                parents: 1,
+                interior: X2(Junction::Parachain(para_id), verifier_junction),
+            } => Parachain::new_parachain_verified::<T>(para_id, verifier_junction)
                 .map(|chain| NftOrigin::Verifier(chain).into())
                 .ok_or(origin),
 
-            (_, origin) => Err(origin),
+            _ => Err(origin),
         }
     }
 }
