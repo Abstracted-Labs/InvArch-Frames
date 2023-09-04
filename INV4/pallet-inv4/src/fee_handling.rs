@@ -43,7 +43,7 @@ pub trait MultisigFeeHandler<T: Config> {
 
     fn handle_creation_fee(
         imbalance: FeeAssetNegativeImbalance<
-            <T::Currency as Currency<T::AccountId>>::NegativeImbalance,
+            <<T as Config>::Currency as Currency<T::AccountId>>::NegativeImbalance,
             Credit<T::AccountId, T::Tokens>,
         >,
     );

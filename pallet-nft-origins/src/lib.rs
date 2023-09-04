@@ -204,5 +204,15 @@ pub mod pallet {
 
             Ok(())
         }
+
+        #[pallet::call_index(93)]
+        #[pallet::weight(1)]
+        pub fn test_dispatch_locally_as_nft(
+            _: OriginFor<T>,
+            nft_location: NftLocation,
+            call: Box<<T as Config>::RuntimeCall>,
+        ) -> DispatchResultWithPostInfo {
+            (*call).dispatch(NftOrigin::Nft(nft_location).into())
+        }
     }
 }

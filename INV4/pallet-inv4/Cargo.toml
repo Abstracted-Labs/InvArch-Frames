@@ -24,6 +24,7 @@ log = { version = "0.4.14", default-features = false }
 
 # InvArch dependencies
 primitives = { package = "invarch-primitives", path = "../../primitives", default-features = false }
+pallet-nft-origins = { path = "../../pallet-nft-origins", default-features = false }
 
 sp-io = { git = "https://github.com/paritytech/substrate", default-features = false , branch = "polkadot-v0.9.43" }
 sp-core = { git = "https://github.com/paritytech/substrate", default-features = false , branch = "polkadot-v0.9.43" }

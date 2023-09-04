@@ -7,7 +7,9 @@ use sp_io::hashing::blake2_256;
 use sp_runtime::traits::TrailingZeroInput;
 use xcm::latest::Junction;
 
-#[derive(PartialEq, Eq, Encode, Decode, TypeInfo, MaxEncodedLen, Clone, RuntimeDebug)]
+#[derive(
+    PartialEq, Eq, Encode, Decode, TypeInfo, MaxEncodedLen, Clone, RuntimeDebug, PartialOrd, Ord,
+)]
 pub struct Parachain(pub u32);
 
 impl Parachain {
@@ -26,7 +28,9 @@ impl Parachain {
     }
 }
 
-#[derive(PartialEq, Eq, Encode, Decode, TypeInfo, MaxEncodedLen, Clone, RuntimeDebug)]
+#[derive(
+    PartialEq, Eq, Encode, Decode, TypeInfo, MaxEncodedLen, Clone, RuntimeDebug, PartialOrd, Ord,
+)]
 #[repr(u8)]
 pub enum Collection {
     /// Pallet based NFT collection
@@ -37,7 +41,9 @@ pub enum Collection {
     Contract32([u8; 32]) = 2,
 }
 
-#[derive(PartialEq, Eq, Encode, Decode, TypeInfo, MaxEncodedLen, Clone, RuntimeDebug)]
+#[derive(
+    PartialEq, Eq, Encode, Decode, TypeInfo, MaxEncodedLen, Clone, RuntimeDebug, PartialOrd, Ord,
+)]
 #[repr(u8)]
 pub enum Nft {
     /// U128 NFT id
@@ -50,7 +56,9 @@ pub enum Nft {
     Key32([u8; 32]) = 3,
 }
 
-#[derive(PartialEq, Eq, Encode, Decode, TypeInfo, MaxEncodedLen, Clone, RuntimeDebug)]
+#[derive(
+    PartialEq, Eq, Encode, Decode, TypeInfo, MaxEncodedLen, Clone, RuntimeDebug, PartialOrd, Ord,
+)]
 pub struct NftLocation {
     /// Chain where the collection and NFT originate
     pub chain: Parachain,

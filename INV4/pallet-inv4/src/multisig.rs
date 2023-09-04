@@ -5,6 +5,7 @@ use crate::{
     util::derive_core_account,
     voting::{Tally, Vote},
 };
+use codec::Decode;
 use core::{
     convert::{TryFrom, TryInto},
     iter::Sum,
@@ -34,7 +35,7 @@ pub type BoundedCallBytes<T> = BoundedVec<u8, <T as Config>::MaxCallSize>;
 #[derive(Clone, Encode, Decode, RuntimeDebug, MaxEncodedLen, TypeInfo, PartialEq, Eq)]
 pub struct MultisigOperation<AccountId, TallyOf, Call, Metadata> {
     pub tally: TallyOf,
-    pub original_caller: AccountId,
+    pub original_caller: MultisigMember<AccountId>,
     pub actual_call: Call,
     pub metadata: Option<Metadata>,
     pub fee_asset: FeeAsset,
@@ -46,6 +47,25 @@ pub type MultisigOperationOf<T> = MultisigOperation<
     BoundedCallBytes<T>,
     BoundedVec<u8, <T as pallet::Config>::MaxMetadata>,
 >;
+
+#[derive(
+    Clone, Encode, Decode, RuntimeDebug, MaxEncodedLen, TypeInfo, PartialEq, Eq, PartialOrd, Ord,
+)]
+pub enum MultisigMember<AccountId> {
+    AccountId(AccountId),
+    Nft(pallet_nft_origins::location::NftLocation),
+}
+
+impl<AccountId: Decode> MultisigMember<AccountId> {
+    pub fn account(self) -> AccountId {
+        match self {
+            Self::AccountId(account_id) => account_id,
+            Self::Nft(nft_location) => nft_location.derive_account::<AccountId>(),
+        }
+    }
+}
+
+pub type MultisigMemberOf<T> = MultisigMember<<T as frame_system::Config>::AccountId>;
 
 impl<T: Config> Pallet<T>
 where
@@ -59,16 +79,18 @@ where
     pub(crate) fn inner_token_mint(
         origin: OriginFor<T>,
         amount: BalanceOf<T>,
-        target: T::AccountId,
+        target: MultisigMemberOf<T>,
     ) -> DispatchResult {
         let core_origin = ensure_multisig::<T, OriginFor<T>>(origin)?;
         let core_id = core_origin.id;
 
-        T::AssetsProvider::mint_into(core_id, &target, amount)?;
+        let target_account = target.account();
+
+        T::AssetsProvider::mint_into(core_id, &target_account, amount)?;
 
         Self::deposit_event(Event::Minted {
             core_id,
-            target,
+            target: target_account,
             amount,
         });
 
@@ -79,14 +101,16 @@ where
     pub(crate) fn inner_token_burn(
         origin: OriginFor<T>,
         amount: BalanceOf<T>,
-        target: T::AccountId,
+        target: MultisigMemberOf<T>,
     ) -> DispatchResult {
         let core_origin = ensure_multisig::<T, OriginFor<T>>(origin)?;
         let core_id = core_origin.id;
 
+        let target_account = target.account();
+
         T::AssetsProvider::burn_from(
             core_id,
-            &target,
+            &target_account,
             amount,
             Precision::Exact,
             Fortitude::Polite,
@@ -94,7 +118,7 @@ where
 
         Self::deposit_event(Event::Burned {
             core_id,
-            target,
+            target: target_account,
             amount,
         });
 
@@ -140,7 +164,7 @@ where
                     <T as Config>::CoreId,
                     <T as frame_system::Config>::AccountId,
                 >(core_id),
-                voter: owner,
+                voter: MultisigMember::AccountId(owner),
                 call_hash,
                 call: *call,
                 result: dispatch_result.map(|_| ()).map_err(|e| e.error),
@@ -160,12 +184,12 @@ where
                         owner_balance,
                         Zero::zero(),
                         BoundedBTreeMap::try_from(BTreeMap::from([(
-                            owner.clone(),
+                            MultisigMember::AccountId(owner.clone()),
                             Vote::Aye(owner_balance),
                         )]))
                         .map_err(|_| Error::<T>::MaxCallersExceeded)?,
                     ),
-                    original_caller: owner.clone(),
+                    original_caller: MultisigMember::AccountId(owner.clone()),
                     actual_call: bounded_call,
                     metadata,
                     fee_asset,
@@ -190,15 +214,16 @@ where
 
     /// Vote on a multisig transaction that has not been executed yet
     pub(crate) fn inner_vote_multisig(
-        caller: OriginFor<T>,
+        caller: MultisigMemberOf<T>,
         core_id: T::CoreId,
         call_hash: T::Hash,
         aye: bool,
     ) -> DispatchResultWithPostInfo {
         Multisig::<T>::try_mutate_exists(core_id, call_hash, |data| {
-            let owner = ensure_signed(caller.clone())?;
+            //let owner = ensure_signed(caller.clone())?;
+            let caller_account = caller.clone().account();
 
-            let voter_balance: BalanceOf<T> = T::AssetsProvider::balance(core_id, &owner);
+            let voter_balance: BalanceOf<T> = T::AssetsProvider::balance(core_id, &caller_account);
 
             ensure!(!voter_balance.is_zero(), Error::<T>::NoPermission);
 
@@ -216,7 +241,7 @@ where
 
             old_data
                 .tally
-                .process_vote(owner.clone(), Some(new_vote_record))?;
+                .process_vote(caller.clone(), Some(new_vote_record))?;
 
             let support = old_data.tally.support(core_id);
             let approval = old_data.tally.approval(core_id);
@@ -242,7 +267,7 @@ where
                         <T as Config>::CoreId,
                         <T as frame_system::Config>::AccountId,
                     >(core_id),
-                    voter: owner,
+                    voter: caller,
                     call_hash,
                     call: decoded_call,
                     result: dispatch_result.map(|_| ()).map_err(|e| e.error),
@@ -257,7 +282,7 @@ where
                         <T as Config>::CoreId,
                         <T as frame_system::Config>::AccountId,
                     >(core_id),
-                    voter: owner,
+                    voter: caller,
                     votes_added: new_vote_record,
                     current_votes: old_data.tally,
                     call_hash,
@@ -279,7 +304,9 @@ where
 
             let mut old_data = data.take().ok_or(Error::<T>::MultisigCallNotFound)?;
 
-            let old_vote = old_data.tally.process_vote(owner.clone(), None)?;
+            let old_vote = old_data
+                .tally
+                .process_vote(MultisigMember::AccountId(owner.clone()), None)?;
 
             *data = Some(old_data.clone());
 

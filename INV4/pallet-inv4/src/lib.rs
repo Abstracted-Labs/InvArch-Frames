@@ -51,6 +51,7 @@ pub mod pallet {
 
     use crate::{
         fee_handling::MultisigFeeHandler,
+        multisig::{MultisigMember, MultisigMemberOf},
         voting::{Tally, VoteRecord},
     };
 
@@ -87,7 +88,9 @@ pub mod pallet {
     pub type CallOf<T> = <T as Config>::RuntimeCall;
 
     #[pallet::config]
-    pub trait Config: frame_system::Config + pallet_balances::Config {
+    pub trait Config:
+        frame_system::Config + pallet_balances::Config + pallet_nft_origins::Config
+    {
         /// The IPS Pallet Events
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
         /// The IPS ID type
@@ -251,7 +254,7 @@ pub mod pallet {
         MultisigVoteAdded {
             core_id: T::CoreId,
             executor_account: T::AccountId,
-            voter: T::AccountId,
+            voter: MultisigMemberOf<T>,
             votes_added: VoteRecord<T>,
             current_votes: Tally<T>,
             call_hash: T::Hash,
@@ -269,7 +272,7 @@ pub mod pallet {
         MultisigExecuted {
             core_id: T::CoreId,
             executor_account: T::AccountId,
-            voter: T::AccountId,
+            voter: MultisigMemberOf<T>,
             call_hash: T::Hash,
             call: CallOf<T>,
             result: DispatchResult,
@@ -321,6 +324,7 @@ pub mod pallet {
             INV4Origin<T, <T as pallet::Config>::CoreId, <T as frame_system::Config>::AccountId>,
             <T as frame_system::Config>::RuntimeOrigin,
         >: From<<T as frame_system::Config>::RuntimeOrigin>,
+    Result<pallet_nft_origins::origin::NftOrigin, <T as frame_system::Config>::RuntimeOrigin>: From<<T as frame_system::Config>::RuntimeOrigin>,
         <<T as pallet::Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance: Sum,
     {
         /// Create IP (Intellectual Property) Set (IPS)
@@ -354,7 +358,7 @@ pub mod pallet {
         pub fn token_mint(
             origin: OriginFor<T>,
             amount: BalanceOf<T>,
-            target: T::AccountId,
+            target: MultisigMemberOf<T>,
         ) -> DispatchResult {
             Pallet::<T>::inner_token_mint(origin, amount, target)
         }
@@ -365,7 +369,7 @@ pub mod pallet {
         pub fn token_burn(
             origin: OriginFor<T>,
             amount: BalanceOf<T>,
-            target: T::AccountId,
+            target: MultisigMemberOf<T>,
         ) -> DispatchResult {
             Pallet::<T>::inner_token_burn(origin, amount, target)
         }
@@ -395,6 +399,20 @@ pub mod pallet {
             call_hash: T::Hash,
             aye: bool,
         ) -> DispatchResultWithPostInfo {
+            let caller = MultisigMember::AccountId(ensure_signed(caller)?);
+            Pallet::<T>::inner_vote_multisig(caller, core_id, call_hash, aye)
+        }
+
+        #[pallet::call_index(10)]
+        #[pallet::weight(1)]
+        pub fn nft_vote_multisig(
+            origin: OriginFor<T>,
+            core_id: T::CoreId,
+            call_hash: T::Hash,
+            aye: bool,
+        ) -> DispatchResultWithPostInfo {
+            let caller = MultisigMember::Nft(pallet_nft_origins::origin::ensure_nft::<T, OriginFor<T>>(origin)?);
+
             Pallet::<T>::inner_vote_multisig(caller, core_id, call_hash, aye)
         }
 
