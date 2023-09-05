@@ -11,9 +11,10 @@ use sp_runtime::{
 };
 
 #[derive(Clone, TypeInfo, Encode, Decode, MaxEncodedLen, Debug, PartialEq, Eq)]
+#[repr(u8)]
 pub enum FeeAsset {
-    TNKR,
-    KSM,
+    TNKR = 0,
+    KSM = 1,
 }
 
 pub enum FeeAssetNegativeImbalance<TNKRNegativeImbalance, KSMNegativeImbalance> {

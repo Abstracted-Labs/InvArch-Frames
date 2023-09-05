@@ -19,7 +19,7 @@ use frame_support::{
     },
     BoundedBTreeMap,
 };
-use frame_system::{ensure_signed, pallet_prelude::*};
+use frame_system::pallet_prelude::*;
 use sp_runtime::{
     traits::{Hash, Zero},
     Perbill,
@@ -84,13 +84,13 @@ where
         let core_origin = ensure_multisig::<T, OriginFor<T>>(origin)?;
         let core_id = core_origin.id;
 
-        let target_account = target.account();
+        let target_account = target.clone().account();
 
         T::AssetsProvider::mint_into(core_id, &target_account, amount)?;
 
         Self::deposit_event(Event::Minted {
             core_id,
-            target: target_account,
+            target,
             amount,
         });
 
@@ -106,7 +106,7 @@ where
         let core_origin = ensure_multisig::<T, OriginFor<T>>(origin)?;
         let core_id = core_origin.id;
 
-        let target_account = target.account();
+        let target_account = target.clone().account();
 
         T::AssetsProvider::burn_from(
             core_id,
@@ -118,7 +118,7 @@ where
 
         Self::deposit_event(Event::Burned {
             core_id,
-            target: target_account,
+            target,
             amount,
         });
 
@@ -127,17 +127,19 @@ where
 
     /// Initiates a multisig transaction. If `caller` has enough votes, execute `call` immediately, otherwise a vote begins.
     pub(crate) fn inner_operate_multisig(
-        caller: OriginFor<T>,
+        member: MultisigMemberOf<T>,
         core_id: T::CoreId,
         metadata: Option<BoundedVec<u8, T::MaxMetadata>>,
         fee_asset: FeeAsset,
         call: Box<<T as Config>::RuntimeCall>,
     ) -> DispatchResultWithPostInfo {
-        let owner = ensure_signed(caller)?;
+        //let owner = ensure_signed(caller)?;
 
-        let owner_balance: BalanceOf<T> = T::AssetsProvider::balance(core_id, &owner);
+        let member_account = member.clone().account();
 
-        ensure!(!owner_balance.is_zero(), Error::<T>::NoPermission);
+        let member_balance: BalanceOf<T> = T::AssetsProvider::balance(core_id, &member_account);
+
+        ensure!(!member_balance.is_zero(), Error::<T>::NoPermission);
 
         let (minimum_support, _) = Pallet::<T>::minimum_support_and_required_approval(core_id)
             .ok_or(Error::<T>::CoreNotFound)?;
@@ -153,7 +155,7 @@ where
         );
 
         // If `caller` has enough balance to meet/exeed the threshold, then go ahead and execute the `call` now.
-        if Perbill::from_rational(owner_balance, total_issuance) >= minimum_support {
+        if Perbill::from_rational(member_balance, total_issuance) >= minimum_support {
             let dispatch_result =
                 crate::dispatch::dispatch_call::<T>(core_id, &fee_asset, *call.clone());
 
@@ -164,7 +166,7 @@ where
                     <T as Config>::CoreId,
                     <T as frame_system::Config>::AccountId,
                 >(core_id),
-                voter: MultisigMember::AccountId(owner),
+                voter: member,
                 call_hash,
                 call: *call,
                 result: dispatch_result.map(|_| ()).map_err(|e| e.error),
@@ -181,15 +183,15 @@ where
                 call_hash,
                 MultisigOperation {
                     tally: Tally::from_parts(
-                        owner_balance,
+                        member_balance,
                         Zero::zero(),
                         BoundedBTreeMap::try_from(BTreeMap::from([(
-                            MultisigMember::AccountId(owner.clone()),
-                            Vote::Aye(owner_balance),
+                            member.clone(),
+                            Vote::Aye(member_balance),
                         )]))
                         .map_err(|_| Error::<T>::MaxCallersExceeded)?,
                     ),
-                    original_caller: MultisigMember::AccountId(owner.clone()),
+                    original_caller: member.clone(),
                     actual_call: bounded_call,
                     metadata,
                     fee_asset,
@@ -203,8 +205,8 @@ where
                     <T as Config>::CoreId,
                     <T as frame_system::Config>::AccountId,
                 >(core_id),
-                voter: owner,
-                votes_added: Vote::Aye(owner_balance),
+                voter: member,
+                votes_added: Vote::Aye(member_balance),
                 call_hash,
             });
         }
@@ -214,18 +216,18 @@ where
 
     /// Vote on a multisig transaction that has not been executed yet
     pub(crate) fn inner_vote_multisig(
-        caller: MultisigMemberOf<T>,
+        member: MultisigMemberOf<T>,
         core_id: T::CoreId,
         call_hash: T::Hash,
         aye: bool,
     ) -> DispatchResultWithPostInfo {
         Multisig::<T>::try_mutate_exists(core_id, call_hash, |data| {
             //let owner = ensure_signed(caller.clone())?;
-            let caller_account = caller.clone().account();
+            let member_account = member.clone().account();
 
-            let voter_balance: BalanceOf<T> = T::AssetsProvider::balance(core_id, &caller_account);
+            let member_balance: BalanceOf<T> = T::AssetsProvider::balance(core_id, &member_account);
 
-            ensure!(!voter_balance.is_zero(), Error::<T>::NoPermission);
+            ensure!(!member_balance.is_zero(), Error::<T>::NoPermission);
 
             let mut old_data = data.take().ok_or(Error::<T>::MultisigCallNotFound)?;
 
@@ -234,14 +236,14 @@ where
                     .ok_or(Error::<T>::CoreNotFound)?;
 
             let new_vote_record = if aye {
-                Vote::Aye(voter_balance)
+                Vote::Aye(member_balance)
             } else {
-                Vote::Nay(voter_balance)
+                Vote::Nay(member_balance)
             };
 
             old_data
                 .tally
-                .process_vote(caller.clone(), Some(new_vote_record))?;
+                .process_vote(member.clone(), Some(new_vote_record))?;
 
             let support = old_data.tally.support(core_id);
             let approval = old_data.tally.approval(core_id);
@@ -267,7 +269,7 @@ where
                         <T as Config>::CoreId,
                         <T as frame_system::Config>::AccountId,
                     >(core_id),
-                    voter: caller,
+                    voter: member,
                     call_hash,
                     call: decoded_call,
                     result: dispatch_result.map(|_| ()).map_err(|e| e.error),
@@ -282,7 +284,7 @@ where
                         <T as Config>::CoreId,
                         <T as frame_system::Config>::AccountId,
                     >(core_id),
-                    voter: caller,
+                    voter: member,
                     votes_added: new_vote_record,
                     current_votes: old_data.tally,
                     call_hash,
@@ -295,18 +297,16 @@ where
 
     /// Withdraw vote from an ongoing multisig operation
     pub(crate) fn inner_withdraw_vote_multisig(
-        caller: OriginFor<T>,
+        member: MultisigMemberOf<T>,
         core_id: T::CoreId,
         call_hash: T::Hash,
     ) -> DispatchResultWithPostInfo {
         Multisig::<T>::try_mutate_exists(core_id, call_hash, |data| {
-            let owner = ensure_signed(caller.clone())?;
+            //let owner = ensure_signed(caller.clone())?;
 
             let mut old_data = data.take().ok_or(Error::<T>::MultisigCallNotFound)?;
 
-            let old_vote = old_data
-                .tally
-                .process_vote(MultisigMember::AccountId(owner.clone()), None)?;
+            let old_vote = old_data.tally.process_vote(member.clone(), None)?;
 
             *data = Some(old_data.clone());
 
@@ -317,7 +317,7 @@ where
                     <T as Config>::CoreId,
                     <T as frame_system::Config>::AccountId,
                 >(core_id),
-                voter: owner,
+                voter: member,
                 votes_removed: old_vote,
                 call_hash,
             });
