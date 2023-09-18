@@ -6,4 +6,5 @@ members = [
     "pallet-checked-inflation",
     "pallet-rings",
     "pallet-nft-origins",
+    "pallet-core-assets",
 ]

@@ -51,7 +51,7 @@ pub mod pallet {
 
     use crate::{
         fee_handling::MultisigFeeHandler,
-        multisig::{MultisigMember, MultisigMemberOf},
+        multisig::MultisigMemberOf,
         origin::{ensure_multisig_member_account_id, ensure_multisig_member_nft},
         voting::{Tally, VoteRecord},
     };
@@ -146,8 +146,13 @@ pub mod pallet {
         #[pallet::constant]
         type KSMAssetId: Get<<<Self as Config>::Tokens as Inspect<<Self as frame_system::Config>::AccountId>>::AssetId>;
 
-        type AssetsProvider: fungibles::Inspect<Self::AccountId, Balance = BalanceOf<Self>, AssetId = Self::CoreId>
-            + fungibles::Mutate<Self::AccountId, AssetId = Self::CoreId>; // + fungibles::Transfer<Self::AccountId, AssetId = Self::CoreId>;
+        type AssetsProvider: fungibles::Inspect<
+                MultisigMemberOf<Self>,
+                Balance = BalanceOf<Self>,
+                AssetId = Self::CoreId,
+            > + fungibles::Mutate<MultisigMemberOf<Self>, AssetId = Self::CoreId>
+            + fungibles::InspectFreeze<MultisigMemberOf<Self>, Id = ()>
+            + fungibles::MutateFreeze<MultisigMemberOf<Self>, AssetId = Self::CoreId>;
 
         type Tokens: Balanced<Self::AccountId> + Inspect<Self::AccountId>;
 
@@ -207,7 +212,7 @@ pub mod pallet {
     #[pallet::storage]
     #[pallet::getter(fn core_members)]
     pub type CoreMembers<T: Config> =
-        StorageDoubleMap<_, Blake2_128Concat, T::CoreId, Blake2_128Concat, T::AccountId, ()>;
+        StorageDoubleMap<_, Blake2_128Concat, T::CoreId, Blake2_128Concat, MultisigMemberOf<T>, ()>;
 
     #[pallet::event]
     #[pallet::generate_deposit(pub(crate) fn deposit_event)]
@@ -482,6 +487,15 @@ pub mod pallet {
             frozen_tokens: Option<bool>,
         ) -> DispatchResult {
             Pallet::<T>::inner_set_parameters(origin, metadata, minimum_support, required_approval, frozen_tokens)
+        }
+
+        #[pallet::call_index(13)]
+        #[pallet::weight(1)]
+        pub fn set_frozen(
+            origin: OriginFor<T>,
+            frozen: bool,
+        ) -> DispatchResult {
+            Pallet::<T>::inner_set_frozen(origin, frozen)
         }
     }
 }

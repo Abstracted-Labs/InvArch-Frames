@@ -21,7 +21,7 @@ use frame_support::{
 };
 use frame_system::pallet_prelude::*;
 use sp_runtime::{
-    traits::{Hash, Zero},
+    traits::{Hash, IdentifyAccount, Zero},
     Perbill,
 };
 use sp_std::{boxed::Box, collections::btree_map::BTreeMap};
@@ -56,6 +56,20 @@ pub enum MultisigMember<AccountId> {
     Nft(pallet_nft_origins::location::NftLocation),
 }
 
+impl<AccountId> From<AccountId> for MultisigMember<AccountId> {
+    fn from(a: AccountId) -> Self {
+        Self::AccountId(a)
+    }
+}
+
+impl<AccountId: Decode> IdentifyAccount for MultisigMember<AccountId> {
+    type AccountId = AccountId;
+
+    fn into_account(self) -> AccountId {
+        self.account()
+    }
+}
+
 impl<AccountId: Decode> MultisigMember<AccountId> {
     pub fn account(self) -> AccountId {
         match self {
@@ -84,9 +98,7 @@ where
         let core_origin = ensure_multisig::<T, OriginFor<T>>(origin)?;
         let core_id = core_origin.id;
 
-        let target_account = target.clone().account();
-
-        T::AssetsProvider::mint_into(core_id, &target_account, amount)?;
+        T::AssetsProvider::mint_into(core_id, &target, amount)?;
 
         Self::deposit_event(Event::Minted {
             core_id,
@@ -106,11 +118,9 @@ where
         let core_origin = ensure_multisig::<T, OriginFor<T>>(origin)?;
         let core_id = core_origin.id;
 
-        let target_account = target.clone().account();
-
         T::AssetsProvider::burn_from(
             core_id,
-            &target_account,
+            &target,
             amount,
             Precision::Exact,
             Fortitude::Polite,
@@ -133,11 +143,7 @@ where
         fee_asset: FeeAsset,
         call: Box<<T as Config>::RuntimeCall>,
     ) -> DispatchResultWithPostInfo {
-        //let owner = ensure_signed(caller)?;
-
-        let member_account = member.clone().account();
-
-        let member_balance: BalanceOf<T> = T::AssetsProvider::balance(core_id, &member_account);
+        let member_balance: BalanceOf<T> = T::AssetsProvider::balance(core_id, &member);
 
         ensure!(!member_balance.is_zero(), Error::<T>::NoPermission);
 
@@ -222,10 +228,7 @@ where
         aye: bool,
     ) -> DispatchResultWithPostInfo {
         Multisig::<T>::try_mutate_exists(core_id, call_hash, |data| {
-            //let owner = ensure_signed(caller.clone())?;
-            let member_account = member.clone().account();
-
-            let member_balance: BalanceOf<T> = T::AssetsProvider::balance(core_id, &member_account);
+            let member_balance: BalanceOf<T> = T::AssetsProvider::balance(core_id, &member);
 
             ensure!(!member_balance.is_zero(), Error::<T>::NoPermission);
 
@@ -302,8 +305,6 @@ where
         call_hash: T::Hash,
     ) -> DispatchResultWithPostInfo {
         Multisig::<T>::try_mutate_exists(core_id, call_hash, |data| {
-            //let owner = ensure_signed(caller.clone())?;
-
             let mut old_data = data.take().ok_or(Error::<T>::MultisigCallNotFound)?;
 
             let old_vote = old_data.tally.process_vote(member.clone(), None)?;
@@ -340,11 +341,11 @@ where
         Ok(().into())
     }
 
-    pub fn add_member(core_id: &T::CoreId, member: &T::AccountId) {
+    pub fn add_member(core_id: &T::CoreId, member: &MultisigMemberOf<T>) {
         CoreMembers::<T>::insert(core_id, member, ())
     }
 
-    pub fn remove_member(core_id: &T::CoreId, member: &T::AccountId) {
+    pub fn remove_member(core_id: &T::CoreId, member: &MultisigMemberOf<T>) {
         CoreMembers::<T>::remove(core_id, member)
     }
 }

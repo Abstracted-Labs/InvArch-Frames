@@ -1,6 +1,7 @@
 use super::pallet::*;
 use crate::{
     fee_handling::{FeeAsset, FeeAssetNegativeImbalance, MultisigFeeHandler},
+    multisig::{MultisigMember, MultisigMemberOf},
     origin::{ensure_multisig, INV4Origin},
     util::derive_core_account,
 };
@@ -54,7 +55,11 @@ where
 
             let seed_balance = <T as Config>::CoreSeedBalance::get();
 
-            T::AssetsProvider::mint_into(current_id, &creator, seed_balance)?;
+            T::AssetsProvider::mint_into(
+                current_id,
+                &MultisigMember::AccountId(creator.clone()),
+                seed_balance,
+            )?;
 
             let info = CoreInfo {
                 account: core_account.clone(),
@@ -141,6 +146,32 @@ where
 
             Ok(())
         })
+    }
+
+    pub(crate) fn inner_set_frozen(origin: OriginFor<T>, frozen: bool) -> DispatchResult {
+        let core_origin = ensure_multisig::<T, OriginFor<T>>(origin)?;
+        let core_id = core_origin.id;
+
+        if frozen {
+            <T::AssetsProvider as frame_support::traits::fungibles::MutateFreeze<
+                MultisigMemberOf<T>,
+            >>::set_freeze(
+                core_id,
+                // None of the other arguments matter, the implementation expects set_freeze to freeze the whole asset.
+                &(),
+                &MultisigMember::AccountId(core_origin.to_account_id()),
+                Default::default(),
+            )
+        } else {
+            <T::AssetsProvider as frame_support::traits::fungibles::MutateFreeze<
+                MultisigMemberOf<T>,
+            >>::thaw(
+                core_id,
+                // None of the other arguments matter, the implementation expects thaw to thaw the whole asset.
+                &(),
+                &MultisigMember::AccountId(core_origin.to_account_id()),
+            )
+        }
     }
 
     pub fn is_asset_frozen(core_id: T::CoreId) -> Option<bool> {
