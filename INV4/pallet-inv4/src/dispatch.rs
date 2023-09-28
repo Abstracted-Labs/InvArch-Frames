@@ -3,10 +3,8 @@ use crate::{
     origin::{INV4Origin, MultisigInternalOrigin},
     Config, Error,
 };
-use frame_support::{
-    dispatch::{Dispatchable, GetDispatchInfo},
-    pallet_prelude::*,
-};
+use frame_support::{dispatch::GetDispatchInfo, pallet_prelude::*};
+use sp_runtime::traits::Dispatchable;
 
 pub fn dispatch_call<T: Config>(
     core_id: <T as Config>::CoreId,

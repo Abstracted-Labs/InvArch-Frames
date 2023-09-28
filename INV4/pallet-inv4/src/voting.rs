@@ -4,13 +4,13 @@ use core::marker::PhantomData;
 use frame_support::{
     pallet_prelude::Member,
     traits::{fungibles::Inspect, PollStatus, VoteTally},
-    BoundedBTreeMap, CloneNoBound, EqNoBound, Parameter, PartialEqNoBound, RuntimeDebug,
-    RuntimeDebugNoBound,
+    BoundedBTreeMap, CloneNoBound, EqNoBound, Parameter, PartialEqNoBound, RuntimeDebugNoBound,
 };
+use frame_system::pallet_prelude::BlockNumberFor;
 use scale_info::TypeInfo;
 use sp_runtime::{
     traits::{One, Zero},
-    DispatchError, Perbill,
+    DispatchError, Perbill, RuntimeDebug,
 };
 use sp_std::vec::Vec;
 
@@ -160,7 +160,7 @@ pub trait CustomPolling<Tally> {
 impl<T: Config> CustomPolling<Tally<T>> for Pallet<T> {
     type Index = T::Hash;
     type Votes = Votes<T>;
-    type Moment = T::BlockNumber;
+    type Moment = BlockNumberFor<T>;
     type Class = T::CoreId;
 
     fn classes() -> Vec<Self::Class> {
@@ -170,7 +170,7 @@ impl<T: Config> CustomPolling<Tally<T>> for Pallet<T> {
     fn access_poll<R>(
         class: Self::Class,
         index: Self::Index,
-        f: impl FnOnce(PollStatus<&mut Tally<T>, T::BlockNumber, T::CoreId>) -> R,
+        f: impl FnOnce(PollStatus<&mut Tally<T>, BlockNumberFor<T>, T::CoreId>) -> R,
     ) -> R {
         match Multisig::<T>::get(class, index) {
             Some(mut m) => {
@@ -185,7 +185,9 @@ impl<T: Config> CustomPolling<Tally<T>> for Pallet<T> {
     fn try_access_poll<R>(
         class: Self::Class,
         index: Self::Index,
-        f: impl FnOnce(PollStatus<&mut Tally<T>, T::BlockNumber, T::CoreId>) -> Result<R, DispatchError>,
+        f: impl FnOnce(
+            PollStatus<&mut Tally<T>, BlockNumberFor<T>, T::CoreId>,
+        ) -> Result<R, DispatchError>,
     ) -> Result<R, DispatchError> {
         match Multisig::<T>::get(class, index) {
             Some(mut m) => {

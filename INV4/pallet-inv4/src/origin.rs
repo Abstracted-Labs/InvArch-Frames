@@ -6,9 +6,9 @@ use crate::{
     Config,
 };
 use codec::{Decode, Encode, MaxEncodedLen};
-use frame_support::{error::BadOrigin, RuntimeDebug};
+use frame_support::error::BadOrigin;
 use scale_info::TypeInfo;
-use sp_runtime::traits::AtLeast32BitUnsigned;
+use sp_runtime::{traits::AtLeast32BitUnsigned, RuntimeDebug};
 
 #[derive(PartialEq, Eq, Encode, Decode, TypeInfo, MaxEncodedLen, Clone, RuntimeDebug)]
 pub enum INV4Origin<

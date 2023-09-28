@@ -124,7 +124,7 @@ pub mod pallet {
     pub trait Config: frame_system::Config + pallet_inv4::Config {
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
 
-        type Currency: LockableCurrency<Self::AccountId, Moment = Self::BlockNumber>
+        type Currency: LockableCurrency<Self::AccountId, Moment = BlockNumberFor<Self>>
             + ReservableCurrency<Self::AccountId>;
 
         type CoreId: Parameter
@@ -197,7 +197,7 @@ pub mod pallet {
 
     #[pallet::storage]
     #[pallet::getter(fn next_era_starting_block)]
-    pub type NextEraStartingBlock<T: Config> = StorageValue<_, T::BlockNumber, ValueQuery>;
+    pub type NextEraStartingBlock<T: Config> = StorageValue<_, BlockNumberFor<T>, ValueQuery>;
 
     #[pallet::storage]
     #[pallet::getter(fn core_info)]

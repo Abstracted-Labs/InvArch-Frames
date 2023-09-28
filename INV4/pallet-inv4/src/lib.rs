@@ -56,7 +56,7 @@ pub mod pallet {
 
     use super::*;
     use frame_support::{
-        dispatch::{Dispatchable, GetDispatchInfo, Pays, PostDispatchInfo},
+        dispatch::{GetDispatchInfo, Pays, PostDispatchInfo},
         pallet_prelude::*,
         traits::{
             fungibles,
@@ -69,7 +69,7 @@ pub mod pallet {
     use primitives::CoreInfo;
     use scale_info::prelude::fmt::Display;
     use sp_runtime::{
-        traits::{AtLeast32BitUnsigned, Member},
+        traits::{AtLeast32BitUnsigned, Dispatchable, Member},
         Perbill,
     };
     use sp_std::{boxed::Box, convert::TryInto, vec::Vec};

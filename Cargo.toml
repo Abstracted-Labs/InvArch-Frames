@@ -6,3 +6,12 @@ members = [
     "pallet-checked-inflation",
     "pallet-rings"
 ]
+
+[patch."https://github.com/open-web3-stack/open-runtime-module-library"]
+orml-traits = { git = "https://github.com/moonbeam-foundation/open-runtime-module-library", branch = "upgrade-to-polkadot-v1.1.0" }
+orml-tokens = { git = "https://github.com/moonbeam-foundation/open-runtime-module-library", branch = "upgrade-to-polkadot-v1.1.0" }
+orml-asset-registry = { git = "https://github.com/moonbeam-foundation/open-runtime-module-library", branch = "upgrade-to-polkadot-v1.1.0" }
+
+[patch."https://github.com/arrudagates/open-runtime-module-library"]
+orml-tokens2 = { package = "orml-tokens", git = "https://github.com/moonbeam-foundation//open-runtime-module-library", branch = "upgrade-to-polkadot-v1.1.0" }
+orml-traits2 = { package = "orml-traits", git = "https://github.com/moonbeam-foundation//open-runtime-module-library", branch = "upgrade-to-polkadot-v1.1.0" }

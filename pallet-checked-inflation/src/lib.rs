@@ -48,7 +48,7 @@ pub mod pallet {
     pub trait Config: frame_system::Config {
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
 
-        type Currency: LockableCurrency<Self::AccountId, Moment = Self::BlockNumber>
+        type Currency: LockableCurrency<Self::AccountId, Moment = BlockNumberFor<Self>>
             + ReservableCurrency<Self::AccountId>
             + Currency<Self::AccountId>;
 
@@ -74,7 +74,7 @@ pub mod pallet {
     /// Block that the next era starts at.
     #[pallet::storage]
     #[pallet::getter(fn next_era_starting_block)]
-    pub type NextEraStartingBlock<T: Config> = StorageValue<_, T::BlockNumber, ValueQuery>;
+    pub type NextEraStartingBlock<T: Config> = StorageValue<_, BlockNumberFor<T>, ValueQuery>;
 
     /// Total token supply at the very beginning of the year before any inflation has been minted.
     #[pallet::storage]
