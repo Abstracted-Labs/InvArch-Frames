@@ -51,6 +51,8 @@ pub mod pallet {
 
     use crate::{
         fee_handling::MultisigFeeHandler,
+        multisig::MultisigMemberOf,
+        origin::{ensure_multisig_member_account_id, ensure_multisig_member_nft},
         voting::{Tally, VoteRecord},
     };
 
@@ -87,7 +89,9 @@ pub mod pallet {
     pub type CallOf<T> = <T as Config>::RuntimeCall;
 
     #[pallet::config]
-    pub trait Config: frame_system::Config + pallet_balances::Config {
+    pub trait Config:
+        frame_system::Config + pallet_balances::Config + pallet_nft_origins::Config
+    {
         /// The IPS Pallet Events
         type RuntimeEvent: From<Event<Self>> + IsType<<Self as frame_system::Config>::RuntimeEvent>;
         /// The IPS ID type
@@ -142,8 +146,13 @@ pub mod pallet {
         #[pallet::constant]
         type KSMAssetId: Get<<<Self as Config>::Tokens as Inspect<<Self as frame_system::Config>::AccountId>>::AssetId>;
 
-        type AssetsProvider: fungibles::Inspect<Self::AccountId, Balance = BalanceOf<Self>, AssetId = Self::CoreId>
-            + fungibles::Mutate<Self::AccountId, AssetId = Self::CoreId>; // + fungibles::Transfer<Self::AccountId, AssetId = Self::CoreId>;
+        type AssetsProvider: fungibles::Inspect<
+                MultisigMemberOf<Self>,
+                Balance = BalanceOf<Self>,
+                AssetId = Self::CoreId,
+            > + fungibles::Mutate<MultisigMemberOf<Self>, AssetId = Self::CoreId>
+            + fungibles::InspectFreeze<MultisigMemberOf<Self>, Id = ()>
+            + fungibles::MutateFreeze<MultisigMemberOf<Self>, AssetId = Self::CoreId>;
 
         type Tokens: Balanced<Self::AccountId> + Inspect<Self::AccountId>;
 
@@ -203,7 +212,7 @@ pub mod pallet {
     #[pallet::storage]
     #[pallet::getter(fn core_members)]
     pub type CoreMembers<T: Config> =
-        StorageDoubleMap<_, Blake2_128Concat, T::CoreId, Blake2_128Concat, T::AccountId, ()>;
+        StorageDoubleMap<_, Blake2_128Concat, T::CoreId, Blake2_128Concat, MultisigMemberOf<T>, ()>;
 
     #[pallet::event]
     #[pallet::generate_deposit(pub(crate) fn deposit_event)]
@@ -226,13 +235,13 @@ pub mod pallet {
         /// IP Tokens were minted
         Minted {
             core_id: T::CoreId,
-            target: T::AccountId,
+            target: MultisigMemberOf<T>,
             amount: BalanceOf<T>,
         },
         /// IP Tokens were burned
         Burned {
             core_id: T::CoreId,
-            target: T::AccountId,
+            target: MultisigMemberOf<T>,
             amount: BalanceOf<T>,
         },
         /// A vote to execute a call has begun. The call needs more votes to pass.
@@ -241,7 +250,7 @@ pub mod pallet {
         MultisigVoteStarted {
             core_id: T::CoreId,
             executor_account: T::AccountId,
-            voter: T::AccountId,
+            voter: MultisigMemberOf<T>,
             votes_added: VoteRecord<T>,
             call_hash: T::Hash,
         },
@@ -251,7 +260,7 @@ pub mod pallet {
         MultisigVoteAdded {
             core_id: T::CoreId,
             executor_account: T::AccountId,
-            voter: T::AccountId,
+            voter: MultisigMemberOf<T>,
             votes_added: VoteRecord<T>,
             current_votes: Tally<T>,
             call_hash: T::Hash,
@@ -259,7 +268,7 @@ pub mod pallet {
         MultisigVoteWithdrawn {
             core_id: T::CoreId,
             executor_account: T::AccountId,
-            voter: T::AccountId,
+            voter: MultisigMemberOf<T>,
             votes_removed: VoteRecord<T>,
             call_hash: T::Hash,
         },
@@ -269,7 +278,7 @@ pub mod pallet {
         MultisigExecuted {
             core_id: T::CoreId,
             executor_account: T::AccountId,
-            voter: T::AccountId,
+            voter: MultisigMemberOf<T>,
             call_hash: T::Hash,
             call: CallOf<T>,
             result: DispatchResult,
@@ -321,6 +330,7 @@ pub mod pallet {
             INV4Origin<T, <T as pallet::Config>::CoreId, <T as frame_system::Config>::AccountId>,
             <T as frame_system::Config>::RuntimeOrigin,
         >: From<<T as frame_system::Config>::RuntimeOrigin>,
+    Result<pallet_nft_origins::origin::NftOrigin, <T as frame_system::Config>::RuntimeOrigin>: From<<T as frame_system::Config>::RuntimeOrigin>,
         <<T as pallet::Config>::Currency as Currency<<T as frame_system::Config>::AccountId>>::Balance: Sum,
     {
         /// Create IP (Intellectual Property) Set (IPS)
@@ -354,7 +364,7 @@ pub mod pallet {
         pub fn token_mint(
             origin: OriginFor<T>,
             amount: BalanceOf<T>,
-            target: T::AccountId,
+            target: MultisigMemberOf<T>,
         ) -> DispatchResult {
             Pallet::<T>::inner_token_mint(origin, amount, target)
         }
@@ -365,7 +375,7 @@ pub mod pallet {
         pub fn token_burn(
             origin: OriginFor<T>,
             amount: BalanceOf<T>,
-            target: T::AccountId,
+            target: MultisigMemberOf<T>,
         ) -> DispatchResult {
             Pallet::<T>::inner_token_burn(origin, amount, target)
         }
@@ -378,34 +388,82 @@ pub mod pallet {
             )
         )]
         pub fn operate_multisig(
-            caller: OriginFor<T>,
+            origin: OriginFor<T>,
             core_id: T::CoreId,
             metadata: Option<BoundedVec<u8, T::MaxMetadata>>,
             fee_asset: FeeAsset,
             call: Box<<T as pallet::Config>::RuntimeCall>,
         ) -> DispatchResultWithPostInfo {
-            Pallet::<T>::inner_operate_multisig(caller, core_id, metadata, fee_asset, call)
+            let member = ensure_multisig_member_account_id::<T, OriginFor<T>>(origin)?;
+
+            Pallet::<T>::inner_operate_multisig(member, core_id, metadata, fee_asset, call)
+        }
+
+        #[pallet::call_index(12)]
+        #[pallet::weight(1)]
+        pub fn nft_operate_multisig(
+            origin: OriginFor<T>,
+            core_id: T::CoreId,
+            metadata: Option<BoundedVec<u8, T::MaxMetadata>>,
+            fee_asset: FeeAsset,
+            call: Box<<T as pallet::Config>::RuntimeCall>,
+        ) -> DispatchResultWithPostInfo {
+            let member = ensure_multisig_member_nft::<T, OriginFor<T>>(origin)?;
+
+            Pallet::<T>::inner_operate_multisig(member, core_id, metadata, fee_asset, call)
         }
 
         #[pallet::call_index(4)]
         #[pallet::weight(<T as Config>::WeightInfo::vote_multisig())]
         pub fn vote_multisig(
-            caller: OriginFor<T>,
+            origin: OriginFor<T>,
             core_id: T::CoreId,
             call_hash: T::Hash,
             aye: bool,
         ) -> DispatchResultWithPostInfo {
-            Pallet::<T>::inner_vote_multisig(caller, core_id, call_hash, aye)
+            let member = ensure_multisig_member_account_id::<T, OriginFor<T>>(origin)?;
+            //let caller = MultisigMember::AccountId(ensure_signed(caller)?);
+
+            Pallet::<T>::inner_vote_multisig(member, core_id, call_hash, aye)
+        }
+
+        #[pallet::call_index(10)]
+        #[pallet::weight(1)]
+        pub fn nft_vote_multisig(
+            origin: OriginFor<T>,
+            core_id: T::CoreId,
+            call_hash: T::Hash,
+            aye: bool,
+        ) -> DispatchResultWithPostInfo {
+            let member = ensure_multisig_member_nft::<T, OriginFor<T>>(origin)?;
+
+            //let caller = MultisigMember::Nft(pallet_nft_origins::origin::ensure_nft::<T, OriginFor<T>>(origin)?);
+
+            Pallet::<T>::inner_vote_multisig(member, core_id, call_hash, aye)
         }
 
         #[pallet::call_index(5)]
         #[pallet::weight(<T as Config>::WeightInfo::withdraw_vote_multisig())]
         pub fn withdraw_vote_multisig(
-            caller: OriginFor<T>,
+            origin: OriginFor<T>,
             core_id: T::CoreId,
             call_hash: T::Hash,
         ) -> DispatchResultWithPostInfo {
-            Pallet::<T>::inner_withdraw_vote_multisig(caller, core_id, call_hash)
+            let member = ensure_multisig_member_account_id::<T, OriginFor<T>>(origin)?;
+
+            Pallet::<T>::inner_withdraw_vote_multisig(member, core_id, call_hash)
+        }
+
+        #[pallet::call_index(11)]
+        #[pallet::weight(1)]
+        pub fn nft_withdraw_vote_multisig(
+            origin: OriginFor<T>,
+            core_id: T::CoreId,
+            call_hash: T::Hash,
+        ) -> DispatchResultWithPostInfo {
+            let member = ensure_multisig_member_nft::<T, OriginFor<T>>(origin)?;
+
+            Pallet::<T>::inner_withdraw_vote_multisig(member, core_id, call_hash)
         }
 
         #[pallet::call_index(6)]
@@ -429,6 +487,15 @@ pub mod pallet {
             frozen_tokens: Option<bool>,
         ) -> DispatchResult {
             Pallet::<T>::inner_set_parameters(origin, metadata, minimum_support, required_approval, frozen_tokens)
+        }
+
+        #[pallet::call_index(13)]
+        #[pallet::weight(1)]
+        pub fn set_frozen(
+            origin: OriginFor<T>,
+            frozen: bool,
+        ) -> DispatchResult {
+            Pallet::<T>::inner_set_frozen(origin, frozen)
         }
     }
 }

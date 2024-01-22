@@ -1,4 +1,7 @@
-use crate::{origin::INV4Origin, BalanceOf, Config, CoreStorage, Error, Multisig, Pallet};
+use crate::{
+    multisig::MultisigMemberOf, origin::INV4Origin, BalanceOf, Config, CoreStorage, Error,
+    Multisig, Pallet,
+};
 use codec::{Decode, Encode, HasCompact, MaxEncodedLen};
 use core::marker::PhantomData;
 use frame_support::{
@@ -33,7 +36,7 @@ pub type Core<T> = <T as Config>::CoreId;
 pub struct Tally<T: Config> {
     pub ayes: Votes<T>,
     pub nays: Votes<T>,
-    pub records: BoundedBTreeMap<T::AccountId, Vote<Votes<T>>, T::MaxCallers>,
+    pub records: BoundedBTreeMap<MultisigMemberOf<T>, Vote<Votes<T>>, T::MaxCallers>,
     dummy: PhantomData<T>,
 }
 
@@ -41,7 +44,7 @@ impl<T: Config> Tally<T> {
     pub fn from_parts(
         ayes: Votes<T>,
         nays: Votes<T>,
-        records: BoundedBTreeMap<T::AccountId, Vote<Votes<T>>, T::MaxCallers>,
+        records: BoundedBTreeMap<MultisigMemberOf<T>, Vote<Votes<T>>, T::MaxCallers>,
     ) -> Self {
         Tally {
             ayes,
@@ -53,7 +56,7 @@ impl<T: Config> Tally<T> {
 
     pub fn process_vote(
         &mut self,
-        account: T::AccountId,
+        account: MultisigMemberOf<T>,
         maybe_vote: Option<Vote<Votes<T>>>,
     ) -> Result<Vote<Votes<T>>, DispatchError> {
         let votes = if let Some(vote) = maybe_vote {

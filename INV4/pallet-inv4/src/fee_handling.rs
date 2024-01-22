@@ -11,9 +11,10 @@ use sp_runtime::{
 };
 
 #[derive(Clone, TypeInfo, Encode, Decode, MaxEncodedLen, Debug, PartialEq, Eq)]
+#[repr(u8)]
 pub enum FeeAsset {
-    TNKR,
-    KSM,
+    TNKR = 0,
+    KSM = 1,
 }
 
 pub enum FeeAssetNegativeImbalance<TNKRNegativeImbalance, KSMNegativeImbalance> {
@@ -43,7 +44,7 @@ pub trait MultisigFeeHandler<T: Config> {
 
     fn handle_creation_fee(
         imbalance: FeeAssetNegativeImbalance<
-            <T::Currency as Currency<T::AccountId>>::NegativeImbalance,
+            <<T as Config>::Currency as Currency<T::AccountId>>::NegativeImbalance,
             Credit<T::AccountId, T::Tokens>,
         >,
     );

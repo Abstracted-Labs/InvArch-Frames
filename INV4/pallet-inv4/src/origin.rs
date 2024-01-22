@@ -1,11 +1,11 @@
-use core::marker::PhantomData;
-
 use crate::{
+    multisig::{MultisigMember, MultisigMemberOf},
     pallet::{self, Origin},
     util::derive_core_account,
     Config,
 };
 use codec::{Decode, Encode, MaxEncodedLen};
+use core::marker::PhantomData;
 use frame_support::{error::BadOrigin, RuntimeDebug};
 use scale_info::TypeInfo;
 use sp_runtime::traits::AtLeast32BitUnsigned;
@@ -60,5 +60,31 @@ where
     match o.into() {
         Ok(Origin::<T>::Multisig(internal)) => Ok(internal),
         _ => Err(BadOrigin),
+    }
+}
+
+pub fn ensure_multisig_member_account_id<T: Config, OuterOrigin>(
+    o: OuterOrigin,
+) -> Result<MultisigMemberOf<T>, BadOrigin>
+where
+    OuterOrigin: Into<Result<frame_system::Origin<T>, OuterOrigin>>,
+{
+    if let Ok(frame_system::Origin::<T>::Signed(account_id)) = o.into() {
+        Ok(MultisigMember::<<T as frame_system::Config>::AccountId>::AccountId(account_id))
+    } else {
+        Err(BadOrigin)
+    }
+}
+
+pub fn ensure_multisig_member_nft<T: Config, OuterOrigin>(
+    o: OuterOrigin,
+) -> Result<MultisigMemberOf<T>, BadOrigin>
+where
+    OuterOrigin: Into<Result<pallet_nft_origins::Origin, OuterOrigin>>,
+{
+    if let Ok(pallet_nft_origins::Origin::Nft(nft)) = o.into() {
+        Ok(MultisigMember::<<T as frame_system::Config>::AccountId>::Nft(nft))
+    } else {
+        Err(BadOrigin)
     }
 }
