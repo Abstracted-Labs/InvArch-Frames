@@ -1,25 +1,19 @@
 <div align="center">
-<img src="https://github.com/InvArch/brand/blob/main/InvArch-logo-dark/cover.png">
+<img src="https://github.com/InvArch/Brand-Assets/blob/main/branding/png/brand_colored_text_white.png">
 </div>
 
 <div align="Center">
-<h1>InvArch FRAME Pallet Library</h1>
-<h2> Multichain MPC & DAO Infrastructure </h2>
+<h1>FRAME Pallet Library</h1>
+    
+Official repository of protocols comprosing the [InvArch Network](https://invarch.network/) runtime.<br>
+Built using [Rust](https://github.com/rust-lang/rust) & the [Polkadot SDK](https://github.com/paritytech/polkadot-sdk).<br>
+</div>
 
-<br>
-Official Repository for the InvArch FRAME Pallet Library
-💡Built on Substrate
-
-<br>  
-<br>
-
+<div align="Center">
+    
 [![Substrate version](https://img.shields.io/badge/Substrate-v3.0.0-E6007A?logo=Parity%20Substrate)](https://github.com/paritytech/substrate/releases/tag/v3.0.0)
 [![Medium](https://img.shields.io/badge/Medium-InvArch-E6007A?logo=medium)](https://invarch.medium.com/)
 [![License](https://img.shields.io/github/license/InvArch/InvArch?color=E6007A)](https://github.com/InvArch/InvArch/blob/main/LICENSE)
-<br />
-[![Twitter URL](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Ftwitter.com%2FInvArch)](https://twitter.com/InvArchNetwork)
-[![Discord](https://img.shields.io/badge/Discord-gray?logo=discord)](https://discord.gg/invarch)
-[![Telegram](https://img.shields.io/badge/Telegram-gray?logo=telegram)](https://t.me/InvArch)
 
 </div>
 
