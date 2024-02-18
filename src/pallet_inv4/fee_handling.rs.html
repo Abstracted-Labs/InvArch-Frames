@@ -51,7 +51,38 @@
 <a href="#51" id="51">51</a>
 <a href="#52" id="52">52</a>
 <a href="#53" id="53">53</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::Config;
+<a href="#54" id="54">54</a>
+<a href="#55" id="55">55</a>
+<a href="#56" id="56">56</a>
+<a href="#57" id="57">57</a>
+<a href="#58" id="58">58</a>
+<a href="#59" id="59">59</a>
+<a href="#60" id="60">60</a>
+<a href="#61" id="61">61</a>
+<a href="#62" id="62">62</a>
+<a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
+<a href="#65" id="65">65</a>
+<a href="#66" id="66">66</a>
+<a href="#67" id="67">67</a>
+<a href="#68" id="68">68</a>
+<a href="#69" id="69">69</a>
+<a href="#70" id="70">70</a>
+<a href="#71" id="71">71</a>
+<a href="#72" id="72">72</a>
+<a href="#73" id="73">73</a>
+<a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a>
+<a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! MultisigFeeHandler trait.
+//!
+//! ## Overview
+//!
+//! Defines how transaction fees are charged to the multisig account.
+//! This trait requires proper runtime implementation to allow the usage of native or non-native assets.
+
+</span><span class="kw">use </span><span class="kw">crate</span>::Config;
 <span class="kw">use </span>codec::{Decode, Encode, MaxEncodedLen};
 <span class="kw">use </span>frame_support::{
     traits::{fungibles::Credit, Currency},
@@ -63,24 +94,39 @@
     DispatchResult,
 };
 
-<span class="doccomment">/// Asset to be used by the multisig for paying fees transaction fees.
+<span class="doccomment">/// Represents the asset to be used by the multisig for paying transaction fees.
+///
+/// This enum defines the assets that can be used to pay for transaction fees.
 </span><span class="attr">#[derive(Clone, TypeInfo, Encode, Decode, MaxEncodedLen, Debug, PartialEq, Eq)]
 </span><span class="kw">pub enum </span>FeeAsset {
     Native,
     Relay,
 }
 
-<span class="kw">pub enum </span>FeeAssetNegativeImbalance&lt;NativeNegativeImbalance, RelayNegativeImbalance&gt; {
+<span class="doccomment">/// Represents a potential negative asset balance incurred during fee payment operations
+/// within a multisig context.
+///
+/// This enum handles imbalances in either the native token or
+/// a relay chain asset used for fees.
+///
+/// - `Native(NativeNegativeImbalance)`: Indicates a deficit balance in the chain&#39;s native asset.
+/// - `Relay(RelayNegativeImbalance)`: Indicates a deficit balance in an asset originating on the relay chain.
+///
+/// This enum plays a role in resolving deficit balances in the `MultisigFeeHandler` trait.
+</span><span class="kw">pub enum </span>FeeAssetNegativeImbalance&lt;NativeNegativeImbalance, RelayNegativeImbalance&gt; {
     Native(NativeNegativeImbalance),
     Relay(RelayNegativeImbalance),
 }
 
 <span class="doccomment">/// Fee handler trait.
+///
 /// This should be implemented properly in the runtime to account for native and non-native assets.
 </span><span class="kw">pub trait </span>MultisigFeeHandler&lt;T: Config&gt; {
-    <span class="kw">type </span>Pre;
+    <span class="doccomment">/// Type returned by `pre_dispatch` - implementation dependent.
+    </span><span class="kw">type </span>Pre;
 
-    <span class="kw">fn </span>pre_dispatch(
+    <span class="doccomment">/// Checks if the fee can be paid using the selected asset.
+    </span><span class="kw">fn </span>pre_dispatch(
         asset: <span class="kw-2">&amp;</span>FeeAsset,
         who: <span class="kw-2">&amp;</span>T::AccountId,
         call: <span class="kw-2">&amp;</span>&lt;T <span class="kw">as </span>Config&gt;::RuntimeCall,
@@ -88,7 +134,8 @@
         len: usize,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Pre, TransactionValidityError&gt;;
 
-    <span class="kw">fn </span>post_dispatch(
+    <span class="doccomment">/// Charges the call dispatching fee from the multisig directly.
+    </span><span class="kw">fn </span>post_dispatch(
         asset: <span class="kw-2">&amp;</span>FeeAsset,
         pre: <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Pre&gt;,
         info: <span class="kw-2">&amp;</span>DispatchInfoOf&lt;&lt;T <span class="kw">as </span>Config&gt;::RuntimeCall&gt;,
@@ -97,7 +144,8 @@
         result: <span class="kw-2">&amp;</span>DispatchResult,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;(), TransactionValidityError&gt;;
 
-    <span class="kw">fn </span>handle_creation_fee(
+    <span class="doccomment">/// Charges the fee for creating the core (multisig).
+    </span><span class="kw">fn </span>handle_creation_fee(
         imbalance: FeeAssetNegativeImbalance&lt;
             &lt;T::Currency <span class="kw">as </span>Currency&lt;T::AccountId&gt;&gt;::NegativeImbalance,
             Credit&lt;T::AccountId, T::Tokens&gt;,

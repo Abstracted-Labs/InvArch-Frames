@@ -149,7 +149,27 @@
 <a href="#149" id="149">149</a>
 <a href="#150" id="150">150</a>
 <a href="#151" id="151">151</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">super</span>::pallet::<span class="kw-2">*</span>;
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! Core creation and internal management.
+//!
+//! ## Overview
+//!
+//! This module handles the mechanics of creating multisigs (referred to as &quot;cores&quot;) and their lifecycle management. Key functions include:
+//!
+//!  - `inner_create_core`: Sets up a new core, deriving its AccountId, distributing voting tokens, and handling creation fees.
+//!  - `inner_set_parameters`: Updates the core&#39;s operational rules.
+//! - `is_asset_frozen`: Utility function for checking if a core&#39;s voting asset is frozen (can&#39;t be transferred by the owner).
+
+</span><span class="kw">use </span><span class="kw">super</span>::pallet::<span class="kw-2">*</span>;
 <span class="kw">use crate</span>::{
     account_derivation::CoreAccountDerivation,
     fee_handling::{FeeAsset, FeeAssetNegativeImbalance, MultisigFeeHandler},

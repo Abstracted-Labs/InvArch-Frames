@@ -53,7 +53,24 @@
 <a href="#53" id="53">53</a>
 <a href="#54" id="54">54</a>
 <a href="#55" id="55">55</a>
-</pre></div><pre class="rust"><code><span class="kw">use crate</span>::{
+<a href="#56" id="56">56</a>
+<a href="#57" id="57">57</a>
+<a href="#58" id="58">58</a>
+<a href="#59" id="59">59</a>
+<a href="#60" id="60">60</a>
+<a href="#61" id="61">61</a>
+<a href="#62" id="62">62</a>
+<a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! Dispatches calls internally, charging fees to the multisig account.
+//!
+//! ## Overview
+//!
+//! This module employs a custom `MultisigInternalOrigin` to ensure calls originate
+//! from the multisig account itself, automating fee payments. The `dispatch_call` function
+//! includes pre and post dispatch handling for streamlined fee management within the multisig context.
+
+</span><span class="kw">use crate</span>::{
     fee_handling::{FeeAsset, MultisigFeeHandler},
     origin::{INV4Origin, MultisigInternalOrigin},
     Config, Error,
@@ -63,7 +80,7 @@
     pallet_prelude::<span class="kw-2">*</span>,
 };
 
-<span class="comment">// Dispatch a call executing pre/post dispatch for proper fee handling.
+<span class="doccomment">/// Dispatch a call executing pre/post dispatch for proper fee handling.
 </span><span class="kw">pub fn </span>dispatch_call&lt;T: Config&gt;(
     core_id: &lt;T <span class="kw">as </span>Config&gt;::CoreId,
     fee_asset: <span class="kw-2">&amp;</span>FeeAsset,
@@ -72,7 +89,8 @@
 <span class="kw">where
     </span>T::AccountId: From&lt;[u8; <span class="number">32</span>]&gt;,
 {
-    <span class="kw">let </span>internal_origin = MultisigInternalOrigin::new(core_id);
+    <span class="comment">// Create new custom origin as the multisig.
+    </span><span class="kw">let </span>internal_origin = MultisigInternalOrigin::new(core_id);
     <span class="kw">let </span>multisig_account = internal_origin.to_account_id();
     <span class="kw">let </span>origin = INV4Origin::Multisig(internal_origin).into();
 
