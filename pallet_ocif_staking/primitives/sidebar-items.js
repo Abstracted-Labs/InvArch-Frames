@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["MAX_ASSUMED_VEC_LEN"],"struct":["AccountLedger","CoreInfo","CoreMetadata","CoreStakeInfo","EraInfo","EraStake","RewardInfo","StakerInfo","UnbondingInfo","UnlockingChunk"],"type":["BalanceOf"]};

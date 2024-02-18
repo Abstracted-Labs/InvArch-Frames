@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["InflationMethod"],"mod":["inflation","pallet","weights"],"trait":["GetInflation"]};

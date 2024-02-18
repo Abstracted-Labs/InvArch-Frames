@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["pallet","traits","weights"],"trait":["ChainAssetsList","ChainList"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["halt_unhalt_pallet","set_first_year_supply"]};

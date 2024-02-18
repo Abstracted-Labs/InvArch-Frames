@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["INV4Origin"],"fn":["ensure_multisig"],"struct":["MultisigInternalOrigin"]};

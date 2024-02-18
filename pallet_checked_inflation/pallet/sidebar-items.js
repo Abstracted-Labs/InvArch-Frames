@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Call","Error","Event"],"mod":["dispatchables","storage_types","warnings"],"struct":["Pallet"],"trait":["Config"],"type":["BalanceOf","CurrentEra","Halted","Module","NegativeImbalanceOf","NextEraStartingBlock","YearStartIssuance","YearlyInflationPerEra"]};

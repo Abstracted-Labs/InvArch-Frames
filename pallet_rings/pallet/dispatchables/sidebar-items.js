@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["bridge_assets","send_call","set_maintenance_status","transfer_assets"]};

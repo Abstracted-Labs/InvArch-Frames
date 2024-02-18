@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["LOCK_ID"],"mod":["pallet","primitives","weights"]};

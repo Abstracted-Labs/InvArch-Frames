@@ -1,0 +1,3 @@
+(function() {var implementors = {
+"pallet_inv4":[["impl&lt;T: <a class=\"trait\" href=\"pallet_inv4/pallet/trait.Config.html\" title=\"trait pallet_inv4::pallet::Config\">Config</a>&gt; StaticLookup for <a class=\"struct\" href=\"pallet_inv4/lookup/struct.INV4Lookup.html\" title=\"struct pallet_inv4::lookup::INV4Lookup\">INV4Lookup</a>&lt;T&gt;"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

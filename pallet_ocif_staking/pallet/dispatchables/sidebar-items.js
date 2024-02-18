@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["change_core_metadata","core_claim_rewards","halt_unhalt_pallet","move_stake","register_core","stake","staker_claim_rewards","unregister_core","unstake","withdraw_unstaked"]};

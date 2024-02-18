@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["STORAGE_VERSION"],"enum":["Call","Error","Event"],"mod":["dispatchables","storage_types","warnings"],"struct":["Pallet"],"trait":["Config"],"type":["BalanceOf","CallOf","CoreByAccount","CoreInfoOf","CoreMembers","CoreStorage","Module","Multisig","NextCoreId","Origin"]};

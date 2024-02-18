@@ -1,0 +1,1 @@
+window.ALL_CRATES = ["invarch_primitives","pallet_checked_inflation","pallet_inv4","pallet_ocif_staking","pallet_rings"];

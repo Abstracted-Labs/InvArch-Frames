@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["MAX_SIZE"],"struct":["MultisigOperation"],"type":["BoundedCallBytes","MultisigOperationOf"]};
