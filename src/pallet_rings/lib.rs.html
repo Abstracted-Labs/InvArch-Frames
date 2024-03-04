@@ -447,7 +447,102 @@
 <a href="#447" id="447">447</a>
 <a href="#448" id="448">448</a>
 <a href="#449" id="449">449</a>
-</pre></div><pre class="rust"><code><span class="attr">#![cfg_attr(not(feature = <span class="string">&quot;std&quot;</span>), no_std)]
+<a href="#450" id="450">450</a>
+<a href="#451" id="451">451</a>
+<a href="#452" id="452">452</a>
+<a href="#453" id="453">453</a>
+<a href="#454" id="454">454</a>
+<a href="#455" id="455">455</a>
+<a href="#456" id="456">456</a>
+<a href="#457" id="457">457</a>
+<a href="#458" id="458">458</a>
+<a href="#459" id="459">459</a>
+<a href="#460" id="460">460</a>
+<a href="#461" id="461">461</a>
+<a href="#462" id="462">462</a>
+<a href="#463" id="463">463</a>
+<a href="#464" id="464">464</a>
+<a href="#465" id="465">465</a>
+<a href="#466" id="466">466</a>
+<a href="#467" id="467">467</a>
+<a href="#468" id="468">468</a>
+<a href="#469" id="469">469</a>
+<a href="#470" id="470">470</a>
+<a href="#471" id="471">471</a>
+<a href="#472" id="472">472</a>
+<a href="#473" id="473">473</a>
+<a href="#474" id="474">474</a>
+<a href="#475" id="475">475</a>
+<a href="#476" id="476">476</a>
+<a href="#477" id="477">477</a>
+<a href="#478" id="478">478</a>
+<a href="#479" id="479">479</a>
+<a href="#480" id="480">480</a>
+<a href="#481" id="481">481</a>
+<a href="#482" id="482">482</a>
+<a href="#483" id="483">483</a>
+<a href="#484" id="484">484</a>
+<a href="#485" id="485">485</a>
+<a href="#486" id="486">486</a>
+<a href="#487" id="487">487</a>
+<a href="#488" id="488">488</a>
+<a href="#489" id="489">489</a>
+<a href="#490" id="490">490</a>
+<a href="#491" id="491">491</a>
+<a href="#492" id="492">492</a>
+<a href="#493" id="493">493</a>
+<a href="#494" id="494">494</a>
+<a href="#495" id="495">495</a>
+<a href="#496" id="496">496</a>
+<a href="#497" id="497">497</a>
+<a href="#498" id="498">498</a>
+<a href="#499" id="499">499</a>
+<a href="#500" id="500">500</a>
+<a href="#501" id="501">501</a>
+<a href="#502" id="502">502</a>
+<a href="#503" id="503">503</a>
+<a href="#504" id="504">504</a>
+<a href="#505" id="505">505</a>
+<a href="#506" id="506">506</a>
+<a href="#507" id="507">507</a>
+<a href="#508" id="508">508</a>
+<a href="#509" id="509">509</a>
+<a href="#510" id="510">510</a>
+<a href="#511" id="511">511</a>
+<a href="#512" id="512">512</a>
+<a href="#513" id="513">513</a>
+<a href="#514" id="514">514</a>
+<a href="#515" id="515">515</a>
+<a href="#516" id="516">516</a>
+<a href="#517" id="517">517</a>
+<a href="#518" id="518">518</a>
+<a href="#519" id="519">519</a>
+<a href="#520" id="520">520</a>
+<a href="#521" id="521">521</a>
+<a href="#522" id="522">522</a>
+<a href="#523" id="523">523</a>
+<a href="#524" id="524">524</a>
+<a href="#525" id="525">525</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! # Rings Pallet
+//!
+//! - [`Config`]
+//! - [`Call`]
+//! - [`Pallet`]
+//!
+//! ## Overview
+//! This pallet provides a XCM abstraction layer for INV4 Cores, allowing them to manage assets easily across multiple chains.
+//!
+//! The module [`traits`] contains traits that provide an abstraction on top of XCM [`MultiLocation`] and has to be correctly implemented in the runtime.
+//!
+//! ## Dispatchable Functions
+//!
+//! - `set_maintenance_status` - Sets the maintenance status of a chain, requires the origin to be authorized as a `MaintenanceOrigin`.
+//! - `send_call` - Allows a core to send a XCM call to a destination chain.
+//! - `transfer_assets` - Allows a core to transfer fungible assets to another account in the destination chain.
+//! - `bridge_assets` - Allows a core to bridge fungible assets to another chain having either a third party account or
+//! the core account as beneficiary in the destination chain.
+
+</span><span class="attr">#![cfg_attr(not(feature = <span class="string">&quot;std&quot;</span>), no_std)]
 
 </span><span class="kw">use </span>frame_support::traits::Get;
 <span class="kw">use </span>sp_std::convert::TryInto;
@@ -482,44 +577,59 @@
 
     <span class="attr">#[pallet::config]
     </span><span class="kw">pub trait </span>Config: frame_system::Config + pallet_inv4::Config + pallet_xcm::Config {
-        <span class="kw">type </span>RuntimeEvent: From&lt;Event&lt;<span class="self">Self</span>&gt;&gt; + IsType&lt;&lt;<span class="self">Self </span><span class="kw">as </span>frame_system::Config&gt;::RuntimeEvent&gt;;
+        <span class="doccomment">/// The overarching event type.
+        </span><span class="kw">type </span>RuntimeEvent: From&lt;Event&lt;<span class="self">Self</span>&gt;&gt; + IsType&lt;&lt;<span class="self">Self </span><span class="kw">as </span>frame_system::Config&gt;::RuntimeEvent&gt;;
 
-        <span class="kw">type </span>Chains: ChainList;
+        <span class="doccomment">/// Higher level type providing an abstraction over a chain&#39;s asset and location.
+        </span><span class="kw">type </span>Chains: ChainList;
 
-        <span class="attr">#[pallet::constant]
+        <span class="doccomment">/// Max length of an XCM call.
+        </span><span class="attr">#[pallet::constant]
         </span><span class="kw">type </span>MaxXCMCallLength: Get&lt;u32&gt;;
 
-        <span class="kw">type </span>MaintenanceOrigin: EnsureOrigin&lt;&lt;<span class="self">Self </span><span class="kw">as </span>frame_system::Config&gt;::RuntimeOrigin&gt;;
+        <span class="doccomment">/// Origin that can set maintenance status.
+        </span><span class="kw">type </span>MaintenanceOrigin: EnsureOrigin&lt;&lt;<span class="self">Self </span><span class="kw">as </span>frame_system::Config&gt;::RuntimeOrigin&gt;;
 
-        <span class="kw">type </span>WeightInfo: WeightInfo;
+        <span class="doccomment">/// Weight information for extrinsics in this pallet.
+        </span><span class="kw">type </span>WeightInfo: WeightInfo;
     }
 
-    <span class="attr">#[pallet::storage]
+    <span class="doccomment">/// Maps chain&#39;s and their maintenance status.
+    </span><span class="attr">#[pallet::storage]
     #[pallet::getter(<span class="kw">fn </span>is_under_maintenance)]
     </span><span class="kw">pub type </span>ChainsUnderMaintenance&lt;T: Config&gt; =
         StorageMap&lt;<span class="kw">_</span>, Blake2_128Concat, MultiLocation, bool&gt;;
 
     <span class="attr">#[pallet::error]
     </span><span class="kw">pub enum </span>Error&lt;T&gt; {
-        SendingFailed,
-        WeightTooHigh,
-        FailedToCalculateXcmFee,
-        FailedToReanchorAsset,
-        FailedToInvertLocation,
-        DifferentChains,
-        ChainUnderMaintenance,
+        <span class="doccomment">/// Failed to send XCM.
+        </span>SendingFailed,
+        <span class="doccomment">/// Weight exceeds `MaxXCMCallLength`.
+        </span>WeightTooHigh,
+        <span class="doccomment">/// Failed to calculate XCM fee.
+        </span>FailedToCalculateXcmFee,
+        <span class="doccomment">/// Failed to reanchor asset.
+        </span>FailedToReanchorAsset,
+        <span class="doccomment">/// Failed to invert location.
+        </span>FailedToInvertLocation,
+        <span class="doccomment">/// Asset is not supported in the destination chain.
+        </span>DifferentChains,
+        <span class="doccomment">/// Chain is under maintenance.
+        </span>ChainUnderMaintenance,
     }
 
     <span class="attr">#[pallet::event]
     #[pallet::generate_deposit(<span class="kw">fn </span>deposit_event)]
     </span><span class="kw">pub enum </span>Event&lt;T: Config&gt; {
-        CallSent {
+        <span class="doccomment">/// A XCM call was sent.
+        </span>CallSent {
             sender: &lt;T <span class="kw">as </span>pallet_inv4::Config&gt;::CoreId,
             destination: &lt;T <span class="kw">as </span>pallet::Config&gt;::Chains,
             call: Vec&lt;u8&gt;,
         },
 
-        AssetsTransferred {
+        <span class="doccomment">/// Assets were transferred.
+        </span>AssetsTransferred {
             chain: &lt;&lt;&lt;T <span class="kw">as </span>pallet::Config&gt;::Chains <span class="kw">as </span>ChainList&gt;::ChainAssets <span class="kw">as </span>ChainAssetsList&gt;::Chains,
             asset: &lt;&lt;T <span class="kw">as </span>pallet::Config&gt;::Chains <span class="kw">as </span>ChainList&gt;::ChainAssets,
             amount: u128,
@@ -527,14 +637,16 @@
             to: &lt;T <span class="kw">as </span>frame_system::Config&gt;::AccountId,
         },
 
-        AssetsBridged {
+        <span class="doccomment">/// Assets were bridged.
+        </span>AssetsBridged {
             origin_chain_asset: &lt;&lt;T <span class="kw">as </span>pallet::Config&gt;::Chains <span class="kw">as </span>ChainList&gt;::ChainAssets,
             amount: u128,
             from: &lt;T <span class="kw">as </span>pallet_inv4::Config&gt;::CoreId,
             to: &lt;T <span class="kw">as </span>frame_system::Config&gt;::AccountId,
         },
 
-        ChainMaintenanceStatusChanged {
+        <span class="doccomment">/// A Chain&#39;s maintenance status changed.
+        </span>ChainMaintenanceStatusChanged {
             chain: &lt;T <span class="kw">as </span>Config&gt;::Chains,
             under_maintenance: bool,
         }
@@ -551,7 +663,13 @@
         [u8; <span class="number">32</span>]: From&lt;&lt;T <span class="kw">as </span>frame_system::Config&gt;::AccountId&gt;,
         T::AccountId: From&lt;[u8; <span class="number">32</span>]&gt;,
     {
-        <span class="attr">#[pallet::call_index(<span class="number">0</span>)]
+        <span class="doccomment">/// Set the maintenance status of a chain.
+        ///
+        /// The origin has to be `MaintenanceOrigin`.
+        ///
+        /// - `chain`: referred chain.
+        /// - `under_maintenance`: maintenance status.
+        </span><span class="attr">#[pallet::call_index(<span class="number">0</span>)]
         #[pallet::weight((&lt;T <span class="kw">as </span>Config&gt;::WeightInfo::set_maintenance_status(), Pays::No))]
         </span><span class="kw">pub fn </span>set_maintenance_status(
             origin: OriginFor&lt;T&gt;,
@@ -570,7 +688,16 @@
             <span class="prelude-val">Ok</span>(())
         }
 
-        <span class="attr">#[pallet::call_index(<span class="number">1</span>)]
+        <span class="doccomment">/// Send a XCM call to a destination chain.
+        ///
+        /// The origin has to be a core.
+        ///
+        /// - `destination`: destination chain.
+        /// - `weight`: weight of the call.
+        /// - `fee_asset`: asset used to pay the fee.
+        /// - `fee`: fee amount.
+        /// - `call`: XCM call.
+        </span><span class="attr">#[pallet::call_index(<span class="number">1</span>)]
         #[pallet::weight(
             &lt;T <span class="kw">as </span>Config&gt;::WeightInfo::send_call(call.len() <span class="kw">as </span>u32)
         )]
@@ -642,7 +769,18 @@
             <span class="prelude-val">Ok</span>(())
         }
 
-        <span class="attr">#[pallet::call_index(<span class="number">2</span>)]
+        <span class="doccomment">/// Transfer fungible assets to another account in the destination chain.
+        ///
+        /// Both asset and fee_asset have to be in the same chain.
+        ///
+        /// The origin has to be a core.
+        ///
+        /// - `asset`: asset to transfer.
+        /// - `amount`: amount to transfer.
+        /// - `to`: account receiving the asset.
+        /// - `fee_asset`: asset used to pay the fee.
+        /// - `fee`: fee amount.
+        </span><span class="attr">#[pallet::call_index(<span class="number">2</span>)]
         #[pallet::weight(&lt;T <span class="kw">as </span>Config&gt;::WeightInfo::transfer_assets())]
         </span><span class="kw">pub fn </span>transfer_assets(
             origin: OriginFor&lt;T&gt;,
@@ -732,7 +870,16 @@
             <span class="prelude-val">Ok</span>(())
         }
 
-        <span class="attr">#[pallet::call_index(<span class="number">3</span>)]
+        <span class="doccomment">/// Bridge fungible assets to another chain.
+        ///
+        /// The origin has to be a core.
+        ///
+        /// - `asset`: asset to bridge and the chain to bridge from.
+        /// - `destination`: destination chain.
+        /// - `fee`: fee amount.
+        /// - `amount`: amount to bridge.
+        /// - `to`: account receiving the asset, None defaults to core account.
+        </span><span class="attr">#[pallet::call_index(<span class="number">3</span>)]
         #[pallet::weight(&lt;T <span class="kw">as </span>Config&gt;::WeightInfo::bridge_assets())]
         </span><span class="kw">pub fn </span>bridge_assets(
             origin: OriginFor&lt;T&gt;,
@@ -818,10 +965,12 @@
                 <span class="prelude-val">None </span>=&gt; core_multilocation,
             };
 
-            <span class="kw">let </span>message = <span class="kw">if </span>asset_location.starts_with(<span class="kw-2">&amp;</span>dest) {
+            <span class="comment">// If the asset originates from the destination chain, we need to reverse the reserve-transfer.
+            </span><span class="kw">let </span>message = <span class="kw">if </span>asset_location.starts_with(<span class="kw-2">&amp;</span>dest) {
                 Xcm(<span class="macro">vec!</span>[
                     WithdrawAsset(<span class="macro">vec!</span>[fee_multiasset.clone(), multiasset.clone()].into()),
-                    Instruction::BuyExecution {
+                    <span class="comment">// Core pays for the execution fee incurred on sending the XCM.
+                    </span>Instruction::BuyExecution {
                         fees: fee_multiasset,
                         weight_limit: WeightLimit::Unlimited,
                     },
@@ -829,7 +978,8 @@
                         assets: multiasset.into(),
                         reserve: inverted_destination,
                         xcm: Xcm(<span class="macro">vec!</span>[
-                            Instruction::BuyExecution {
+                            <span class="comment">// the beneficiary buys execution fee in the destination chain for the deposit.
+                            </span>Instruction::BuyExecution {
                                 fees: reanchored_multiasset,
                                 weight_limit: WeightLimit::Unlimited,
                             },
@@ -838,14 +988,16 @@
                                 beneficiary,
                             },
                             Instruction::RefundSurplus,
-                            Instruction::DepositAsset {
+                            <span class="comment">// Refunds the beneficiary the surplus of the execution fees in the destination chain.
+                            </span>Instruction::DepositAsset {
                                 assets: All.into(),
                                 beneficiary,
                             },
                         ]),
                     },
                     Instruction::RefundSurplus,
-                    Instruction::DepositAsset {
+                    <span class="comment">// Refunds the core the surplus of the execution fees incurred on sending the XCM.
+                    </span>Instruction::DepositAsset {
                         assets: All.into(),
                         beneficiary: core_multilocation,
                     },
