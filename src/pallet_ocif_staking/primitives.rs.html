@@ -272,7 +272,69 @@
 <a href="#272" id="272">272</a>
 <a href="#273" id="273">273</a>
 <a href="#274" id="274">274</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>codec::{Decode, Encode, HasCompact, MaxEncodedLen};
+<a href="#275" id="275">275</a>
+<a href="#276" id="276">276</a>
+<a href="#277" id="277">277</a>
+<a href="#278" id="278">278</a>
+<a href="#279" id="279">279</a>
+<a href="#280" id="280">280</a>
+<a href="#281" id="281">281</a>
+<a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
+<a href="#284" id="284">284</a>
+<a href="#285" id="285">285</a>
+<a href="#286" id="286">286</a>
+<a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
+<a href="#290" id="290">290</a>
+<a href="#291" id="291">291</a>
+<a href="#292" id="292">292</a>
+<a href="#293" id="293">293</a>
+<a href="#294" id="294">294</a>
+<a href="#295" id="295">295</a>
+<a href="#296" id="296">296</a>
+<a href="#297" id="297">297</a>
+<a href="#298" id="298">298</a>
+<a href="#299" id="299">299</a>
+<a href="#300" id="300">300</a>
+<a href="#301" id="301">301</a>
+<a href="#302" id="302">302</a>
+<a href="#303" id="303">303</a>
+<a href="#304" id="304">304</a>
+<a href="#305" id="305">305</a>
+<a href="#306" id="306">306</a>
+<a href="#307" id="307">307</a>
+<a href="#308" id="308">308</a>
+<a href="#309" id="309">309</a>
+<a href="#310" id="310">310</a>
+<a href="#311" id="311">311</a>
+<a href="#312" id="312">312</a>
+<a href="#313" id="313">313</a>
+<a href="#314" id="314">314</a>
+<a href="#315" id="315">315</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! Provides supporting types and traits for the staking pallet.
+//!
+//! ## Overview
+//!
+//! Primitives provides the foundational types and traits for a staking pallet.  
+//!
+//! ## Types overview:
+//!
+//! - `BalanceOf` - A type alias for the balance of a currency in the system.
+//! - `CoreMetadata` - A struct that holds metadata for a core entity in the system.
+//! - `CoreInfo` - A struct that holds information about a core entity, including its account ID and metadata.
+//! - `RewardInfo` - A struct that holds information about rewards, including the balance for stakers and the core.
+//! - `EraInfo` - A struct that holds information about a specific era, including rewards, staked balance, active stake, and locked balance.
+//! - `CoreStakeInfo` - A struct that holds information about a core&#39;s stake, including the total balance,
+//! number of stakers, and whether a reward has been claimed.
+//! - `EraStake` - A struct that holds information about the stake for a specific era.
+//! - `StakerInfo` - A struct that holds information about a staker&#39;s stakes across different eras.
+//! - `UnlockingChunk` - A struct that holds information about an unlocking chunk of balance.
+//! - `UnbondingInfo` - A struct that holds information about unbonding chunks of balance.
+//! - `AccountLedger` - A struct that holds information about an account&#39;s locked balance and unbonding information.
+
+</span><span class="kw">use </span>codec::{Decode, Encode, HasCompact, MaxEncodedLen};
 <span class="kw">use </span>frame_support::traits::Currency;
 <span class="kw">use </span>scale_info::TypeInfo;
 <span class="kw">use </span>sp_runtime::{
@@ -283,25 +345,29 @@
 
 <span class="kw">pub use </span><span class="kw">crate</span>::pallet::<span class="kw-2">*</span>;
 
-<span class="kw">pub type </span>BalanceOf&lt;T&gt; =
+<span class="doccomment">/// The balance type of this pallet.
+</span><span class="kw">pub type </span>BalanceOf&lt;T&gt; =
     &lt;&lt;T <span class="kw">as </span>Config&gt;::Currency <span class="kw">as </span>Currency&lt;&lt;T <span class="kw">as </span>frame_system::Config&gt;::AccountId&gt;&gt;::Balance;
 
 <span class="kw">const </span>MAX_ASSUMED_VEC_LEN: u32 = <span class="number">10</span>;
 
-<span class="attr">#[derive(Clone, PartialEq, Eq, Encode, Decode, RuntimeDebug, TypeInfo, MaxEncodedLen)]
+<span class="doccomment">/// Metadata for a core entity in the system.
+</span><span class="attr">#[derive(Clone, PartialEq, Eq, Encode, Decode, RuntimeDebug, TypeInfo, MaxEncodedLen)]
 </span><span class="kw">pub struct </span>CoreMetadata&lt;Name, Description, Image&gt; {
     <span class="kw">pub </span>name: Name,
     <span class="kw">pub </span>description: Description,
     <span class="kw">pub </span>image: Image,
 }
 
-<span class="attr">#[derive(Clone, PartialEq, Eq, Encode, Decode, RuntimeDebug, TypeInfo, MaxEncodedLen)]
+<span class="doccomment">/// Information about a core entity, including its account ID and metadata.
+</span><span class="attr">#[derive(Clone, PartialEq, Eq, Encode, Decode, RuntimeDebug, TypeInfo, MaxEncodedLen)]
 </span><span class="kw">pub struct </span>CoreInfo&lt;AccountId, Metadata&gt; {
     <span class="kw">pub </span>account: AccountId,
     <span class="kw">pub </span>metadata: Metadata,
 }
 
-<span class="attr">#[derive(PartialEq, Eq, Clone, Default, Encode, Decode, RuntimeDebug, TypeInfo, MaxEncodedLen)]
+<span class="doccomment">/// Information about rewards, including the balance for stakers and the core.
+</span><span class="attr">#[derive(PartialEq, Eq, Clone, Default, Encode, Decode, RuntimeDebug, TypeInfo, MaxEncodedLen)]
 </span><span class="kw">pub struct </span>RewardInfo&lt;Balance: HasCompact + MaxEncodedLen&gt; {
     <span class="attr">#[codec(compact)]
     </span><span class="kw">pub</span>(<span class="kw">crate</span>) stakers: Balance,
@@ -309,7 +375,8 @@
     </span><span class="kw">pub</span>(<span class="kw">crate</span>) core: Balance,
 }
 
-<span class="attr">#[derive(PartialEq, Eq, Clone, Default, Encode, Decode, RuntimeDebug, TypeInfo, MaxEncodedLen)]
+<span class="doccomment">/// Information about a specific era, including rewards, staked balance, active stake, and locked balance.
+</span><span class="attr">#[derive(PartialEq, Eq, Clone, Default, Encode, Decode, RuntimeDebug, TypeInfo, MaxEncodedLen)]
 </span><span class="kw">pub struct </span>EraInfo&lt;Balance: HasCompact + MaxEncodedLen&gt; {
     <span class="kw">pub</span>(<span class="kw">crate</span>) rewards: RewardInfo&lt;Balance&gt;,
     <span class="attr">#[codec(compact)]
@@ -320,7 +387,8 @@
     </span><span class="kw">pub</span>(<span class="kw">crate</span>) locked: Balance,
 }
 
-<span class="attr">#[derive(Clone, PartialEq, Eq, Encode, Decode, Default, RuntimeDebug, TypeInfo, MaxEncodedLen)]
+<span class="doccomment">/// Information about a core&#39;s stake, including the total balance, number of stakers, and whether a reward has been claimed.
+</span><span class="attr">#[derive(Clone, PartialEq, Eq, Encode, Decode, Default, RuntimeDebug, TypeInfo, MaxEncodedLen)]
 </span><span class="kw">pub struct </span>CoreStakeInfo&lt;Balance: HasCompact + MaxEncodedLen&gt; {
     <span class="attr">#[codec(compact)]
     </span><span class="kw">pub</span>(<span class="kw">crate</span>) total: Balance,
@@ -330,7 +398,8 @@
     <span class="kw">pub</span>(<span class="kw">crate</span>) active: bool,
 }
 
-<span class="attr">#[derive(Encode, Decode, Clone, Copy, PartialEq, Eq, RuntimeDebug, TypeInfo, MaxEncodedLen)]
+<span class="doccomment">/// Information about the stake for a specific era.
+</span><span class="attr">#[derive(Encode, Decode, Clone, Copy, PartialEq, Eq, RuntimeDebug, TypeInfo, MaxEncodedLen)]
 </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>EraStake&lt;Balance: AtLeast32BitUnsigned + Copy + MaxEncodedLen&gt; {
     <span class="attr">#[codec(compact)]
     </span><span class="kw">pub</span>(<span class="kw">crate</span>) staked: Balance,
@@ -338,7 +407,8 @@
     </span><span class="kw">pub</span>(<span class="kw">crate</span>) era: Era,
 }
 
-<span class="attr">#[derive(Encode, Decode, Clone, Default, PartialEq, Eq, RuntimeDebug, TypeInfo)]
+<span class="doccomment">/// Information about a staker&#39;s stakes across different eras.
+</span><span class="attr">#[derive(Encode, Decode, Clone, Default, PartialEq, Eq, RuntimeDebug, TypeInfo)]
 </span><span class="kw">pub struct </span>StakerInfo&lt;Balance: AtLeast32BitUnsigned + Copy + MaxEncodedLen&gt; {
     <span class="kw">pub</span>(<span class="kw">crate</span>) stakes: Vec&lt;EraStake&lt;Balance&gt;&gt;,
 }
@@ -363,7 +433,8 @@
         <span class="self">self</span>.stakes.len() <span class="kw">as </span>u32
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>stake(<span class="kw-2">&amp;mut </span><span class="self">self</span>, current_era: Era, value: Balance) -&gt; <span class="prelude-ty">Result</span>&lt;(), <span class="kw-2">&amp;</span>str&gt; {
+    <span class="doccomment">/// Stakes the given value in the current era, mutates StakerInfo in-place.
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>stake(<span class="kw-2">&amp;mut </span><span class="self">self</span>, current_era: Era, value: Balance) -&gt; <span class="prelude-ty">Result</span>&lt;(), <span class="kw-2">&amp;</span>str&gt; {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(era_stake) = <span class="self">self</span>.stakes.last_mut() {
             <span class="kw">if </span>era_stake.era &gt; current_era {
                 <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="string">&quot;Unexpected era&quot;</span>);
@@ -392,7 +463,8 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>unstake(<span class="kw-2">&amp;mut </span><span class="self">self</span>, current_era: Era, value: Balance) -&gt; <span class="prelude-ty">Result</span>&lt;(), <span class="kw-2">&amp;</span>str&gt; {
+    <span class="doccomment">/// Unstakes the given value in the current era, mutates StakerInfo in-place.
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>unstake(<span class="kw-2">&amp;mut </span><span class="self">self</span>, current_era: Era, value: Balance) -&gt; <span class="prelude-ty">Result</span>&lt;(), <span class="kw-2">&amp;</span>str&gt; {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(era_stake) = <span class="self">self</span>.stakes.last_mut() {
             <span class="kw">if </span>era_stake.era &gt; current_era {
                 <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="string">&quot;Unexpected era&quot;</span>);
@@ -419,7 +491,9 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>claim(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; (Era, Balance) {
+    <span class="doccomment">/// Claims the stake for the current era, mutates StakerInfo in-place.  
+    /// Returns the era and the staked balance.
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>claim(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; (Era, Balance) {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(era_stake) = <span class="self">self</span>.stakes.first() {
             <span class="kw">let </span>era_stake = <span class="kw-2">*</span>era_stake;
 
@@ -442,12 +516,14 @@
         }
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>latest_staked_value(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Balance {
+    <span class="doccomment">/// Returns the latest staked balance.
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>latest_staked_value(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Balance {
         <span class="self">self</span>.stakes.last().map_or(Zero::zero(), |x| x.staked)
     }
 }
 
-<span class="attr">#[derive(
+<span class="doccomment">/// A chunk of balance that is unlocking until a specific era.
+</span><span class="attr">#[derive(
     Clone, PartialEq, Eq, Copy, Encode, Decode, Default, RuntimeDebug, TypeInfo, MaxEncodedLen,
 )]
 </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>UnlockingChunk&lt;Balance: MaxEncodedLen&gt; {
@@ -461,12 +537,14 @@
 <span class="kw">where
     </span>Balance: Add&lt;Output = Balance&gt; + Copy + MaxEncodedLen,
 {
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>add_amount(<span class="kw-2">&amp;mut </span><span class="self">self</span>, amount: Balance) {
+    <span class="doccomment">/// Adds the given amount to the chunk&#39;s amount.
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>add_amount(<span class="kw-2">&amp;mut </span><span class="self">self</span>, amount: Balance) {
         <span class="self">self</span>.amount = <span class="self">self</span>.amount + amount
     }
 }
 
-<span class="attr">#[derive(Clone, PartialEq, Eq, Encode, Decode, Default, RuntimeDebug, TypeInfo)]
+<span class="doccomment">/// Information about unbonding chunks of balance.
+</span><span class="attr">#[derive(Clone, PartialEq, Eq, Encode, Decode, Default, RuntimeDebug, TypeInfo)]
 </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>UnbondingInfo&lt;Balance: AtLeast32BitUnsigned + Default + Copy + MaxEncodedLen&gt; {
     <span class="kw">pub</span>(<span class="kw">crate</span>) unlocking_chunks: Vec&lt;UnlockingChunk&lt;Balance&gt;&gt;,
 }
@@ -496,7 +574,8 @@
         <span class="self">self</span>.unlocking_chunks.is_empty()
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>sum(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Balance {
+    <span class="doccomment">/// Returns the total amount of the unlocking chunks.
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>sum(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Balance {
         <span class="self">self</span>.unlocking_chunks
             .iter()
             .map(|chunk| chunk.amount)
@@ -504,7 +583,8 @@
             .unwrap_or_default()
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, chunk: UnlockingChunk&lt;Balance&gt;) {
+    <span class="doccomment">/// Adds the given chunk to the unbonding info.
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>add(<span class="kw-2">&amp;mut </span><span class="self">self</span>, chunk: UnlockingChunk&lt;Balance&gt;) {
         <span class="kw">match </span><span class="self">self
             </span>.unlocking_chunks
             .binary_search_by(|x| x.unlock_era.cmp(<span class="kw-2">&amp;</span>chunk.unlock_era))
@@ -514,7 +594,8 @@
         }
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>partition(<span class="self">self</span>, era: Era) -&gt; (<span class="self">Self</span>, <span class="self">Self</span>) {
+    <span class="doccomment">/// returns the chucks before and after a given era.
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>partition(<span class="self">self</span>, era: Era) -&gt; (<span class="self">Self</span>, <span class="self">Self</span>) {
         <span class="kw">let </span>(matching_chunks, other_chunks): (
             Vec&lt;UnlockingChunk&lt;Balance&gt;&gt;,
             Vec&lt;UnlockingChunk&lt;Balance&gt;&gt;,
@@ -534,7 +615,8 @@
     }
 }
 
-<span class="attr">#[derive(Clone, PartialEq, Eq, Encode, Decode, Default, RuntimeDebug, TypeInfo, MaxEncodedLen)]
+<span class="doccomment">/// Information about an account&#39;s locked balance and unbonding information.
+</span><span class="attr">#[derive(Clone, PartialEq, Eq, Encode, Decode, Default, RuntimeDebug, TypeInfo, MaxEncodedLen)]
 </span><span class="kw">pub struct </span>AccountLedger&lt;Balance: AtLeast32BitUnsigned + Default + Copy + MaxEncodedLen&gt; {
     <span class="attr">#[codec(compact)]
     </span><span class="kw">pub</span>(<span class="kw">crate</span>) locked: Balance,
