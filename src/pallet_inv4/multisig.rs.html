@@ -1,4 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `INV4/pallet-inv4/src/multisig.rs`."><title>multisig.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e6a78389201e676c.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="pallet_inv4" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (87e1447aa 2023-11-30)" data-channel="nightly" data-search-js="search-5a66c239c06b3a66.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `INV4/pallet-inv4/src/multisig.rs`."><title>multisig.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="pallet_inv4" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0-nightly (f067fd608 2024-02-05)" data-channel="nightly" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+            <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../pallet_inv4/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -414,7 +416,7 @@
         </span><span class="kw">let </span>core_origin = ensure_multisig::&lt;T, OriginFor&lt;T&gt;&gt;(origin)<span class="question-mark">?</span>;
         <span class="kw">let </span>core_id = core_origin.id;
 
-        <span class="comment">// Mint the core&#39;s voting token to the target.
+        <span class="comment">// Mint the core's voting token to the target.
         </span>T::AssetsProvider::mint_into(core_id, <span class="kw-2">&amp;</span>target, amount)<span class="question-mark">?</span>;
 
         <span class="self">Self</span>::deposit_event(Event::Minted {
@@ -436,7 +438,7 @@
         </span><span class="kw">let </span>core_origin = ensure_multisig::&lt;T, OriginFor&lt;T&gt;&gt;(origin)<span class="question-mark">?</span>;
         <span class="kw">let </span>core_id = core_origin.id;
 
-        <span class="comment">// Burn the core&#39;s voting token from the target.
+        <span class="comment">// Burn the core's voting token from the target.
         </span>T::AssetsProvider::burn_from(
             core_id,
             <span class="kw-2">&amp;</span>target,
@@ -473,20 +475,20 @@
         </span><span class="kw">let </span>(minimum_support, <span class="kw">_</span>) = Pallet::&lt;T&gt;::minimum_support_and_required_approval(core_id)
             .ok_or(Error::&lt;T&gt;::CoreNotFound)<span class="question-mark">?</span>;
 
-        <span class="comment">// Get the total issuance of the core&#39;s voting token
+        <span class="comment">// Get the total issuance of the core's voting token
         </span><span class="kw">let </span>total_issuance: BalanceOf&lt;T&gt; = T::AssetsProvider::total_issuance(core_id);
 
         <span class="comment">// Compute the call hash
         </span><span class="kw">let </span>call_hash = &lt;&lt;T <span class="kw">as </span>frame_system::Config&gt;::Hashing <span class="kw">as </span>Hash&gt;::hash_of(<span class="kw-2">&amp;</span>call);
 
-        <span class="comment">// Make sure this exact multisig call doesn&#39;t already exist
+        <span class="comment">// Make sure this exact multisig call doesn't already exist
         </span><span class="macro">ensure!</span>(
             Multisig::&lt;T&gt;::get(core_id, call_hash).is_none(),
             Error::&lt;T&gt;::MultisigCallAlreadyExists
         );
 
         <span class="comment">// If caller has enough balance to meet/exeed the threshold, then go ahead and execute the call now
-        // There is no need to check against required_approval as it&#39;s assumed the caller is voting aye
+        // There is no need to check against required_approval as it's assumed the caller is voting aye
         </span><span class="kw">if </span>Perbill::from_rational(owner_balance, total_issuance) &gt;= minimum_support {
             <span class="kw">let </span>dispatch_result =
                 <span class="kw">crate</span>::dispatch::dispatch_call::&lt;T&gt;(core_id, <span class="kw-2">&amp;</span>fee_asset, <span class="kw-2">*</span>call.clone());
@@ -506,7 +508,7 @@
                 .try_into()
                 .map_err(|<span class="kw">_</span>| Error::&lt;T&gt;::MaxCallLengthExceeded)<span class="question-mark">?</span>;
 
-            <span class="comment">// Insert proposal in storage, it&#39;s now in the voting stage
+            <span class="comment">// Insert proposal in storage, it's now in the voting stage
             </span>Multisig::&lt;T&gt;::insert(
                 core_id,
                 call_hash,
@@ -552,7 +554,7 @@
             <span class="comment">// Get the voting token balance of the caller
             </span><span class="kw">let </span>voter_balance: BalanceOf&lt;T&gt; = T::AssetsProvider::balance(core_id, <span class="kw-2">&amp;</span>owner);
 
-            <span class="comment">// If caller doesn&#39;t own the token, they have no voting power.
+            <span class="comment">// If caller doesn't own the token, they have no voting power.
             </span><span class="macro">ensure!</span>(!voter_balance.is_zero(), Error::&lt;T&gt;::NoPermission);
 
             <span class="comment">// Get the multisig call data from the storage
@@ -602,7 +604,7 @@
                     result: dispatch_result.map(|<span class="kw">_</span>| ()).map_err(|e| e.error),
                 });
             } <span class="kw">else </span>{
-                <span class="comment">// If the thresholds aren&#39;t met, update storage with the new tally
+                <span class="comment">// If the thresholds aren't met, update storage with the new tally
                 </span><span class="kw-2">*</span>data = <span class="prelude-val">Some</span>(old_data.clone());
 
                 <span class="self">Self</span>::deposit_event(Event::MultisigVoteAdded {

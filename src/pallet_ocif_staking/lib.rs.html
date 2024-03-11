@@ -1,4 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `OCIF/staking/src/lib.rs`."><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e6a78389201e676c.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="pallet_ocif_staking" data-themes="" data-resource-suffix="" data-rustdoc-version="1.76.0-nightly (87e1447aa 2023-11-30)" data-channel="nightly" data-search-js="search-5a66c239c06b3a66.js" data-settings-js="settings-fe03fdc259827cd2.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-77dede896d6ac08e.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `OCIF/staking/src/lib.rs`."><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="pallet_ocif_staking" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0-nightly (f067fd608 2024-02-05)" data-channel="nightly" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+            <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../pallet_ocif_staking/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -1265,7 +1267,7 @@
 //! Cores are virtual accounts that have an ID used to derive their own account address,
 //! their task in the process is to register themselves and have Stakers lock tokens in favor of a specifc Core.
 //! Cores receive their fraction of the pot rewards based on the total amount staked towards them by Stakers,
-//! however, a Core must have total stake above the defined threshold (making it `active`), otherwise they won&#39;t be entitled to rewards.
+//! however, a Core must have total stake above the defined threshold (making it `active`), otherwise they won't be entitled to rewards.
 //!
 //! ### Stakers
 //! Stakers are any account existing on the chain, their task is to lock tokens in favor of a Core.
@@ -1294,12 +1296,12 @@
 //! * `withdraw_unstaked` - Withdraws tokens that have already been through the unbonding period.
 //! * `staker_claim_rewards` - Claims rewards available for a Staker.
 //! * `core_claim_rewards` - Claims rewards available for a Core.
-//! * `halt_unhalt_pallet` - Allows Root to trigger a halt of the system, eras will stop counting and rewards won&#39;t be distributed.
+//! * `halt_unhalt_pallet` - Allows Root to trigger a halt of the system, eras will stop counting and rewards won't be distributed.
 //!
 //! [`Call`]: ./enum.Call.html
 //! [`Config`]: ./trait.Config.html
 
-</span><span class="attr">#![cfg_attr(not(feature = <span class="string">&quot;std&quot;</span>), no_std)]
+</span><span class="attr">#![cfg_attr(not(feature = <span class="string">"std"</span>), no_std)]
 
 </span><span class="kw">use </span>frame_support::{
     dispatch::{Pays, PostDispatchInfo},
@@ -1326,7 +1328,7 @@
 <span class="kw">use </span>core::ops::Div;
 <span class="kw">use </span>primitives::<span class="kw-2">*</span>;
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;runtime-benchmarks&quot;</span>)]
+<span class="attr">#[cfg(feature = <span class="string">"runtime-benchmarks"</span>)]
 </span><span class="kw">mod </span>benchmarking;
 <span class="attr">#[cfg(test)]
 </span><span class="kw">mod </span>testing;
@@ -1335,7 +1337,7 @@
 <span class="kw">pub use </span>weights::WeightInfo;
 
 <span class="doccomment">/// Staking lock identifier.
-</span><span class="kw">const </span>LOCK_ID: LockIdentifier = <span class="kw-2">*</span><span class="string">b&quot;ocif-stk&quot;</span>;
+</span><span class="kw">const </span>LOCK_ID: LockIdentifier = <span class="kw-2">*</span><span class="string">b"ocif-stk"</span>;
 
 <span class="kw">pub use </span>pallet::<span class="kw-2">*</span>;
 
@@ -1367,7 +1369,7 @@
         BoundedVec&lt;u8, &lt;T <span class="kw">as </span>Config&gt;::MaxImageUrlLength&gt;,
     &gt;;
 
-    <span class="doccomment">/// The core information type, containing a core&#39;s AccountId and CoreMetadataOf.
+    <span class="doccomment">/// The core information type, containing a core's AccountId and CoreMetadataOf.
     </span><span class="kw">pub type </span>CoreInfoOf&lt;T&gt; = CoreInfo&lt;&lt;T <span class="kw">as </span>frame_system::Config&gt;::AccountId, CoreMetadataOf&lt;T&gt;&gt;;
 
     <span class="doccomment">/// Alias type for the era identifier type.
@@ -1423,16 +1425,16 @@
         </span><span class="kw">type </span>MaxUnlocking: Get&lt;u32&gt;;
 
         <span class="doccomment">/// Number of eras that need to pass until unstaked value can be withdrawn.
-        /// When set to `0`, it&#39;s equal to having no unbonding period.
+        /// When set to `0`, it's equal to having no unbonding period.
         </span><span class="attr">#[pallet::constant]
         </span><span class="kw">type </span>UnbondingPeriod: Get&lt;u32&gt;;
 
         <span class="doccomment">/// Max number of unique `EraStake` values that can exist for a `(staker, core)` pairing.
         ///
         /// When stakers claims rewards, they will either keep the number of `EraStake` values the same or they will reduce them by one.
-        /// Stakers cannot add an additional `EraStake` value by calling `bond&amp;stake` or `unbond&amp;unstake` if they&#39;ve reached the max number of values.
+        /// Stakers cannot add an additional `EraStake` value by calling `bond&amp;stake` or `unbond&amp;unstake` if they've reached the max number of values.
         ///
-        /// This ensures that history doesn&#39;t grow indefinitely - if there are too many chunks, stakers should first claim their former rewards
+        /// This ensures that history doesn't grow indefinitely - if there are too many chunks, stakers should first claim their former rewards
         /// before adding additional `EraStake` values.
         </span><span class="attr">#[pallet::constant]
         </span><span class="kw">type </span>MaxEraStakeValues: Get&lt;u32&gt;;
@@ -1445,15 +1447,15 @@
         </span><span class="attr">#[pallet::constant]
         </span><span class="kw">type </span>StakeThresholdForActiveCore: Get&lt;BalanceOf&lt;<span class="self">Self</span>&gt;&gt;;
 
-        <span class="doccomment">/// Maximum length of a core&#39;s name.
+        <span class="doccomment">/// Maximum length of a core's name.
         </span><span class="attr">#[pallet::constant]
         </span><span class="kw">type </span>MaxNameLength: Get&lt;u32&gt;;
 
-        <span class="doccomment">/// Maximum length of a core&#39;s description.
+        <span class="doccomment">/// Maximum length of a core's description.
         </span><span class="attr">#[pallet::constant]
         </span><span class="kw">type </span>MaxDescriptionLength: Get&lt;u32&gt;;
 
-        <span class="doccomment">/// Maximum length of a core&#39;s image URL.
+        <span class="doccomment">/// Maximum length of a core's image URL.
         </span><span class="attr">#[pallet::constant]
         </span><span class="kw">type </span>MaxImageUrlLength: Get&lt;u32&gt;;
 
@@ -1505,7 +1507,7 @@
         CoreStakeInfo&lt;BalanceOf&lt;T&gt;&gt;,
     &gt;;
 
-    <span class="doccomment">/// Info about staker&#39;s stakes on a particular core.
+    <span class="doccomment">/// Info about staker's stakes on a particular core.
     </span><span class="attr">#[pallet::storage]
     #[pallet::getter(<span class="kw">fn </span>staker_info)]
     </span><span class="kw">pub type </span>GeneralStakerInfo&lt;T: Config&gt; = StorageDoubleMap&lt;
@@ -1647,7 +1649,7 @@
     <span class="attr">#[pallet::hooks]
     </span><span class="kw">impl</span>&lt;T: Config&gt; Hooks&lt;BlockNumberFor&lt;T&gt;&gt; <span class="kw">for </span>Pallet&lt;T&gt; {
         <span class="kw">fn </span>on_initialize(now: BlockNumberFor&lt;T&gt;) -&gt; Weight {
-            <span class="comment">// If the pallet is halted we don&#39;t process a new era.
+            <span class="comment">// If the pallet is halted we don't process a new era.
             </span><span class="kw">if </span><span class="self">Self</span>::is_halted() {
                 <span class="kw">return </span>T::DbWeight::get().reads(<span class="number">1</span>);
             }
@@ -1891,9 +1893,9 @@
         <span class="doccomment">/// Lock up and stake balance of the origin account.
         ///
         /// `value` must be more than the `minimum_stake` specified by `MinimumStakingAmount`
-        /// unless account already has bonded value equal or more than &#39;minimum_stake&#39;.
+        /// unless account already has bonded value equal or more than 'minimum_stake'.
         ///
-        /// The dispatch origin for this call must be _Signed_ by the staker&#39;s account.
+        /// The dispatch origin for this call must be _Signed_ by the staker's account.
         ///
         /// - `core_id`: Id of the core to stake towards.
         /// - `value`: Amount to stake.
@@ -1953,7 +1955,7 @@
 
         <span class="doccomment">/// Start unbonding process and unstake balance from the core.
         ///
-        /// The unstaked amount will no longer be eligible for rewards but still won&#39;t be unlocked.
+        /// The unstaked amount will no longer be eligible for rewards but still won't be unlocked.
         /// User needs to wait for the unbonding period to finish before being able to withdraw
         /// the funds via `withdraw_unstaked` call.
         ///
@@ -2021,7 +2023,7 @@
         /// If there are unbonding chunks which will be fully unbonded in future eras,
         /// they will remain and can be withdrawn later.
         ///
-        /// The dispatch origin for this call must be _Signed_ by the staker&#39;s account.
+        /// The dispatch origin for this call must be _Signed_ by the staker's account.
         </span><span class="attr">#[pallet::call_index(<span class="number">5</span>)]
         #[pallet::weight(&lt;T <span class="kw">as </span>Config&gt;::WeightInfo::withdraw_unstaked())]
         </span><span class="kw">pub fn </span>withdraw_unstaked(origin: OriginFor&lt;T&gt;) -&gt; DispatchResultWithPostInfo {
@@ -2055,11 +2057,11 @@
             <span class="prelude-val">Ok</span>(().into())
         }
 
-        <span class="doccomment">/// Claim the staker&#39;s rewards.
+        <span class="doccomment">/// Claim the staker's rewards.
         ///
         /// In case reward cannot be claimed or was already claimed, an error is raised.
         ///
-        /// The dispatch origin for this call must be _Signed_ by the staker&#39;s account.
+        /// The dispatch origin for this call must be _Signed_ by the staker's account.
         ///
         /// - `core_id`: Id of the core to claim rewards from.
         </span><span class="attr">#[pallet::call_index(<span class="number">6</span>)]
@@ -2189,7 +2191,7 @@
 
         <span class="doccomment">/// Move stake from one core to another.
         ///
-        /// The dispatch origin for this call must be _Signed_ by the staker&#39;s account.
+        /// The dispatch origin for this call must be _Signed_ by the staker's account.
         ///
         /// - `from_core`: Id of the core to move stake from.
         /// - `amount`: Amount to move.
@@ -2253,7 +2255,7 @@
 
     <span class="kw">impl</span>&lt;T: Config&gt; Pallet&lt;T&gt; {
         <span class="doccomment">/// Internal function responsible for validating a stake and updating in-place
-        /// both the staker&#39;s and core staking info.
+        /// both the staker's and core staking info.
         </span><span class="kw">fn </span>internal_stake(
             staker_info: <span class="kw-2">&amp;mut </span>StakerInfo&lt;BalanceOf&lt;T&gt;&gt;,
             staking_info: <span class="kw-2">&amp;mut </span>CoreStakeInfo&lt;BalanceOf&lt;T&gt;&gt;,
@@ -2289,7 +2291,7 @@
         }
 
         <span class="doccomment">/// Internal function responsible for validating an unstake and updating in-place
-        /// both the staker&#39;s and core staking info.
+        /// both the staker's and core staking info.
         </span><span class="kw">fn </span>internal_unstake(
             staker_info: <span class="kw-2">&amp;mut </span>StakerInfo&lt;BalanceOf&lt;T&gt;&gt;,
             core_stake_info: <span class="kw-2">&amp;mut </span>CoreStakeInfo&lt;BalanceOf&lt;T&gt;&gt;,
@@ -2349,8 +2351,8 @@
             }
         }
 
-        <span class="doccomment">/// The block rewards are accumulated on the pallet&#39;s account during an era.
-        /// This function takes a snapshot of the pallet&#39;s balance accrued during current era
+        <span class="doccomment">/// The block rewards are accumulated on the pallet's account during an era.
+        /// This function takes a snapshot of the pallet's balance accrued during current era
         /// and stores it for future distribution
         ///
         /// This is called just at the beginning of an era.
