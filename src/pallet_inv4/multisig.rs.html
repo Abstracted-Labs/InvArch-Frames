@@ -338,6 +338,10 @@
 <a href="#336" id="336">336</a>
 <a href="#337" id="337">337</a>
 <a href="#338" id="338">338</a>
+<a href="#339" id="339">339</a>
+<a href="#340" id="340">340</a>
+<a href="#341" id="341">341</a>
+<a href="#342" id="342">342</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Multisig Operations.
 //!
 //! ## Overview
@@ -357,6 +361,7 @@
     origin::{ensure_multisig, INV4Origin},
     voting::{Tally, Vote},
 };
+<span class="kw">use </span>codec::DecodeLimit;
 <span class="kw">use </span>core::{
     convert::{TryFrom, TryInto},
     iter::Sum,
@@ -579,12 +584,15 @@
             <span class="kw">let </span>support = old_data.tally.support(core_id);
             <span class="kw">let </span>approval = old_data.tally.approval(core_id);
 
-            <span class="comment">// Decode the call
-            </span><span class="kw">let </span>decoded_call = &lt;T <span class="kw">as </span>Config&gt;::RuntimeCall::decode(<span class="kw-2">&amp;mut &amp;</span>old_data.actual_call[..])
-                .map_err(|<span class="kw">_</span>| Error::&lt;T&gt;::FailedDecodingCall)<span class="question-mark">?</span>;
-
             <span class="comment">// Check if the multisig proposal passes the thresholds with the added vote
             </span><span class="kw">if </span>(support &gt;= minimum_support) &amp;&amp; (approval &gt;= required_approval) {
+                <span class="comment">// Decode the call
+                </span><span class="kw">let </span>decoded_call = &lt;T <span class="kw">as </span>Config&gt;::RuntimeCall::decode_all_with_depth_limit(
+                    sp_api::MAX_EXTRINSIC_DEPTH / <span class="number">4</span>,
+                    <span class="kw-2">&amp;mut &amp;</span>old_data.actual_call[..],
+                )
+                .map_err(|<span class="kw">_</span>| Error::&lt;T&gt;::FailedDecodingCall)<span class="question-mark">?</span>;
+
                 <span class="comment">// If the proposal thresholds are met, remove proposal from storage
                 </span><span class="kw-2">*</span>data = <span class="prelude-val">None</span>;
 

@@ -754,7 +754,7 @@
                 },
                 Instruction::RefundSurplus,
                 Instruction::DepositAsset {
-                    assets: MultiAssetFilter::Wild(WildMultiAsset::All),
+                    assets: MultiAssetFilter::Wild(WildMultiAsset::AllCounted(<span class="number">1</span>)),
                     beneficiary,
                 },
             ]);
@@ -853,7 +853,7 @@
                 <span class="comment">// Refund unused fees
                 </span>Instruction::RefundSurplus,
                 Instruction::DepositAsset {
-                    assets: MultiAssetFilter::Wild(WildMultiAsset::All),
+                    assets: MultiAssetFilter::Wild(WildMultiAsset::AllCounted(<span class="number">1</span>)),
                     beneficiary: core_multilocation,
                 },
             ]);
@@ -986,13 +986,13 @@
                                 weight_limit: WeightLimit::Unlimited,
                             },
                             Instruction::DepositAsset {
-                                assets: All.into(),
+                                assets: AllCounted(<span class="number">1</span>).into(),
                                 beneficiary,
                             },
                             Instruction::RefundSurplus,
                             <span class="comment">// Refunds the beneficiary the surplus of the execution fees in the destination chain.
                             </span>Instruction::DepositAsset {
-                                assets: All.into(),
+                                assets: AllCounted(<span class="number">1</span>).into(),
                                 beneficiary,
                             },
                         ]),
@@ -1000,7 +1000,7 @@
                     Instruction::RefundSurplus,
                     <span class="comment">// Refunds the core the surplus of the execution fees incurred on sending the XCM.
                     </span>Instruction::DepositAsset {
-                        assets: All.into(),
+                        assets: AllCounted(<span class="number">1</span>).into(),
                         beneficiary: core_multilocation,
                     },
                 ])
@@ -1022,7 +1022,7 @@
                                 weight_limit: WeightLimit::Unlimited,
                             },
                             Instruction::DepositAsset {
-                                assets: MultiAssetFilter::Wild(WildMultiAsset::All),
+                                assets: MultiAssetFilter::Wild(WildMultiAsset::AllCounted(<span class="number">1</span>)),
                                 beneficiary,
                             },
                         ]),
@@ -1030,7 +1030,7 @@
                     <span class="comment">// Refund unused fees
                     </span>Instruction::RefundSurplus,
                     Instruction::DepositAsset {
-                        assets: MultiAssetFilter::Wild(WildMultiAsset::All),
+                        assets: MultiAssetFilter::Wild(WildMultiAsset::AllCounted(<span class="number">1</span>)),
                         beneficiary: core_multilocation,
                     },
                 ])
