@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["Call","Error","Event"],"mod":["dispatchables","storage_types","warnings"],"struct":["Pallet"],"trait":["Config"],"type":["ChainsUnderMaintenance","Module"]};
+window.SIDEBAR_ITEMS = {"enum":["Call","Error","Event"],"fn":["mutate_if_relay"],"mod":["dispatchables","storage_types","warnings"],"struct":["Pallet"],"trait":["Config"],"type":["ChainsUnderMaintenance","Module"]};

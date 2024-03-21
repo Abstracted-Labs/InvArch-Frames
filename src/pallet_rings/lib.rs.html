@@ -525,6 +525,23 @@
 <a href="#523" id="523">523</a>
 <a href="#524" id="524">524</a>
 <a href="#525" id="525">525</a>
+<a href="#526" id="526">526</a>
+<a href="#527" id="527">527</a>
+<a href="#528" id="528">528</a>
+<a href="#529" id="529">529</a>
+<a href="#530" id="530">530</a>
+<a href="#531" id="531">531</a>
+<a href="#532" id="532">532</a>
+<a href="#533" id="533">533</a>
+<a href="#534" id="534">534</a>
+<a href="#535" id="535">535</a>
+<a href="#536" id="536">536</a>
+<a href="#537" id="537">537</a>
+<a href="#538" id="538">538</a>
+<a href="#539" id="539">539</a>
+<a href="#540" id="540">540</a>
+<a href="#541" id="541">541</a>
+<a href="#542" id="542">542</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! # Rings Pallet
 //!
 //! - [`Config`]
@@ -644,7 +661,7 @@
             origin_chain_asset: &lt;&lt;T <span class="kw">as </span>pallet::Config&gt;::Chains <span class="kw">as </span>ChainList&gt;::ChainAssets,
             amount: u128,
             from: &lt;T <span class="kw">as </span>pallet_inv4::Config&gt;::CoreId,
-            to: &lt;T <span class="kw">as </span>frame_system::Config&gt;::AccountId,
+            to: <span class="prelude-ty">Option</span>&lt;&lt;T <span class="kw">as </span>frame_system::Config&gt;::AccountId&gt;,
         },
 
         <span class="doccomment">/// A Chain's maintenance status changed.
@@ -728,13 +745,15 @@
 
             <span class="kw">let </span>fee_asset_location = fee_asset.get_asset_location();
 
-            <span class="kw">let </span>beneficiary: MultiLocation = MultiLocation {
+            <span class="kw">let </span><span class="kw-2">mut </span>core_multilocation: MultiLocation = MultiLocation {
                 parents: <span class="number">1</span>,
                 interior: Junctions::X2(
                     Junction::Parachain(&lt;T <span class="kw">as </span>pallet_inv4::Config&gt;::ParaId::get()),
                     descend_interior,
                 ),
             };
+
+            mutate_if_relay(<span class="kw-2">&amp;mut </span>core_multilocation, <span class="kw-2">&amp;</span>dest);
 
             <span class="kw">let </span>fee_multiasset = MultiAsset {
                 id: AssetId::Concrete(fee_asset_location),
@@ -755,7 +774,7 @@
                 Instruction::RefundSurplus,
                 Instruction::DepositAsset {
                     assets: MultiAssetFilter::Wild(WildMultiAsset::AllCounted(<span class="number">1</span>)),
-                    beneficiary,
+                    beneficiary: core_multilocation,
                 },
             ]);
 
@@ -825,13 +844,15 @@
                 }),
             };
 
-            <span class="kw">let </span>core_multilocation: MultiLocation = MultiLocation {
+            <span class="kw">let </span><span class="kw-2">mut </span>core_multilocation: MultiLocation = MultiLocation {
                 parents: <span class="number">1</span>,
                 interior: Junctions::X2(
                     Junction::Parachain(&lt;T <span class="kw">as </span>pallet_inv4::Config&gt;::ParaId::get()),
                     descend_interior,
                 ),
             };
+
+            mutate_if_relay(<span class="kw-2">&amp;mut </span>core_multilocation, <span class="kw-2">&amp;</span>dest);
 
             <span class="kw">let </span>fee_multiasset = MultiAsset {
                 id: AssetId::Concrete(fee_asset.get_asset_location()),
@@ -894,7 +915,6 @@
             <span class="kw">let </span>core = ensure_multisig::&lt;T, OriginFor&lt;T&gt;&gt;(origin)<span class="question-mark">?</span>;
 
             <span class="kw">let </span>core_id = core.id.into();
-            <span class="kw">let </span>core_account = core.to_account_id();
 
             <span class="kw">let </span>from_chain = asset.get_chain();
             <span class="kw">let </span>from_chain_location = from_chain.get_location();
@@ -948,7 +968,7 @@
                 })
                 .map_err(|<span class="kw">_</span>| Error::&lt;T&gt;::FailedToReanchorAsset)<span class="question-mark">?</span>;
 
-            <span class="kw">let </span>core_multilocation: MultiLocation = MultiLocation {
+            <span class="kw">let </span><span class="kw-2">mut </span>core_multilocation: MultiLocation = MultiLocation {
                 parents: <span class="number">1</span>,
                 interior: Junctions::X2(
                     Junction::Parachain(&lt;T <span class="kw">as </span>pallet_inv4::Config&gt;::ParaId::get()),
@@ -964,8 +984,16 @@
                         id: to_inner.into(),
                     }),
                 },
-                <span class="prelude-val">None </span>=&gt; core_multilocation,
+                <span class="prelude-val">None </span>=&gt; {
+                    <span class="kw">let </span><span class="kw-2">mut </span>dest_core_multilocation = core_multilocation;
+
+                    mutate_if_relay(<span class="kw-2">&amp;mut </span>dest_core_multilocation, <span class="kw-2">&amp;</span>dest);
+
+                    dest_core_multilocation
+                }
             };
+
+            mutate_if_relay(<span class="kw-2">&amp;mut </span>core_multilocation, <span class="kw-2">&amp;</span>dest);
 
             <span class="comment">// If the asset originates from the destination chain, we need to reverse the reserve-transfer.
             </span><span class="kw">let </span>message = <span class="kw">if </span>asset_location.starts_with(<span class="kw-2">&amp;</span>dest) {
@@ -1043,10 +1071,16 @@
                 origin_chain_asset: asset,
                 from: core.id,
                 amount,
-                to: to.unwrap_or(core_account),
+                to,
             });
 
             <span class="prelude-val">Ok</span>(())
+        }
+    }
+
+    <span class="kw">pub fn </span>mutate_if_relay(origin: <span class="kw-2">&amp;mut </span>MultiLocation, dest: <span class="kw-2">&amp;</span>MultiLocation) {
+        <span class="kw">if </span>dest.contains_parents_only(<span class="number">1</span>) {
+            origin.dec_parent();
         }
     }
 }
