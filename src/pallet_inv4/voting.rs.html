@@ -237,6 +237,8 @@
 <a href="#235" id="235">235</a>
 <a href="#236" id="236">236</a>
 <a href="#237" id="237">237</a>
+<a href="#238" id="238">238</a>
+<a href="#239" id="239">239</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Voting Mechanism.
 //!
 //! ## Overview
@@ -250,11 +252,11 @@
 <span class="kw">use </span>codec::{Decode, Encode, HasCompact, MaxEncodedLen};
 <span class="kw">use </span>core::marker::PhantomData;
 <span class="kw">use </span>frame_support::{
-    pallet_prelude::Member,
+    pallet_prelude::{Member, RuntimeDebug},
     traits::{fungibles::Inspect, PollStatus, VoteTally},
-    BoundedBTreeMap, CloneNoBound, EqNoBound, Parameter, PartialEqNoBound, RuntimeDebug,
-    RuntimeDebugNoBound,
+    BoundedBTreeMap, CloneNoBound, EqNoBound, Parameter, PartialEqNoBound, RuntimeDebugNoBound,
 };
+<span class="kw">use </span>frame_system::pallet_prelude::BlockNumberFor;
 <span class="kw">use </span>scale_info::TypeInfo;
 <span class="kw">use </span>sp_runtime::{
     traits::{One, Zero},
@@ -410,7 +412,7 @@
 <span class="kw">impl</span>&lt;T: Config&gt; CustomPolling&lt;Tally&lt;T&gt;&gt; <span class="kw">for </span>Pallet&lt;T&gt; {
     <span class="kw">type </span>Index = T::Hash;
     <span class="kw">type </span>Votes = Votes&lt;T&gt;;
-    <span class="kw">type </span>Moment = T::BlockNumber;
+    <span class="kw">type </span>Moment = BlockNumberFor&lt;T&gt;;
     <span class="kw">type </span>Class = T::CoreId;
 
     <span class="kw">fn </span>classes() -&gt; Vec&lt;<span class="self">Self</span>::Class&gt; {
@@ -420,7 +422,7 @@
     <span class="kw">fn </span>access_poll&lt;R&gt;(
         class: <span class="self">Self</span>::Class,
         index: <span class="self">Self</span>::Index,
-        f: <span class="kw">impl </span>FnOnce(PollStatus&lt;<span class="kw-2">&amp;mut </span>Tally&lt;T&gt;, T::BlockNumber, T::CoreId&gt;) -&gt; R,
+        f: <span class="kw">impl </span>FnOnce(PollStatus&lt;<span class="kw-2">&amp;mut </span>Tally&lt;T&gt;, BlockNumberFor&lt;T&gt;, T::CoreId&gt;) -&gt; R,
     ) -&gt; R {
         <span class="kw">match </span>Multisig::&lt;T&gt;::get(class, index) {
             <span class="prelude-val">Some</span>(<span class="kw-2">mut </span>m) =&gt; {
@@ -435,7 +437,9 @@
     <span class="kw">fn </span>try_access_poll&lt;R&gt;(
         class: <span class="self">Self</span>::Class,
         index: <span class="self">Self</span>::Index,
-        f: <span class="kw">impl </span>FnOnce(PollStatus&lt;<span class="kw-2">&amp;mut </span>Tally&lt;T&gt;, T::BlockNumber, T::CoreId&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;R, DispatchError&gt;,
+        f: <span class="kw">impl </span>FnOnce(
+            PollStatus&lt;<span class="kw-2">&amp;mut </span>Tally&lt;T&gt;, BlockNumberFor&lt;T&gt;, T::CoreId&gt;,
+        ) -&gt; <span class="prelude-ty">Result</span>&lt;R, DispatchError&gt;,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;R, DispatchError&gt; {
         <span class="kw">match </span>Multisig::&lt;T&gt;::get(class, index) {
             <span class="prelude-val">Some</span>(<span class="kw-2">mut </span>m) =&gt; {

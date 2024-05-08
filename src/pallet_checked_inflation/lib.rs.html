@@ -344,7 +344,6 @@
 <a href="#342" id="342">342</a>
 <a href="#343" id="343">343</a>
 <a href="#344" id="344">344</a>
-<a href="#345" id="345">345</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! # Checked Inflation Pallet
 //!
 //! - [`Config`]
@@ -416,9 +415,8 @@
     </span><span class="kw">pub trait </span>Config: frame_system::Config {
         <span class="doccomment">/// The overarching event type.
         </span><span class="kw">type </span>RuntimeEvent: From&lt;Event&lt;<span class="self">Self</span>&gt;&gt; + IsType&lt;&lt;<span class="self">Self </span><span class="kw">as </span>frame_system::Config&gt;::RuntimeEvent&gt;;
-
         <span class="doccomment">/// The currency (token) used in this pallet.
-        </span><span class="kw">type </span>Currency: LockableCurrency&lt;<span class="self">Self</span>::AccountId, Moment = <span class="self">Self</span>::BlockNumber&gt;
+        </span><span class="kw">type </span>Currency: LockableCurrency&lt;<span class="self">Self</span>::AccountId, Moment = BlockNumberFor&lt;<span class="self">Self</span>&gt;&gt;
             + ReservableCurrency&lt;<span class="self">Self</span>::AccountId&gt;
             + Currency&lt;<span class="self">Self</span>::AccountId&gt;;
 
@@ -449,7 +447,7 @@
     <span class="doccomment">/// Block that the next era starts at.
     </span><span class="attr">#[pallet::storage]
     #[pallet::getter(<span class="kw">fn </span>next_era_starting_block)]
-    </span><span class="kw">pub type </span>NextEraStartingBlock&lt;T: Config&gt; = StorageValue&lt;<span class="kw">_</span>, T::BlockNumber, ValueQuery&gt;;
+    </span><span class="kw">pub type </span>NextEraStartingBlock&lt;T: Config&gt; = StorageValue&lt;<span class="kw">_</span>, BlockNumberFor&lt;T&gt;, ValueQuery&gt;;
 
     <span class="doccomment">/// Total token supply at the very beginning of the year before any inflation has been minted.
     </span><span class="attr">#[pallet::storage]

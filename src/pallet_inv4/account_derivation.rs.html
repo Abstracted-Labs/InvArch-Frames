@@ -70,7 +70,7 @@
 <span class="kw">use </span>codec::{Compact, Encode};
 <span class="kw">use </span>frame_support::traits::Get;
 <span class="kw">use </span>sp_io::hashing::blake2_256;
-<span class="kw">use </span>xcm::latest::{BodyId, BodyPart, Junction, Junctions};
+<span class="kw">use </span>xcm::v3::{BodyId, BodyPart, Junction, Junctions};
 <span class="doccomment">/// Trait providing the XCM location and the derived account of a core.
 </span><span class="kw">pub trait </span>CoreAccountDerivation&lt;T: Config&gt; {
     <span class="doccomment">/// Derives the core's AccountId.

@@ -549,7 +549,7 @@
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
     <span class="kw">use </span>codec::FullCodec;
     <span class="kw">use </span>frame_support::{
-        dispatch::{Dispatchable, GetDispatchInfo, Pays, PostDispatchInfo},
+        dispatch::{GetDispatchInfo, Pays, PostDispatchInfo},
         pallet_prelude::<span class="kw-2">*</span>,
         traits::{
             fungibles,
@@ -562,7 +562,7 @@
     <span class="kw">use </span>primitives::CoreInfo;
     <span class="kw">use </span>scale_info::prelude::fmt::Display;
     <span class="kw">use </span>sp_runtime::{
-        traits::{AtLeast32BitUnsigned, Member},
+        traits::{AtLeast32BitUnsigned, Dispatchable, Member},
         Perbill,
     };
     <span class="kw">use </span>sp_std::{boxed::Box, convert::TryInto, vec::Vec};

@@ -1381,7 +1381,7 @@
         </span><span class="kw">type </span>RuntimeEvent: From&lt;Event&lt;<span class="self">Self</span>&gt;&gt; + IsType&lt;&lt;<span class="self">Self </span><span class="kw">as </span>frame_system::Config&gt;::RuntimeEvent&gt;;
 
         <span class="doccomment">/// The currency used in staking.
-        </span><span class="kw">type </span>Currency: LockableCurrency&lt;<span class="self">Self</span>::AccountId, Moment = <span class="self">Self</span>::BlockNumber&gt;
+        </span><span class="kw">type </span>Currency: LockableCurrency&lt;<span class="self">Self</span>::AccountId, Moment = BlockNumberFor&lt;<span class="self">Self</span>&gt;&gt;
             + ReservableCurrency&lt;<span class="self">Self</span>::AccountId&gt;;
 
         <span class="comment">// type CoreId: Parameter
@@ -1482,7 +1482,7 @@
     <span class="doccomment">/// Stores the block number of when the next era starts.
     </span><span class="attr">#[pallet::storage]
     #[pallet::getter(<span class="kw">fn </span>next_era_starting_block)]
-    </span><span class="kw">pub type </span>NextEraStartingBlock&lt;T: Config&gt; = StorageValue&lt;<span class="kw">_</span>, T::BlockNumber, ValueQuery&gt;;
+    </span><span class="kw">pub type </span>NextEraStartingBlock&lt;T: Config&gt; = StorageValue&lt;<span class="kw">_</span>, BlockNumberFor&lt;T&gt;, ValueQuery&gt;;
 
     <span class="doccomment">/// Simple map where CoreId points to the respective core information.
     </span><span class="attr">#[pallet::storage]
