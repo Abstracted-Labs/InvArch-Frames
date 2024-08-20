@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["CoreEraStake","CurrentEra","GeneralEraInfo","GeneralStakerInfo","Halted","Ledger","NextEraStartingBlock","RegisteredCore","RewardAccumulator"]};
+window.SIDEBAR_ITEMS = {"struct":["CoreEraStake","CurrentEra","GeneralEraInfo","GeneralStakerInfo","Halted","Ledger","NextEraStartingBlock","RegisteredCore","RewardAccumulator","UnregisteredCoreStakeInfo","UnregisteredCoreStakers"]};

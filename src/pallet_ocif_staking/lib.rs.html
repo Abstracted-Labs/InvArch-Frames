@@ -1,6 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `OCIF/staking/src/lib.rs`."><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="pallet_ocif_staking" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0-nightly (f067fd608 2024-02-05)" data-channel="nightly" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
-            <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
-    <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../pallet_ocif_staking/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `OCIF/staking/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="pallet_ocif_staking" data-themes="" data-resource-suffix="" data-rustdoc-version="1.81.0-nightly (d9284afea 2024-07-14)" data-channel="nightly" data-search-js="search-d234aafac6c221dd.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -1251,6 +1249,141 @@
 <a href="#1249" id="1249">1249</a>
 <a href="#1250" id="1250">1250</a>
 <a href="#1251" id="1251">1251</a>
+<a href="#1252" id="1252">1252</a>
+<a href="#1253" id="1253">1253</a>
+<a href="#1254" id="1254">1254</a>
+<a href="#1255" id="1255">1255</a>
+<a href="#1256" id="1256">1256</a>
+<a href="#1257" id="1257">1257</a>
+<a href="#1258" id="1258">1258</a>
+<a href="#1259" id="1259">1259</a>
+<a href="#1260" id="1260">1260</a>
+<a href="#1261" id="1261">1261</a>
+<a href="#1262" id="1262">1262</a>
+<a href="#1263" id="1263">1263</a>
+<a href="#1264" id="1264">1264</a>
+<a href="#1265" id="1265">1265</a>
+<a href="#1266" id="1266">1266</a>
+<a href="#1267" id="1267">1267</a>
+<a href="#1268" id="1268">1268</a>
+<a href="#1269" id="1269">1269</a>
+<a href="#1270" id="1270">1270</a>
+<a href="#1271" id="1271">1271</a>
+<a href="#1272" id="1272">1272</a>
+<a href="#1273" id="1273">1273</a>
+<a href="#1274" id="1274">1274</a>
+<a href="#1275" id="1275">1275</a>
+<a href="#1276" id="1276">1276</a>
+<a href="#1277" id="1277">1277</a>
+<a href="#1278" id="1278">1278</a>
+<a href="#1279" id="1279">1279</a>
+<a href="#1280" id="1280">1280</a>
+<a href="#1281" id="1281">1281</a>
+<a href="#1282" id="1282">1282</a>
+<a href="#1283" id="1283">1283</a>
+<a href="#1284" id="1284">1284</a>
+<a href="#1285" id="1285">1285</a>
+<a href="#1286" id="1286">1286</a>
+<a href="#1287" id="1287">1287</a>
+<a href="#1288" id="1288">1288</a>
+<a href="#1289" id="1289">1289</a>
+<a href="#1290" id="1290">1290</a>
+<a href="#1291" id="1291">1291</a>
+<a href="#1292" id="1292">1292</a>
+<a href="#1293" id="1293">1293</a>
+<a href="#1294" id="1294">1294</a>
+<a href="#1295" id="1295">1295</a>
+<a href="#1296" id="1296">1296</a>
+<a href="#1297" id="1297">1297</a>
+<a href="#1298" id="1298">1298</a>
+<a href="#1299" id="1299">1299</a>
+<a href="#1300" id="1300">1300</a>
+<a href="#1301" id="1301">1301</a>
+<a href="#1302" id="1302">1302</a>
+<a href="#1303" id="1303">1303</a>
+<a href="#1304" id="1304">1304</a>
+<a href="#1305" id="1305">1305</a>
+<a href="#1306" id="1306">1306</a>
+<a href="#1307" id="1307">1307</a>
+<a href="#1308" id="1308">1308</a>
+<a href="#1309" id="1309">1309</a>
+<a href="#1310" id="1310">1310</a>
+<a href="#1311" id="1311">1311</a>
+<a href="#1312" id="1312">1312</a>
+<a href="#1313" id="1313">1313</a>
+<a href="#1314" id="1314">1314</a>
+<a href="#1315" id="1315">1315</a>
+<a href="#1316" id="1316">1316</a>
+<a href="#1317" id="1317">1317</a>
+<a href="#1318" id="1318">1318</a>
+<a href="#1319" id="1319">1319</a>
+<a href="#1320" id="1320">1320</a>
+<a href="#1321" id="1321">1321</a>
+<a href="#1322" id="1322">1322</a>
+<a href="#1323" id="1323">1323</a>
+<a href="#1324" id="1324">1324</a>
+<a href="#1325" id="1325">1325</a>
+<a href="#1326" id="1326">1326</a>
+<a href="#1327" id="1327">1327</a>
+<a href="#1328" id="1328">1328</a>
+<a href="#1329" id="1329">1329</a>
+<a href="#1330" id="1330">1330</a>
+<a href="#1331" id="1331">1331</a>
+<a href="#1332" id="1332">1332</a>
+<a href="#1333" id="1333">1333</a>
+<a href="#1334" id="1334">1334</a>
+<a href="#1335" id="1335">1335</a>
+<a href="#1336" id="1336">1336</a>
+<a href="#1337" id="1337">1337</a>
+<a href="#1338" id="1338">1338</a>
+<a href="#1339" id="1339">1339</a>
+<a href="#1340" id="1340">1340</a>
+<a href="#1341" id="1341">1341</a>
+<a href="#1342" id="1342">1342</a>
+<a href="#1343" id="1343">1343</a>
+<a href="#1344" id="1344">1344</a>
+<a href="#1345" id="1345">1345</a>
+<a href="#1346" id="1346">1346</a>
+<a href="#1347" id="1347">1347</a>
+<a href="#1348" id="1348">1348</a>
+<a href="#1349" id="1349">1349</a>
+<a href="#1350" id="1350">1350</a>
+<a href="#1351" id="1351">1351</a>
+<a href="#1352" id="1352">1352</a>
+<a href="#1353" id="1353">1353</a>
+<a href="#1354" id="1354">1354</a>
+<a href="#1355" id="1355">1355</a>
+<a href="#1356" id="1356">1356</a>
+<a href="#1357" id="1357">1357</a>
+<a href="#1358" id="1358">1358</a>
+<a href="#1359" id="1359">1359</a>
+<a href="#1360" id="1360">1360</a>
+<a href="#1361" id="1361">1361</a>
+<a href="#1362" id="1362">1362</a>
+<a href="#1363" id="1363">1363</a>
+<a href="#1364" id="1364">1364</a>
+<a href="#1365" id="1365">1365</a>
+<a href="#1366" id="1366">1366</a>
+<a href="#1367" id="1367">1367</a>
+<a href="#1368" id="1368">1368</a>
+<a href="#1369" id="1369">1369</a>
+<a href="#1370" id="1370">1370</a>
+<a href="#1371" id="1371">1371</a>
+<a href="#1372" id="1372">1372</a>
+<a href="#1373" id="1373">1373</a>
+<a href="#1374" id="1374">1374</a>
+<a href="#1375" id="1375">1375</a>
+<a href="#1376" id="1376">1376</a>
+<a href="#1377" id="1377">1377</a>
+<a href="#1378" id="1378">1378</a>
+<a href="#1379" id="1379">1379</a>
+<a href="#1380" id="1380">1380</a>
+<a href="#1381" id="1381">1381</a>
+<a href="#1382" id="1382">1382</a>
+<a href="#1383" id="1383">1383</a>
+<a href="#1384" id="1384">1384</a>
+<a href="#1385" id="1385">1385</a>
+<a href="#1386" id="1386">1386</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! # OCIF Staking pallet
 //! A pallet for allowing INV-Cores to be staked towards.
 //!
@@ -1308,11 +1441,12 @@
     ensure,
     pallet_prelude::<span class="kw-2">*</span>,
     traits::{
-        Currency, ExistenceRequirement, Get, Imbalance, LockIdentifier, LockableCurrency,
-        ReservableCurrency, WithdrawReasons,
+        Currency, ExistenceRequirement, Get, HandleMessage, Imbalance, LockIdentifier,
+        LockableCurrency, OnUnbalanced, ProcessMessage, QueuePausedQuery, ReservableCurrency,
+        WithdrawReasons,
     },
-    weights::Weight,
-    PalletId,
+    weights::{Weight, WeightToFee},
+    BoundedSlice, PalletId,
 };
 <span class="kw">use </span>frame_system::{ensure_signed, pallet_prelude::<span class="kw-2">*</span>};
 <span class="kw">use </span>sp_runtime::{
@@ -1325,7 +1459,6 @@
 };
 
 <span class="kw">pub mod </span>primitives;
-<span class="kw">use </span>core::ops::Div;
 <span class="kw">use </span>primitives::<span class="kw-2">*</span>;
 
 <span class="attr">#[cfg(feature = <span class="string">"runtime-benchmarks"</span>)]
@@ -1347,6 +1480,8 @@
         origin::{ensure_multisig, INV4Origin},
         CoreAccountDerivation,
     };
+
+    <span class="kw">use </span>pallet_message_queue::{<span class="self">self</span>};
 
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
 
@@ -1376,7 +1511,9 @@
     </span><span class="kw">pub type </span>Era = u32;
 
     <span class="attr">#[pallet::config]
-    </span><span class="kw">pub trait </span>Config: frame_system::Config + pallet_inv4::Config {
+    </span><span class="kw">pub trait </span>Config:
+        frame_system::Config + pallet_inv4::Config + pallet_message_queue::Config
+    {
         <span class="doccomment">/// The overarching event type.
         </span><span class="kw">type </span>RuntimeEvent: From&lt;Event&lt;<span class="self">Self</span>&gt;&gt; + IsType&lt;&lt;<span class="self">Self </span><span class="kw">as </span>frame_system::Config&gt;::RuntimeEvent&gt;;
 
@@ -1461,6 +1598,15 @@
 
         <span class="doccomment">/// Weight information for extrinsics in this pallet.
         </span><span class="kw">type </span>WeightInfo: WeightInfo;
+
+        <span class="doccomment">/// Message queue interface.
+        </span><span class="kw">type </span>StakingMessage: HandleMessage;
+
+        <span class="doccomment">/// Weight to fee conversion provider, from pallet_transaction_payment.
+        </span><span class="kw">type </span>WeightToFee: WeightToFee&lt;Balance = BalanceOf&lt;<span class="self">Self</span>&gt;&gt;;
+
+        <span class="doccomment">/// Fee charghing interface.
+        </span><span class="kw">type </span>OnUnbalanced: OnUnbalanced&lt;NegativeImbalanceOf&lt;<span class="self">Self</span>&gt;&gt;;
     }
 
     <span class="doccomment">/// General information about the staker.
@@ -1524,6 +1670,23 @@
     </span><span class="attr">#[pallet::storage]
     #[pallet::getter(<span class="kw">fn </span>is_halted)]
     </span><span class="kw">pub type </span>Halted&lt;T: Config&gt; = StorageValue&lt;<span class="kw">_</span>, bool, ValueQuery&gt;;
+
+    <span class="doccomment">/// Placeholder for the core being unregistered and its stake info.
+    </span><span class="attr">#[pallet::storage]
+    #[pallet::getter(<span class="kw">fn </span>core_unregistering_staker_info)]
+    </span><span class="kw">pub type </span>UnregisteredCoreStakeInfo&lt;T: Config&gt; =
+        StorageMap&lt;<span class="kw">_</span>, Blake2_128Concat, T::CoreId, CoreStakeInfo&lt;BalanceOf&lt;T&gt;&gt;, OptionQuery&gt;;
+
+    <span class="doccomment">/// Placeholder for the core being unregistered and its stakers.
+    </span><span class="attr">#[pallet::storage]
+    #[pallet::getter(<span class="kw">fn </span>core_unregistering_staker_list)]
+    </span><span class="kw">pub type </span>UnregisteredCoreStakers&lt;T: Config&gt; = StorageMap&lt;
+        <span class="kw">_</span>,
+        Blake2_128Concat,
+        T::CoreId,
+        BoundedVec&lt;T::AccountId, T::MaxStakersPerCore&gt;,
+        OptionQuery,
+    &gt;;
 
     <span class="attr">#[pallet::event]
     #[pallet::generate_deposit(<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>deposit_event)]
@@ -1590,6 +1753,16 @@
             to_core: T::CoreId,
             amount: BalanceOf&lt;T&gt;,
         },
+        <span class="doccomment">/// Core is being unregistered.
+        </span>CoreUnregistrationQueueStarted { core: T::CoreId },
+        <span class="doccomment">/// Core ungregistration chunk was processed.
+        </span>CoreUnregistrationChunksProcessed {
+            core: T::CoreId,
+            accounts_processed_in_this_chunk: u64,
+            accounts_left: u64,
+        },
+        <span class="doccomment">/// Sharded execution of the core unregistration process finished.
+        </span>CoreUnregistrationQueueFinished { core: T::CoreId },
     }
 
     <span class="attr">#[pallet::error]
@@ -1753,13 +1926,12 @@
         /// - `core_id`: Id of the core to be unregistered.
         </span><span class="attr">#[pallet::call_index(<span class="number">1</span>)]
         #[pallet::weight(
-            &lt;T <span class="kw">as </span>Config&gt;::WeightInfo::unregister_core() +
-                &lt;T <span class="kw">as </span>Config&gt;::MaxStakersPerCore::get().div(<span class="number">100</span>) * &lt;T <span class="kw">as </span>Config&gt;::WeightInfo::unstake()
+            &lt;T <span class="kw">as </span>Config&gt;::WeightInfo::unregister_core()
         )]
         </span><span class="kw">pub fn </span>unregister_core(origin: OriginFor&lt;T&gt;) -&gt; DispatchResultWithPostInfo {
             <span class="self">Self</span>::ensure_not_halted()<span class="question-mark">?</span>;
 
-            <span class="kw">let </span>core = ensure_multisig::&lt;T, OriginFor&lt;T&gt;&gt;(origin)<span class="question-mark">?</span>;
+            <span class="kw">let </span>core = ensure_multisig::&lt;T, OriginFor&lt;T&gt;&gt;(origin.clone())<span class="question-mark">?</span>;
             <span class="kw">let </span>core_account = core.to_account_id();
             <span class="kw">let </span>core_id = core.id;
 
@@ -1770,65 +1942,56 @@
 
             <span class="kw">let </span>current_era = <span class="self">Self</span>::current_era();
 
-            <span class="kw">let </span>staker_info_prefix = GeneralStakerInfo::&lt;T&gt;::iter_key_prefix(core_id);
-
-            <span class="kw">let </span><span class="kw-2">mut </span>corrected_staker_length_fee = Zero::zero();
-
-            <span class="kw">for </span>staker <span class="kw">in </span>staker_info_prefix {
-                <span class="kw">let </span><span class="kw-2">mut </span>core_stake_info =
-                    <span class="self">Self</span>::core_stake_info(core_id, current_era).unwrap_or_default();
-
-                <span class="kw">let </span><span class="kw-2">mut </span>staker_info = <span class="self">Self</span>::staker_info(core_id, <span class="kw-2">&amp;</span>staker);
-
-                <span class="kw">let </span>latest_staked_value = staker_info.latest_staked_value();
-
-                <span class="kw">let </span>value_to_unstake = <span class="self">Self</span>::internal_unstake(
-                    <span class="kw-2">&amp;mut </span>staker_info,
-                    <span class="kw-2">&amp;mut </span>core_stake_info,
-                    latest_staked_value,
-                    current_era,
-                )<span class="question-mark">?</span>;
-
-                <span class="kw">let </span><span class="kw-2">mut </span>ledger = <span class="self">Self</span>::ledger(<span class="kw-2">&amp;</span>staker);
-                ledger.unbonding_info.add(UnlockingChunk {
-                    amount: value_to_unstake,
-                    unlock_era: current_era + T::UnbondingPeriod::get(),
-                });
-
-                <span class="macro">ensure!</span>(
-                    ledger.unbonding_info.len() &lt;= T::MaxUnlocking::get(),
-                    Error::&lt;T&gt;::TooManyUnlockingChunks
+            <span class="kw">let </span>all_stakers: BoundedVec&lt;T::AccountId, T::MaxStakersPerCore&gt; =
+                BoundedVec::truncate_from(
+                    GeneralStakerInfo::&lt;T&gt;::iter_key_prefix(core_id).collect::&lt;Vec&lt;T::AccountId&gt;&gt;(),
                 );
 
-                <span class="self">Self</span>::update_ledger(<span class="kw-2">&amp;</span>staker, ledger);
+            <span class="kw">let </span>all_fee = &lt;T <span class="kw">as </span>Config&gt;::WeightToFee::weight_to_fee(
+                <span class="kw-2">&amp;</span>(all_stakers.len() <span class="kw">as </span>u32 * &lt;T <span class="kw">as </span>Config&gt;::WeightInfo::unstake()),
+            );
 
-                GeneralEraInfo::&lt;T&gt;::mutate(current_era, |value| {
-                    <span class="kw">if let </span><span class="prelude-val">Some</span>(x) = value {
-                        x.staked = x.staked.saturating_sub(value_to_unstake);
-                    }
-                });
-                <span class="self">Self</span>::update_staker_info(<span class="kw-2">&amp;</span>staker, core_id, staker_info);
-                CoreEraStake::&lt;T&gt;::insert(core_id, current_era, core_stake_info);
+            UnregisteredCoreStakers::&lt;T&gt;::insert(core_id, all_stakers);
 
-                <span class="self">Self</span>::deposit_event(Event::&lt;T&gt;::Unstaked {
-                    staker,
-                    core: core_id,
-                    amount: value_to_unstake,
-                });
+            <span class="kw">let </span><span class="kw-2">mut </span>core_stake_info =
+                <span class="self">Self</span>::core_stake_info(core_id, current_era).unwrap_or_default();
+            UnregisteredCoreStakeInfo::&lt;T&gt;::insert(core_id, core_stake_info.clone());
+            GeneralEraInfo::&lt;T&gt;::mutate(current_era, |value| {
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(x) = value {
+                    x.staked = x.staked.saturating_sub(core_stake_info.total);
+                }
+            });
+            core_stake_info.total = Zero::zero();
+            CoreEraStake::&lt;T&gt;::insert(core_id, current_era, core_stake_info.clone());
 
-                corrected_staker_length_fee += &lt;T <span class="kw">as </span>Config&gt;::WeightInfo::unstake();
-            }
+            <span class="kw">let </span>reserve_deposit = T::RegisterDeposit::get();
+            &lt;T <span class="kw">as </span>Config&gt;::Currency::unreserve(<span class="kw-2">&amp;</span>core_account, reserve_deposit);
+
+            T::OnUnbalanced::on_unbalanced(&lt;T <span class="kw">as </span>Config&gt;::Currency::withdraw(
+                <span class="kw-2">&amp;</span>core_account,
+                reserve_deposit.min(all_fee),
+                WithdrawReasons::TRANSACTION_PAYMENT,
+                ExistenceRequirement::KeepAlive,
+            )<span class="question-mark">?</span>);
 
             RegisteredCore::&lt;T&gt;::remove(core_id);
 
-            &lt;T <span class="kw">as </span>pallet::Config&gt;::Currency::unreserve(<span class="kw-2">&amp;</span>core_account, T::RegisterDeposit::get());
+            <span class="kw">let </span>total_stakers = core_stake_info.number_of_stakers;
+
+            <span class="kw">let </span>message = primitives::UnregisterMessage::&lt;T&gt; {
+                core_id,
+                era: current_era,
+                stakers_to_unstake: total_stakers,
+            }
+            .encode();
+
+            T::StakingMessage::handle_message(BoundedSlice::truncate_from(message.as_slice()));
+
+            <span class="self">Self</span>::deposit_event(Event::&lt;T&gt;::CoreUnregistrationQueueStarted { core: core_id });
 
             <span class="self">Self</span>::deposit_event(Event::&lt;T&gt;::CoreUnregistered { core: core_id });
 
-            <span class="prelude-val">Ok</span>(
-                <span class="prelude-val">Some</span>(&lt;T <span class="kw">as </span>Config&gt;::WeightInfo::unregister_core() + corrected_staker_length_fee)
-                    .into(),
-            )
+            <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(&lt;T <span class="kw">as </span>Config&gt;::WeightInfo::unregister_core()).into())
         }
 
         <span class="doccomment">/// Used to change the metadata of a core.
@@ -2082,23 +2245,29 @@
             <span class="macro">ensure!</span>(era &lt; current_era, Error::&lt;T&gt;::IncorrectEra);
 
             <span class="kw">let </span>staking_info = <span class="self">Self</span>::core_stake_info(core_id, era).unwrap_or_default();
-            <span class="kw">let </span>reward_and_stake =
-                <span class="self">Self</span>::general_era_info(era).ok_or(Error::&lt;T&gt;::UnknownEraReward)<span class="question-mark">?</span>;
 
-            <span class="kw">let </span>(<span class="kw">_</span>, stakers_joint_reward) =
-                <span class="self">Self</span>::core_stakers_split(<span class="kw-2">&amp;</span>staking_info, <span class="kw-2">&amp;</span>reward_and_stake);
-            <span class="kw">let </span>staker_reward =
-                Perbill::from_rational(staked, staking_info.total) * stakers_joint_reward;
+            <span class="kw">let </span><span class="kw-2">mut </span>staker_reward = Zero::zero();
 
-            <span class="kw">let </span>reward_imbalance = &lt;T <span class="kw">as </span>pallet::Config&gt;::Currency::withdraw(
-                <span class="kw-2">&amp;</span><span class="self">Self</span>::account_id(),
-                staker_reward,
-                WithdrawReasons::TRANSFER,
-                ExistenceRequirement::AllowDeath,
-            )<span class="question-mark">?</span>;
+            <span class="kw">if </span>staking_info.total &gt; Zero::zero() {
+                <span class="kw">let </span>reward_and_stake =
+                    <span class="self">Self</span>::general_era_info(era).ok_or(Error::&lt;T&gt;::UnknownEraReward)<span class="question-mark">?</span>;
 
-            &lt;T <span class="kw">as </span>pallet::Config&gt;::Currency::resolve_creating(<span class="kw-2">&amp;</span>staker, reward_imbalance);
-            <span class="self">Self</span>::update_staker_info(<span class="kw-2">&amp;</span>staker, core_id, staker_info);
+                <span class="kw">let </span>(<span class="kw">_</span>, stakers_joint_reward) =
+                    <span class="self">Self</span>::core_stakers_split(<span class="kw-2">&amp;</span>staking_info, <span class="kw-2">&amp;</span>reward_and_stake);
+                staker_reward =
+                    Perbill::from_rational(staked, staking_info.total) * stakers_joint_reward;
+
+                <span class="kw">let </span>reward_imbalance = &lt;T <span class="kw">as </span>pallet::Config&gt;::Currency::withdraw(
+                    <span class="kw-2">&amp;</span><span class="self">Self</span>::account_id(),
+                    staker_reward,
+                    WithdrawReasons::TRANSFER,
+                    ExistenceRequirement::AllowDeath,
+                )<span class="question-mark">?</span>;
+
+                &lt;T <span class="kw">as </span>pallet::Config&gt;::Currency::resolve_creating(<span class="kw-2">&amp;</span>staker, reward_imbalance);
+                <span class="self">Self</span>::update_staker_info(<span class="kw-2">&amp;</span>staker, core_id, staker_info);
+            }
+
             <span class="self">Self</span>::deposit_event(Event::&lt;T&gt;::StakerClaimed {
                 staker,
                 core: core_id,
@@ -2500,6 +2669,105 @@
                 <span class="prelude-val">Ok</span>(())
             }
         }
+
+        <span class="doccomment">/// Sharded execution of the core unregistration process.
+        ///
+        /// This function is called by the [`ProcessMessage`] trait implemented in [`primitives::ProcessUnregistrationMessages`]
+        </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>process_core_unregistration_shard(
+            stakers: u32,
+            core_id: T::CoreId,
+            start_era: Era,
+            chunk_size: u64,
+        ) -&gt; DispatchResultWithPostInfo {
+            <span class="kw">let </span><span class="kw-2">mut </span>staker_info_prefix =
+                <span class="self">Self</span>::core_unregistering_staker_list(core_id).unwrap_or_default();
+
+            <span class="kw">let </span><span class="kw-2">mut </span>corrected_staker_length_fee = Zero::zero();
+
+            <span class="kw">let </span><span class="kw-2">mut </span>core_stake_info =
+                <span class="self">Self</span>::core_unregistering_staker_info(core_id).unwrap_or_default();
+
+            <span class="kw">let </span><span class="kw-2">mut </span>unsteked_count: u64 = <span class="number">0</span>;
+            <span class="kw">while let </span><span class="prelude-val">Some</span>(staker) = staker_info_prefix.pop() {
+                <span class="kw">let </span><span class="kw-2">mut </span>staker_info = <span class="self">Self</span>::staker_info(core_id, <span class="kw-2">&amp;</span>staker);
+
+                <span class="kw">let </span>latest_staked_value = staker_info.latest_staked_value();
+
+                <span class="kw">if let </span><span class="prelude-val">Ok</span>(value_to_unstake) = <span class="self">Self</span>::internal_unstake(
+                    <span class="kw-2">&amp;mut </span>staker_info,
+                    <span class="kw-2">&amp;mut </span>core_stake_info,
+                    latest_staked_value,
+                    start_era,
+                ) {
+                    UnregisteredCoreStakeInfo::&lt;T&gt;::insert(core_id, core_stake_info.clone());
+                    <span class="kw">let </span><span class="kw-2">mut </span>ledger = <span class="self">Self</span>::ledger(<span class="kw-2">&amp;</span>staker);
+                    ledger.unbonding_info.add(UnlockingChunk {
+                        amount: value_to_unstake,
+                        unlock_era: start_era + T::UnbondingPeriod::get(),
+                    });
+
+                    <span class="macro">ensure!</span>(
+                        ledger.unbonding_info.len() &lt;= T::MaxUnlocking::get(),
+                        Error::&lt;T&gt;::TooManyUnlockingChunks
+                    );
+
+                    <span class="self">Self</span>::update_ledger(<span class="kw-2">&amp;</span>staker, ledger);
+
+                    <span class="self">Self</span>::update_staker_info(<span class="kw-2">&amp;</span>staker, core_id, staker_info);
+
+                    <span class="self">Self</span>::deposit_event(Event::&lt;T&gt;::Unstaked {
+                        staker: staker.clone(),
+                        core: core_id,
+                        amount: value_to_unstake,
+                    });
+                    corrected_staker_length_fee += &lt;T <span class="kw">as </span>Config&gt;::WeightInfo::unstake();
+                } <span class="kw">else </span>{
+                    <span class="comment">// if the staker has moved or already unstaked `internal_unstake` will do one read and return err.
+                    </span>corrected_staker_length_fee += T::DbWeight::get().reads(<span class="number">1</span>);
+                }
+
+                unsteked_count += <span class="number">1</span>;
+
+                <span class="kw">if </span>unsteked_count &gt;= chunk_size {
+                    <span class="kw">let </span>total_remaning_stakers = stakers.saturating_sub(unsteked_count <span class="kw">as </span>u32);
+                    <span class="kw">let </span>message: Vec&lt;u8&gt; = primitives::UnregisterMessage::&lt;T&gt; {
+                        core_id,
+                        stakers_to_unstake: total_remaning_stakers,
+                        era: start_era,
+                    }
+                    .encode();
+
+                    T::StakingMessage::handle_message(BoundedSlice::truncate_from(
+                        message.as_slice(),
+                    ));
+
+                    <span class="self">Self</span>::deposit_event(Event::&lt;T&gt;::CoreUnregistrationChunksProcessed {
+                        core: core_id,
+                        accounts_processed_in_this_chunk: unsteked_count,
+                        accounts_left: total_remaning_stakers <span class="kw">as </span>u64,
+                    });
+                    UnregisteredCoreStakeInfo::&lt;T&gt;::insert(core_id, core_stake_info.clone());
+                    UnregisteredCoreStakers::&lt;T&gt;::insert(core_id, staker_info_prefix);
+
+                    <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(corrected_staker_length_fee).into());
+                }
+            }
+
+            <span class="self">Self</span>::deposit_event(Event::&lt;T&gt;::CoreUnregistrationQueueFinished { core: core_id });
+            UnregisteredCoreStakers::&lt;T&gt;::remove(core_id);
+            UnregisteredCoreStakeInfo::&lt;T&gt;::remove(core_id);
+
+            <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(corrected_staker_length_fee).into())
+        }
     }
 }
+
+<span class="kw">impl</span>&lt;T: Config&gt; QueuePausedQuery&lt;T&gt; <span class="kw">for </span>Pallet&lt;T&gt; {
+    <span class="kw">fn </span>is_paused(_origin: <span class="kw-2">&amp;</span>T) -&gt; bool {
+        Pallet::&lt;T&gt;::is_halted()
+    }
+}
+
+<span class="kw">pub type </span>MessageOriginOf&lt;T&gt; =
+    &lt;&lt;T <span class="kw">as </span>pallet_message_queue::Config&gt;::MessageProcessor <span class="kw">as </span>ProcessMessage&gt;::Origin;
 </code></pre></div></section></main></body></html>

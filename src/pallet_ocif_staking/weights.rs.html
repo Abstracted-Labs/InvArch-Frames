@@ -1,6 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `OCIF/staking/src/weights.rs`."><title>weights.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="pallet_ocif_staking" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0-nightly (f067fd608 2024-02-05)" data-channel="nightly" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
-            <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
-    <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../pallet_ocif_staking/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `OCIF/staking/src/weights.rs`."><title>weights.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="pallet_ocif_staking" data-themes="" data-resource-suffix="" data-rustdoc-version="1.81.0-nightly (d9284afea 2024-07-14)" data-channel="nightly" data-search-js="search-d234aafac6c221dd.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -463,30 +461,60 @@
 <a href="#461" id="461">461</a>
 <a href="#462" id="462">462</a>
 <a href="#463" id="463">463</a>
+<a href="#464" id="464">464</a>
+<a href="#465" id="465">465</a>
+<a href="#466" id="466">466</a>
+<a href="#467" id="467">467</a>
+<a href="#468" id="468">468</a>
+<a href="#469" id="469">469</a>
+<a href="#470" id="470">470</a>
+<a href="#471" id="471">471</a>
+<a href="#472" id="472">472</a>
+<a href="#473" id="473">473</a>
+<a href="#474" id="474">474</a>
+<a href="#475" id="475">475</a>
+<a href="#476" id="476">476</a>
+<a href="#477" id="477">477</a>
+<a href="#478" id="478">478</a>
+<a href="#479" id="479">479</a>
+<a href="#480" id="480">480</a>
+<a href="#481" id="481">481</a>
+<a href="#482" id="482">482</a>
+<a href="#483" id="483">483</a>
+<a href="#484" id="484">484</a>
+<a href="#485" id="485">485</a>
+<a href="#486" id="486">486</a>
+<a href="#487" id="487">487</a>
+<a href="#488" id="488">488</a>
+<a href="#489" id="489">489</a>
+<a href="#490" id="490">490</a>
+<a href="#491" id="491">491</a>
+<a href="#492" id="492">492</a>
+<a href="#493" id="493">493</a>
+<a href="#494" id="494">494</a>
 </pre></div><pre class="rust"><code>
 <span class="doccomment">//! Autogenerated weights for `pallet_ocif_staking`
 //!
 //! THIS FILE WAS AUTO-GENERATED USING THE SUBSTRATE BENCHMARK CLI VERSION 4.0.0-dev
-//! DATE: 2023-11-30, STEPS: `50`, REPEAT: `20`, LOW RANGE: `[]`, HIGH RANGE: `[]`
+//! DATE: 2024-06-18, STEPS: `50`, REPEAT: `20`, LOW RANGE: `[]`, HIGH RANGE: `[]`
 //! WORST CASE MAP SIZE: `1000000`
-//! HOSTNAME: `Gabriels-MacBook-Pro-3.local`, CPU: `&lt;UNKNOWN&gt;`
-//! EXECUTION: `Some(Wasm)`, WASM-EXECUTION: `Compiled`, CHAIN: `Some("dev")`, DB CACHE: `1024`
+//! HOSTNAME: `anny.local`, CPU: `&lt;UNKNOWN&gt;`
+//! WASM-EXECUTION: `Compiled`, CHAIN: `Some("dev")`, DB CACHE: `1024`
 
 </span><span class="comment">// Executed Command:
-    // ./target/release/tinkernet-collator
-    // benchmark
-    // pallet
-    // --chain=dev
-    // --execution=wasm
-    // --wasm-execution=compiled
-    // --pallet=pallet_ocif_staking
-    // --extrinsic=*
-    // --steps
-    // 50
-    // --repeat
-    // 20
-    // --output=../../InvArch-Frames/OCIF/staking/src/weights.rs
-    // --template=../weights-template.hbs
+// ./target/release/tinkernet-collator
+// benchmark
+// pallet
+// --chain=dev
+// --wasm-execution=compiled
+// --pallet=pallet-ocif-staking
+// --extrinsic=*
+// --steps
+// 50
+// --repeat
+// 20
+// --output=../../InvArch-Frames/OCIF/staking/src/weights.rs
+// --template=../weights-template.hbs
 
 </span><span class="attr">#![cfg_attr(rustfmt, rustfmt_skip)]
 #![allow(unused_parens)]
@@ -498,432 +526,464 @@
 
 <span class="doccomment">/// Weight functions needed for `pallet_ocif_staking`.
 </span><span class="kw">pub trait </span>WeightInfo {
-	  <span class="kw">fn </span>register_core(n: u32, d: u32, i: u32, ) -&gt; Weight;
-	  <span class="kw">fn </span>change_core_metadata(n: u32, d: u32, i: u32, ) -&gt; Weight;
-	  <span class="kw">fn </span>unregister_core() -&gt; Weight;
-	  <span class="kw">fn </span>stake() -&gt; Weight;
-	  <span class="kw">fn </span>unstake() -&gt; Weight;
-	  <span class="kw">fn </span>withdraw_unstaked() -&gt; Weight;
-	  <span class="kw">fn </span>staker_claim_rewards() -&gt; Weight;
-	  <span class="kw">fn </span>core_claim_rewards() -&gt; Weight;
-	  <span class="kw">fn </span>halt_unhalt_pallet() -&gt; Weight;
-	  <span class="kw">fn </span>move_stake() -&gt; Weight;
-  }
+	<span class="kw">fn </span>register_core(n: u32, d: u32, i: u32, ) -&gt; Weight;
+	<span class="kw">fn </span>change_core_metadata(n: u32, d: u32, i: u32, ) -&gt; Weight;
+	<span class="kw">fn </span>unregister_core() -&gt; Weight;
+	<span class="kw">fn </span>stake() -&gt; Weight;
+	<span class="kw">fn </span>unstake() -&gt; Weight;
+	<span class="kw">fn </span>withdraw_unstaked() -&gt; Weight;
+	<span class="kw">fn </span>staker_claim_rewards() -&gt; Weight;
+	<span class="kw">fn </span>core_claim_rewards() -&gt; Weight;
+	<span class="kw">fn </span>halt_unhalt_pallet() -&gt; Weight;
+	<span class="kw">fn </span>move_stake() -&gt; Weight;
+}
 
-  <span class="doccomment">/// Weights for `pallet_ocif_staking` using the Substrate node and recommended hardware.
-  </span><span class="kw">pub struct </span>SubstrateWeight&lt;T&gt;(PhantomData&lt;T&gt;);
-          <span class="kw">impl</span>&lt;T: frame_system::Config&gt; WeightInfo <span class="kw">for </span>SubstrateWeight&lt;T&gt; {
-	            <span class="doccomment">/// Storage: OcifStaking Halted (r:1 w:0)
-	            /// Proof: OcifStaking Halted (max_values: Some(1), max_size: Some(1), added: 496, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking RegisteredCore (r:1 w:1)
-	            /// Proof: OcifStaking RegisteredCore (max_values: None, max_size: Some(477), added: 2952, mode: MaxEncodedLen)
-	            /// Storage: System Account (r:1 w:1)
-	            /// Proof: System Account (max_values: None, max_size: Some(128), added: 2603, mode: MaxEncodedLen)
-	            /// The range of component `n` is `[0, 20]`.
-	            /// The range of component `d` is `[0, 300]`.
-	            /// The range of component `i` is `[0, 100]`.
-	        </span><span class="kw">fn </span>register_core(_n: u32, d: u32, i: u32, ) -&gt; Weight {
-		      <span class="comment">// Proof Size summary in bytes:
-		      //  Measured:  `144`
-		      //  Estimated: `3942`
-		      // Minimum execution time: 28_000_000 picoseconds.
-		      </span>Weight::from_parts(<span class="number">28_865_871</span>, <span class="number">3942</span>)
-			        <span class="comment">// Standard Error: 170
-			        </span>.saturating_add(Weight::from_parts(<span class="number">1_142</span>, <span class="number">0</span>).saturating_mul(d.into()))
-			        <span class="comment">// Standard Error: 509
-			        </span>.saturating_add(Weight::from_parts(<span class="number">3_348</span>, <span class="number">0</span>).saturating_mul(i.into()))
-			        .saturating_add(T::DbWeight::get().reads(<span class="number">3_u64</span>))
-			        .saturating_add(T::DbWeight::get().writes(<span class="number">2_u64</span>))
-	        }
-	            <span class="doccomment">/// Storage: OcifStaking Halted (r:1 w:0)
-	            /// Proof: OcifStaking Halted (max_values: Some(1), max_size: Some(1), added: 496, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking RegisteredCore (r:1 w:1)
-	            /// Proof: OcifStaking RegisteredCore (max_values: None, max_size: Some(477), added: 2952, mode: MaxEncodedLen)
-	            /// The range of component `n` is `[0, 20]`.
-	            /// The range of component `d` is `[0, 300]`.
-	            /// The range of component `i` is `[0, 100]`.
-	        </span><span class="kw">fn </span>change_core_metadata(n: u32, d: u32, i: u32, ) -&gt; Weight {
-		      <span class="comment">// Proof Size summary in bytes:
-		      //  Measured:  `86`
-		      //  Estimated: `3942`
-		      // Minimum execution time: 14_000_000 picoseconds.
-		      </span>Weight::from_parts(<span class="number">14_052_844</span>, <span class="number">3942</span>)
-			        <span class="comment">// Standard Error: 1_584
-			        </span>.saturating_add(Weight::from_parts(<span class="number">6_072</span>, <span class="number">0</span>).saturating_mul(n.into()))
-			        <span class="comment">// Standard Error: 108
-			        </span>.saturating_add(Weight::from_parts(<span class="number">2_023</span>, <span class="number">0</span>).saturating_mul(d.into()))
-			        <span class="comment">// Standard Error: 324
-			        </span>.saturating_add(Weight::from_parts(<span class="number">2_933</span>, <span class="number">0</span>).saturating_mul(i.into()))
-			        .saturating_add(T::DbWeight::get().reads(<span class="number">2_u64</span>))
-			        .saturating_add(T::DbWeight::get().writes(<span class="number">1_u64</span>))
-	        }
-	            <span class="doccomment">/// Storage: OcifStaking Halted (r:1 w:0)
-	            /// Proof: OcifStaking Halted (max_values: Some(1), max_size: Some(1), added: 496, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking RegisteredCore (r:1 w:1)
-	            /// Proof: OcifStaking RegisteredCore (max_values: None, max_size: Some(477), added: 2952, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking CurrentEra (r:1 w:0)
-	            /// Proof: OcifStaking CurrentEra (max_values: Some(1), max_size: Some(4), added: 499, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking GeneralStakerInfo (r:1 w:0)
-	            /// Proof: OcifStaking GeneralStakerInfo (max_values: None, max_size: Some(269), added: 2744, mode: MaxEncodedLen)
-	            /// Storage: System Account (r:1 w:1)
-	            /// Proof: System Account (max_values: None, max_size: Some(128), added: 2603, mode: MaxEncodedLen)
-	        </span><span class="kw">fn </span>unregister_core() -&gt; Weight {
-		      <span class="comment">// Proof Size summary in bytes:
-		      //  Measured:  `268`
-		      //  Estimated: `3942`
-		      // Minimum execution time: 35_000_000 picoseconds.
-		      </span>Weight::from_parts(<span class="number">36_000_000</span>, <span class="number">3942</span>)
-			        .saturating_add(T::DbWeight::get().reads(<span class="number">5_u64</span>))
-			        .saturating_add(T::DbWeight::get().writes(<span class="number">2_u64</span>))
-	        }
-	            <span class="doccomment">/// Storage: OcifStaking Halted (r:1 w:0)
-	            /// Proof: OcifStaking Halted (max_values: Some(1), max_size: Some(1), added: 496, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking RegisteredCore (r:1 w:0)
-	            /// Proof: OcifStaking RegisteredCore (max_values: None, max_size: Some(477), added: 2952, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking Ledger (r:1 w:1)
-	            /// Proof: OcifStaking Ledger (max_values: None, max_size: Some(265), added: 2740, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking CurrentEra (r:1 w:0)
-	            /// Proof: OcifStaking CurrentEra (max_values: Some(1), max_size: Some(4), added: 499, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking CoreEraStake (r:1 w:1)
-	            /// Proof: OcifStaking CoreEraStake (max_values: None, max_size: Some(54), added: 2529, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking GeneralStakerInfo (r:1 w:1)
-	            /// Proof: OcifStaking GeneralStakerInfo (max_values: None, max_size: Some(269), added: 2744, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking GeneralEraInfo (r:1 w:1)
-	            /// Proof: OcifStaking GeneralEraInfo (max_values: None, max_size: Some(92), added: 2567, mode: MaxEncodedLen)
-	            /// Storage: Balances Locks (r:1 w:1)
-	            /// Proof: Balances Locks (max_values: None, max_size: Some(1299), added: 3774, mode: MaxEncodedLen)
-	            /// Storage: Balances Freezes (r:1 w:0)
-	            /// Proof: Balances Freezes (max_values: None, max_size: Some(49), added: 2524, mode: MaxEncodedLen)
-	        </span><span class="kw">fn </span>stake() -&gt; Weight {
-		      <span class="comment">// Proof Size summary in bytes:
-		      //  Measured:  `86`
-		      //  Estimated: `4764`
-		      // Minimum execution time: 47_000_000 picoseconds.
-		      </span>Weight::from_parts(<span class="number">48_000_000</span>, <span class="number">4764</span>)
-			        .saturating_add(T::DbWeight::get().reads(<span class="number">9_u64</span>))
-			        .saturating_add(T::DbWeight::get().writes(<span class="number">5_u64</span>))
-	        }
-	            <span class="doccomment">/// Storage: OcifStaking Halted (r:1 w:0)
-	            /// Proof: OcifStaking Halted (max_values: Some(1), max_size: Some(1), added: 496, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking RegisteredCore (r:1 w:0)
-	            /// Proof: OcifStaking RegisteredCore (max_values: None, max_size: Some(477), added: 2952, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking CurrentEra (r:1 w:0)
-	            /// Proof: OcifStaking CurrentEra (max_values: Some(1), max_size: Some(4), added: 499, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking GeneralStakerInfo (r:1 w:1)
-	            /// Proof: OcifStaking GeneralStakerInfo (max_values: None, max_size: Some(269), added: 2744, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking CoreEraStake (r:1 w:1)
-	            /// Proof: OcifStaking CoreEraStake (max_values: None, max_size: Some(54), added: 2529, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking Ledger (r:1 w:1)
-	            /// Proof: OcifStaking Ledger (max_values: None, max_size: Some(265), added: 2740, mode: MaxEncodedLen)
-	            /// Storage: Balances Locks (r:1 w:1)
-	            /// Proof: Balances Locks (max_values: None, max_size: Some(1299), added: 3774, mode: MaxEncodedLen)
-	            /// Storage: Balances Freezes (r:1 w:0)
-	            /// Proof: Balances Freezes (max_values: None, max_size: Some(49), added: 2524, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking GeneralEraInfo (r:1 w:1)
-	            /// Proof: OcifStaking GeneralEraInfo (max_values: None, max_size: Some(92), added: 2567, mode: MaxEncodedLen)
-	        </span><span class="kw">fn </span>unstake() -&gt; Weight {
-		      <span class="comment">// Proof Size summary in bytes:
-		      //  Measured:  `397`
-		      //  Estimated: `4764`
-		      // Minimum execution time: 45_000_000 picoseconds.
-		      </span>Weight::from_parts(<span class="number">46_000_000</span>, <span class="number">4764</span>)
-			        .saturating_add(T::DbWeight::get().reads(<span class="number">9_u64</span>))
-			        .saturating_add(T::DbWeight::get().writes(<span class="number">5_u64</span>))
-	        }
-	            <span class="doccomment">/// Storage: OcifStaking Halted (r:1 w:0)
-	            /// Proof: OcifStaking Halted (max_values: Some(1), max_size: Some(1), added: 496, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking Ledger (r:1 w:1)
-	            /// Proof: OcifStaking Ledger (max_values: None, max_size: Some(265), added: 2740, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking CurrentEra (r:1 w:0)
-	            /// Proof: OcifStaking CurrentEra (max_values: Some(1), max_size: Some(4), added: 499, mode: MaxEncodedLen)
-	            /// Storage: Balances Locks (r:1 w:1)
-	            /// Proof: Balances Locks (max_values: None, max_size: Some(1299), added: 3774, mode: MaxEncodedLen)
-	            /// Storage: Balances Freezes (r:1 w:0)
-	            /// Proof: Balances Freezes (max_values: None, max_size: Some(49), added: 2524, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking GeneralEraInfo (r:1 w:1)
-	            /// Proof: OcifStaking GeneralEraInfo (max_values: None, max_size: Some(92), added: 2567, mode: MaxEncodedLen)
-	        </span><span class="kw">fn </span>withdraw_unstaked() -&gt; Weight {
-		      <span class="comment">// Proof Size summary in bytes:
-		      //  Measured:  `449`
-		      //  Estimated: `4764`
-		      // Minimum execution time: 63_000_000 picoseconds.
-		      </span>Weight::from_parts(<span class="number">69_000_000</span>, <span class="number">4764</span>)
-			        .saturating_add(T::DbWeight::get().reads(<span class="number">6_u64</span>))
-			        .saturating_add(T::DbWeight::get().writes(<span class="number">3_u64</span>))
-	        }
-	            <span class="doccomment">/// Storage: OcifStaking Halted (r:1 w:0)
-	            /// Proof: OcifStaking Halted (max_values: Some(1), max_size: Some(1), added: 496, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking GeneralStakerInfo (r:1 w:1)
-	            /// Proof: OcifStaking GeneralStakerInfo (max_values: None, max_size: Some(269), added: 2744, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking CurrentEra (r:1 w:0)
-	            /// Proof: OcifStaking CurrentEra (max_values: Some(1), max_size: Some(4), added: 499, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking CoreEraStake (r:1 w:0)
-	            /// Proof: OcifStaking CoreEraStake (max_values: None, max_size: Some(54), added: 2529, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking GeneralEraInfo (r:1 w:0)
-	            /// Proof: OcifStaking GeneralEraInfo (max_values: None, max_size: Some(92), added: 2567, mode: MaxEncodedLen)
-	        </span><span class="kw">fn </span>staker_claim_rewards() -&gt; Weight {
-		      <span class="comment">// Proof Size summary in bytes:
-		      //  Measured:  `374`
-		      //  Estimated: `3734`
-		      // Minimum execution time: 24_000_000 picoseconds.
-		      </span>Weight::from_parts(<span class="number">26_000_000</span>, <span class="number">3734</span>)
-			        .saturating_add(T::DbWeight::get().reads(<span class="number">5_u64</span>))
-			        .saturating_add(T::DbWeight::get().writes(<span class="number">1_u64</span>))
-	        }
-	            <span class="doccomment">/// Storage: OcifStaking Halted (r:1 w:0)
-	            /// Proof: OcifStaking Halted (max_values: Some(1), max_size: Some(1), added: 496, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking CurrentEra (r:1 w:0)
-	            /// Proof: OcifStaking CurrentEra (max_values: Some(1), max_size: Some(4), added: 499, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking CoreEraStake (r:1 w:1)
-	            /// Proof: OcifStaking CoreEraStake (max_values: None, max_size: Some(54), added: 2529, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking GeneralEraInfo (r:1 w:0)
-	            /// Proof: OcifStaking GeneralEraInfo (max_values: None, max_size: Some(92), added: 2567, mode: MaxEncodedLen)
-	        </span><span class="kw">fn </span>core_claim_rewards() -&gt; Weight {
-		      <span class="comment">// Proof Size summary in bytes:
-		      //  Measured:  `308`
-		      //  Estimated: `3557`
-		      // Minimum execution time: 22_000_000 picoseconds.
-		      </span>Weight::from_parts(<span class="number">22_000_000</span>, <span class="number">3557</span>)
-			        .saturating_add(T::DbWeight::get().reads(<span class="number">4_u64</span>))
-			        .saturating_add(T::DbWeight::get().writes(<span class="number">1_u64</span>))
-	        }
-	            <span class="doccomment">/// Storage: OcifStaking Halted (r:1 w:1)
-	            /// Proof: OcifStaking Halted (max_values: Some(1), max_size: Some(1), added: 496, mode: MaxEncodedLen)
-	        </span><span class="kw">fn </span>halt_unhalt_pallet() -&gt; Weight {
-		      <span class="comment">// Proof Size summary in bytes:
-		      //  Measured:  `4`
-		      //  Estimated: `1486`
-		      // Minimum execution time: 8_000_000 picoseconds.
-		      </span>Weight::from_parts(<span class="number">9_000_000</span>, <span class="number">1486</span>)
-			        .saturating_add(T::DbWeight::get().reads(<span class="number">1_u64</span>))
-			        .saturating_add(T::DbWeight::get().writes(<span class="number">1_u64</span>))
-	        }
-	            <span class="doccomment">/// Storage: OcifStaking Halted (r:1 w:0)
-	            /// Proof: OcifStaking Halted (max_values: Some(1), max_size: Some(1), added: 496, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking RegisteredCore (r:1 w:0)
-	            /// Proof: OcifStaking RegisteredCore (max_values: None, max_size: Some(477), added: 2952, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking CurrentEra (r:1 w:0)
-	            /// Proof: OcifStaking CurrentEra (max_values: Some(1), max_size: Some(4), added: 499, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking GeneralStakerInfo (r:2 w:2)
-	            /// Proof: OcifStaking GeneralStakerInfo (max_values: None, max_size: Some(269), added: 2744, mode: MaxEncodedLen)
-	            /// Storage: OcifStaking CoreEraStake (r:2 w:2)
-	            /// Proof: OcifStaking CoreEraStake (max_values: None, max_size: Some(54), added: 2529, mode: MaxEncodedLen)
-	        </span><span class="kw">fn </span>move_stake() -&gt; Weight {
-		      <span class="comment">// Proof Size summary in bytes:
-		      //  Measured:  `302`
-		      //  Estimated: `6478`
-		      // Minimum execution time: 32_000_000 picoseconds.
-		      </span>Weight::from_parts(<span class="number">33_000_000</span>, <span class="number">6478</span>)
-			        .saturating_add(T::DbWeight::get().reads(<span class="number">7_u64</span>))
-			        .saturating_add(T::DbWeight::get().writes(<span class="number">4_u64</span>))
-	        }
-  }
+<span class="doccomment">/// Weights for `pallet_ocif_staking` using the Substrate node and recommended hardware.
+</span><span class="kw">pub struct </span>SubstrateWeight&lt;T&gt;(PhantomData&lt;T&gt;);
+<span class="kw">impl</span>&lt;T: frame_system::Config&gt; WeightInfo <span class="kw">for </span>SubstrateWeight&lt;T&gt; {
+	<span class="doccomment">/// Storage: `OcifStaking::Halted` (r:1 w:0)
+	/// Proof: `OcifStaking::Halted` (`max_values`: Some(1), `max_size`: Some(1), added: 496, mode: `MaxEncodedLen`)
+	/// Storage: `ParachainInfo::ParachainId` (r:1 w:0)
+	/// Proof: `ParachainInfo::ParachainId` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::RegisteredCore` (r:1 w:1)
+	/// Proof: `OcifStaking::RegisteredCore` (`max_values`: None, `max_size`: Some(477), added: 2952, mode: `MaxEncodedLen`)
+	/// Storage: `System::Account` (r:1 w:1)
+	/// Proof: `System::Account` (`max_values`: None, `max_size`: Some(128), added: 2603, mode: `MaxEncodedLen`)
+	/// The range of component `n` is `[0, 20]`.
+	/// The range of component `d` is `[0, 300]`.
+	/// The range of component `i` is `[0, 100]`.
+	</span><span class="kw">fn </span>register_core(_n: u32, _d: u32, _i: u32, ) -&gt; Weight {
+		<span class="comment">// Proof Size summary in bytes:
+		//  Measured:  `213`
+		//  Estimated: `3942`
+		// Minimum execution time: 22_000_000 picoseconds.
+		</span>Weight::from_parts(<span class="number">24_293_021</span>, <span class="number">3942</span>)
+			.saturating_add(T::DbWeight::get().reads(<span class="number">4_u64</span>))
+			.saturating_add(T::DbWeight::get().writes(<span class="number">2_u64</span>))
+	}
+	<span class="doccomment">/// Storage: `OcifStaking::Halted` (r:1 w:0)
+	/// Proof: `OcifStaking::Halted` (`max_values`: Some(1), `max_size`: Some(1), added: 496, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::RegisteredCore` (r:1 w:1)
+	/// Proof: `OcifStaking::RegisteredCore` (`max_values`: None, `max_size`: Some(477), added: 2952, mode: `MaxEncodedLen`)
+	/// The range of component `n` is `[0, 20]`.
+	/// The range of component `d` is `[0, 300]`.
+	/// The range of component `i` is `[0, 100]`.
+	</span><span class="kw">fn </span>change_core_metadata(n: u32, d: u32, i: u32, ) -&gt; Weight {
+		<span class="comment">// Proof Size summary in bytes:
+		//  Measured:  `86`
+		//  Estimated: `3942`
+		// Minimum execution time: 9_000_000 picoseconds.
+		</span>Weight::from_parts(<span class="number">9_593_278</span>, <span class="number">3942</span>)
+			<span class="comment">// Standard Error: 890
+			</span>.saturating_add(Weight::from_parts(<span class="number">4_471</span>, <span class="number">0</span>).saturating_mul(n.into()))
+			<span class="comment">// Standard Error: 61
+			</span>.saturating_add(Weight::from_parts(<span class="number">856</span>, <span class="number">0</span>).saturating_mul(d.into()))
+			<span class="comment">// Standard Error: 182
+			</span>.saturating_add(Weight::from_parts(<span class="number">1_028</span>, <span class="number">0</span>).saturating_mul(i.into()))
+			.saturating_add(T::DbWeight::get().reads(<span class="number">2_u64</span>))
+			.saturating_add(T::DbWeight::get().writes(<span class="number">1_u64</span>))
+	}
+	<span class="doccomment">/// Storage: `OcifStaking::Halted` (r:1 w:0)
+	/// Proof: `OcifStaking::Halted` (`max_values`: Some(1), `max_size`: Some(1), added: 496, mode: `MaxEncodedLen`)
+	/// Storage: `ParachainInfo::ParachainId` (r:1 w:0)
+	/// Proof: `ParachainInfo::ParachainId` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::RegisteredCore` (r:1 w:1)
+	/// Proof: `OcifStaking::RegisteredCore` (`max_values`: None, `max_size`: Some(477), added: 2952, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::CurrentEra` (r:1 w:0)
+	/// Proof: `OcifStaking::CurrentEra` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::GeneralStakerInfo` (r:1 w:0)
+	/// Proof: `OcifStaking::GeneralStakerInfo` (`max_values`: None, `max_size`: Some(269), added: 2744, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::CoreEraStake` (r:1 w:1)
+	/// Proof: `OcifStaking::CoreEraStake` (`max_values`: None, `max_size`: Some(54), added: 2529, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::GeneralEraInfo` (r:1 w:1)
+	/// Proof: `OcifStaking::GeneralEraInfo` (`max_values`: None, `max_size`: Some(92), added: 2567, mode: `MaxEncodedLen`)
+	/// Storage: `System::Account` (r:1 w:1)
+	/// Proof: `System::Account` (`max_values`: None, `max_size`: Some(128), added: 2603, mode: `MaxEncodedLen`)
+	/// Storage: `MessageQueue::BookStateFor` (r:1 w:1)
+	/// Proof: `MessageQueue::BookStateFor` (`max_values`: None, `max_size`: Some(55), added: 2530, mode: `MaxEncodedLen`)
+	/// Storage: `MessageQueue::ServiceHead` (r:1 w:1)
+	/// Proof: `MessageQueue::ServiceHead` (`max_values`: Some(1), `max_size`: Some(6), added: 501, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::UnregisteredCoreStakeInfo` (r:0 w:1)
+	/// Proof: `OcifStaking::UnregisteredCoreStakeInfo` (`max_values`: None, `max_size`: Some(42), added: 2517, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::UnregisteredCoreStakers` (r:0 w:1)
+	/// Proof: `OcifStaking::UnregisteredCoreStakers` (`max_values`: None, `max_size`: Some(320022), added: 322497, mode: `MaxEncodedLen`)
+	/// Storage: `MessageQueue::Pages` (r:0 w:1)
+	/// Proof: `MessageQueue::Pages` (`max_values`: None, `max_size`: Some(134194), added: 136669, mode: `MaxEncodedLen`)
+	</span><span class="kw">fn </span>unregister_core() -&gt; Weight {
+		<span class="comment">// Proof Size summary in bytes:
+		//  Measured:  `343`
+		//  Estimated: `3942`
+		// Minimum execution time: 44_000_000 picoseconds.
+		</span>Weight::from_parts(<span class="number">45_000_000</span>, <span class="number">3942</span>)
+			.saturating_add(T::DbWeight::get().reads(<span class="number">10_u64</span>))
+			.saturating_add(T::DbWeight::get().writes(<span class="number">9_u64</span>))
+	}
+	<span class="doccomment">/// Storage: `OcifStaking::Halted` (r:1 w:0)
+	/// Proof: `OcifStaking::Halted` (`max_values`: Some(1), `max_size`: Some(1), added: 496, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::RegisteredCore` (r:1 w:0)
+	/// Proof: `OcifStaking::RegisteredCore` (`max_values`: None, `max_size`: Some(477), added: 2952, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::Ledger` (r:1 w:1)
+	/// Proof: `OcifStaking::Ledger` (`max_values`: None, `max_size`: Some(265), added: 2740, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::CurrentEra` (r:1 w:0)
+	/// Proof: `OcifStaking::CurrentEra` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::CoreEraStake` (r:1 w:1)
+	/// Proof: `OcifStaking::CoreEraStake` (`max_values`: None, `max_size`: Some(54), added: 2529, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::GeneralStakerInfo` (r:1 w:1)
+	/// Proof: `OcifStaking::GeneralStakerInfo` (`max_values`: None, `max_size`: Some(269), added: 2744, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::GeneralEraInfo` (r:1 w:1)
+	/// Proof: `OcifStaking::GeneralEraInfo` (`max_values`: None, `max_size`: Some(92), added: 2567, mode: `MaxEncodedLen`)
+	/// Storage: `Balances::Locks` (r:1 w:1)
+	/// Proof: `Balances::Locks` (`max_values`: None, `max_size`: Some(1299), added: 3774, mode: `MaxEncodedLen`)
+	/// Storage: `Balances::Freezes` (r:1 w:0)
+	/// Proof: `Balances::Freezes` (`max_values`: None, `max_size`: Some(49), added: 2524, mode: `MaxEncodedLen`)
+	</span><span class="kw">fn </span>stake() -&gt; Weight {
+		<span class="comment">// Proof Size summary in bytes:
+		//  Measured:  `86`
+		//  Estimated: `4764`
+		// Minimum execution time: 34_000_000 picoseconds.
+		</span>Weight::from_parts(<span class="number">35_000_000</span>, <span class="number">4764</span>)
+			.saturating_add(T::DbWeight::get().reads(<span class="number">9_u64</span>))
+			.saturating_add(T::DbWeight::get().writes(<span class="number">5_u64</span>))
+	}
+	<span class="doccomment">/// Storage: `OcifStaking::Halted` (r:1 w:0)
+	/// Proof: `OcifStaking::Halted` (`max_values`: Some(1), `max_size`: Some(1), added: 496, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::RegisteredCore` (r:1 w:0)
+	/// Proof: `OcifStaking::RegisteredCore` (`max_values`: None, `max_size`: Some(477), added: 2952, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::CurrentEra` (r:1 w:0)
+	/// Proof: `OcifStaking::CurrentEra` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::GeneralStakerInfo` (r:1 w:1)
+	/// Proof: `OcifStaking::GeneralStakerInfo` (`max_values`: None, `max_size`: Some(269), added: 2744, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::CoreEraStake` (r:1 w:1)
+	/// Proof: `OcifStaking::CoreEraStake` (`max_values`: None, `max_size`: Some(54), added: 2529, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::Ledger` (r:1 w:1)
+	/// Proof: `OcifStaking::Ledger` (`max_values`: None, `max_size`: Some(265), added: 2740, mode: `MaxEncodedLen`)
+	/// Storage: `Balances::Locks` (r:1 w:1)
+	/// Proof: `Balances::Locks` (`max_values`: None, `max_size`: Some(1299), added: 3774, mode: `MaxEncodedLen`)
+	/// Storage: `Balances::Freezes` (r:1 w:0)
+	/// Proof: `Balances::Freezes` (`max_values`: None, `max_size`: Some(49), added: 2524, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::GeneralEraInfo` (r:1 w:1)
+	/// Proof: `OcifStaking::GeneralEraInfo` (`max_values`: None, `max_size`: Some(92), added: 2567, mode: `MaxEncodedLen`)
+	</span><span class="kw">fn </span>unstake() -&gt; Weight {
+		<span class="comment">// Proof Size summary in bytes:
+		//  Measured:  `397`
+		//  Estimated: `4764`
+		// Minimum execution time: 36_000_000 picoseconds.
+		</span>Weight::from_parts(<span class="number">37_000_000</span>, <span class="number">4764</span>)
+			.saturating_add(T::DbWeight::get().reads(<span class="number">9_u64</span>))
+			.saturating_add(T::DbWeight::get().writes(<span class="number">5_u64</span>))
+	}
+	<span class="doccomment">/// Storage: `OcifStaking::Halted` (r:1 w:0)
+	/// Proof: `OcifStaking::Halted` (`max_values`: Some(1), `max_size`: Some(1), added: 496, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::Ledger` (r:1 w:1)
+	/// Proof: `OcifStaking::Ledger` (`max_values`: None, `max_size`: Some(265), added: 2740, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::CurrentEra` (r:1 w:0)
+	/// Proof: `OcifStaking::CurrentEra` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
+	/// Storage: `Balances::Locks` (r:1 w:1)
+	/// Proof: `Balances::Locks` (`max_values`: None, `max_size`: Some(1299), added: 3774, mode: `MaxEncodedLen`)
+	/// Storage: `Balances::Freezes` (r:1 w:0)
+	/// Proof: `Balances::Freezes` (`max_values`: None, `max_size`: Some(49), added: 2524, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::GeneralEraInfo` (r:1 w:1)
+	/// Proof: `OcifStaking::GeneralEraInfo` (`max_values`: None, `max_size`: Some(92), added: 2567, mode: `MaxEncodedLen`)
+	</span><span class="kw">fn </span>withdraw_unstaked() -&gt; Weight {
+		<span class="comment">// Proof Size summary in bytes:
+		//  Measured:  `449`
+		//  Estimated: `4764`
+		// Minimum execution time: 31_000_000 picoseconds.
+		</span>Weight::from_parts(<span class="number">32_000_000</span>, <span class="number">4764</span>)
+			.saturating_add(T::DbWeight::get().reads(<span class="number">6_u64</span>))
+			.saturating_add(T::DbWeight::get().writes(<span class="number">3_u64</span>))
+	}
+	<span class="doccomment">/// Storage: `OcifStaking::Halted` (r:1 w:0)
+	/// Proof: `OcifStaking::Halted` (`max_values`: Some(1), `max_size`: Some(1), added: 496, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::GeneralStakerInfo` (r:1 w:1)
+	/// Proof: `OcifStaking::GeneralStakerInfo` (`max_values`: None, `max_size`: Some(269), added: 2744, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::CurrentEra` (r:1 w:0)
+	/// Proof: `OcifStaking::CurrentEra` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::CoreEraStake` (r:1 w:0)
+	/// Proof: `OcifStaking::CoreEraStake` (`max_values`: None, `max_size`: Some(54), added: 2529, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::GeneralEraInfo` (r:1 w:0)
+	/// Proof: `OcifStaking::GeneralEraInfo` (`max_values`: None, `max_size`: Some(92), added: 2567, mode: `MaxEncodedLen`)
+	</span><span class="kw">fn </span>staker_claim_rewards() -&gt; Weight {
+		<span class="comment">// Proof Size summary in bytes:
+		//  Measured:  `374`
+		//  Estimated: `3734`
+		// Minimum execution time: 18_000_000 picoseconds.
+		</span>Weight::from_parts(<span class="number">19_000_000</span>, <span class="number">3734</span>)
+			.saturating_add(T::DbWeight::get().reads(<span class="number">5_u64</span>))
+			.saturating_add(T::DbWeight::get().writes(<span class="number">1_u64</span>))
+	}
+	<span class="doccomment">/// Storage: `OcifStaking::Halted` (r:1 w:0)
+	/// Proof: `OcifStaking::Halted` (`max_values`: Some(1), `max_size`: Some(1), added: 496, mode: `MaxEncodedLen`)
+	/// Storage: `ParachainInfo::ParachainId` (r:1 w:0)
+	/// Proof: `ParachainInfo::ParachainId` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::CurrentEra` (r:1 w:0)
+	/// Proof: `OcifStaking::CurrentEra` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::CoreEraStake` (r:1 w:1)
+	/// Proof: `OcifStaking::CoreEraStake` (`max_values`: None, `max_size`: Some(54), added: 2529, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::GeneralEraInfo` (r:1 w:0)
+	/// Proof: `OcifStaking::GeneralEraInfo` (`max_values`: None, `max_size`: Some(92), added: 2567, mode: `MaxEncodedLen`)
+	</span><span class="kw">fn </span>core_claim_rewards() -&gt; Weight {
+		<span class="comment">// Proof Size summary in bytes:
+		//  Measured:  `377`
+		//  Estimated: `3557`
+		// Minimum execution time: 18_000_000 picoseconds.
+		</span>Weight::from_parts(<span class="number">19_000_000</span>, <span class="number">3557</span>)
+			.saturating_add(T::DbWeight::get().reads(<span class="number">5_u64</span>))
+			.saturating_add(T::DbWeight::get().writes(<span class="number">1_u64</span>))
+	}
+	<span class="doccomment">/// Storage: `OcifStaking::Halted` (r:1 w:1)
+	/// Proof: `OcifStaking::Halted` (`max_values`: Some(1), `max_size`: Some(1), added: 496, mode: `MaxEncodedLen`)
+	</span><span class="kw">fn </span>halt_unhalt_pallet() -&gt; Weight {
+		<span class="comment">// Proof Size summary in bytes:
+		//  Measured:  `4`
+		//  Estimated: `1486`
+		// Minimum execution time: 5_000_000 picoseconds.
+		</span>Weight::from_parts(<span class="number">5_000_000</span>, <span class="number">1486</span>)
+			.saturating_add(T::DbWeight::get().reads(<span class="number">1_u64</span>))
+			.saturating_add(T::DbWeight::get().writes(<span class="number">1_u64</span>))
+	}
+	<span class="doccomment">/// Storage: `OcifStaking::Halted` (r:1 w:0)
+	/// Proof: `OcifStaking::Halted` (`max_values`: Some(1), `max_size`: Some(1), added: 496, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::RegisteredCore` (r:1 w:0)
+	/// Proof: `OcifStaking::RegisteredCore` (`max_values`: None, `max_size`: Some(477), added: 2952, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::CurrentEra` (r:1 w:0)
+	/// Proof: `OcifStaking::CurrentEra` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::GeneralStakerInfo` (r:2 w:2)
+	/// Proof: `OcifStaking::GeneralStakerInfo` (`max_values`: None, `max_size`: Some(269), added: 2744, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::CoreEraStake` (r:2 w:2)
+	/// Proof: `OcifStaking::CoreEraStake` (`max_values`: None, `max_size`: Some(54), added: 2529, mode: `MaxEncodedLen`)
+	</span><span class="kw">fn </span>move_stake() -&gt; Weight {
+		<span class="comment">// Proof Size summary in bytes:
+		//  Measured:  `302`
+		//  Estimated: `6478`
+		// Minimum execution time: 24_000_000 picoseconds.
+		</span>Weight::from_parts(<span class="number">25_000_000</span>, <span class="number">6478</span>)
+			.saturating_add(T::DbWeight::get().reads(<span class="number">7_u64</span>))
+			.saturating_add(T::DbWeight::get().writes(<span class="number">4_u64</span>))
+	}
+}
 
-  <span class="comment">// For backwards compatibility and tests.
-  </span><span class="kw">impl </span>WeightInfo <span class="kw">for </span>() {
-	        <span class="doccomment">/// Storage: OcifStaking Halted (r:1 w:0)
-	        /// Proof: OcifStaking Halted (max_values: Some(1), max_size: Some(1), added: 496, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking RegisteredCore (r:1 w:1)
-	        /// Proof: OcifStaking RegisteredCore (max_values: None, max_size: Some(477), added: 2952, mode: MaxEncodedLen)
-	        /// Storage: System Account (r:1 w:1)
-	        /// Proof: System Account (max_values: None, max_size: Some(128), added: 2603, mode: MaxEncodedLen)
-	        /// The range of component `n` is `[0, 20]`.
-	        /// The range of component `d` is `[0, 300]`.
-	        /// The range of component `i` is `[0, 100]`.
-	    </span><span class="kw">fn </span>register_core(_n: u32, d: u32, i: u32, ) -&gt; Weight {
-		  <span class="comment">// Proof Size summary in bytes:
-		  //  Measured:  `144`
-		  //  Estimated: `3942`
-		  // Minimum execution time: 28_000_000 picoseconds.
-		  </span>Weight::from_parts(<span class="number">28_865_871</span>, <span class="number">3942</span>)
-			    <span class="comment">// Standard Error: 170
-			    </span>.saturating_add(Weight::from_parts(<span class="number">1_142</span>, <span class="number">0</span>).saturating_mul(d.into()))
-			    <span class="comment">// Standard Error: 509
-			    </span>.saturating_add(Weight::from_parts(<span class="number">3_348</span>, <span class="number">0</span>).saturating_mul(i.into()))
-			    .saturating_add(RocksDbWeight::get().reads(<span class="number">3_u64</span>))
-			    .saturating_add(RocksDbWeight::get().writes(<span class="number">2_u64</span>))
-	    }
-	        <span class="doccomment">/// Storage: OcifStaking Halted (r:1 w:0)
-	        /// Proof: OcifStaking Halted (max_values: Some(1), max_size: Some(1), added: 496, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking RegisteredCore (r:1 w:1)
-	        /// Proof: OcifStaking RegisteredCore (max_values: None, max_size: Some(477), added: 2952, mode: MaxEncodedLen)
-	        /// The range of component `n` is `[0, 20]`.
-	        /// The range of component `d` is `[0, 300]`.
-	        /// The range of component `i` is `[0, 100]`.
-	    </span><span class="kw">fn </span>change_core_metadata(n: u32, d: u32, i: u32, ) -&gt; Weight {
-		  <span class="comment">// Proof Size summary in bytes:
-		  //  Measured:  `86`
-		  //  Estimated: `3942`
-		  // Minimum execution time: 14_000_000 picoseconds.
-		  </span>Weight::from_parts(<span class="number">14_052_844</span>, <span class="number">3942</span>)
-			    <span class="comment">// Standard Error: 1_584
-			    </span>.saturating_add(Weight::from_parts(<span class="number">6_072</span>, <span class="number">0</span>).saturating_mul(n.into()))
-			    <span class="comment">// Standard Error: 108
-			    </span>.saturating_add(Weight::from_parts(<span class="number">2_023</span>, <span class="number">0</span>).saturating_mul(d.into()))
-			    <span class="comment">// Standard Error: 324
-			    </span>.saturating_add(Weight::from_parts(<span class="number">2_933</span>, <span class="number">0</span>).saturating_mul(i.into()))
-			    .saturating_add(RocksDbWeight::get().reads(<span class="number">2_u64</span>))
-			    .saturating_add(RocksDbWeight::get().writes(<span class="number">1_u64</span>))
-	    }
-	        <span class="doccomment">/// Storage: OcifStaking Halted (r:1 w:0)
-	        /// Proof: OcifStaking Halted (max_values: Some(1), max_size: Some(1), added: 496, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking RegisteredCore (r:1 w:1)
-	        /// Proof: OcifStaking RegisteredCore (max_values: None, max_size: Some(477), added: 2952, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking CurrentEra (r:1 w:0)
-	        /// Proof: OcifStaking CurrentEra (max_values: Some(1), max_size: Some(4), added: 499, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking GeneralStakerInfo (r:1 w:0)
-	        /// Proof: OcifStaking GeneralStakerInfo (max_values: None, max_size: Some(269), added: 2744, mode: MaxEncodedLen)
-	        /// Storage: System Account (r:1 w:1)
-	        /// Proof: System Account (max_values: None, max_size: Some(128), added: 2603, mode: MaxEncodedLen)
-	    </span><span class="kw">fn </span>unregister_core() -&gt; Weight {
-		  <span class="comment">// Proof Size summary in bytes:
-		  //  Measured:  `268`
-		  //  Estimated: `3942`
-		  // Minimum execution time: 35_000_000 picoseconds.
-		  </span>Weight::from_parts(<span class="number">36_000_000</span>, <span class="number">3942</span>)
-			    .saturating_add(RocksDbWeight::get().reads(<span class="number">5_u64</span>))
-			    .saturating_add(RocksDbWeight::get().writes(<span class="number">2_u64</span>))
-	    }
-	        <span class="doccomment">/// Storage: OcifStaking Halted (r:1 w:0)
-	        /// Proof: OcifStaking Halted (max_values: Some(1), max_size: Some(1), added: 496, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking RegisteredCore (r:1 w:0)
-	        /// Proof: OcifStaking RegisteredCore (max_values: None, max_size: Some(477), added: 2952, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking Ledger (r:1 w:1)
-	        /// Proof: OcifStaking Ledger (max_values: None, max_size: Some(265), added: 2740, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking CurrentEra (r:1 w:0)
-	        /// Proof: OcifStaking CurrentEra (max_values: Some(1), max_size: Some(4), added: 499, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking CoreEraStake (r:1 w:1)
-	        /// Proof: OcifStaking CoreEraStake (max_values: None, max_size: Some(54), added: 2529, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking GeneralStakerInfo (r:1 w:1)
-	        /// Proof: OcifStaking GeneralStakerInfo (max_values: None, max_size: Some(269), added: 2744, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking GeneralEraInfo (r:1 w:1)
-	        /// Proof: OcifStaking GeneralEraInfo (max_values: None, max_size: Some(92), added: 2567, mode: MaxEncodedLen)
-	        /// Storage: Balances Locks (r:1 w:1)
-	        /// Proof: Balances Locks (max_values: None, max_size: Some(1299), added: 3774, mode: MaxEncodedLen)
-	        /// Storage: Balances Freezes (r:1 w:0)
-	        /// Proof: Balances Freezes (max_values: None, max_size: Some(49), added: 2524, mode: MaxEncodedLen)
-	    </span><span class="kw">fn </span>stake() -&gt; Weight {
-		  <span class="comment">// Proof Size summary in bytes:
-		  //  Measured:  `86`
-		  //  Estimated: `4764`
-		  // Minimum execution time: 47_000_000 picoseconds.
-		  </span>Weight::from_parts(<span class="number">48_000_000</span>, <span class="number">4764</span>)
-			    .saturating_add(RocksDbWeight::get().reads(<span class="number">9_u64</span>))
-			    .saturating_add(RocksDbWeight::get().writes(<span class="number">5_u64</span>))
-	    }
-	        <span class="doccomment">/// Storage: OcifStaking Halted (r:1 w:0)
-	        /// Proof: OcifStaking Halted (max_values: Some(1), max_size: Some(1), added: 496, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking RegisteredCore (r:1 w:0)
-	        /// Proof: OcifStaking RegisteredCore (max_values: None, max_size: Some(477), added: 2952, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking CurrentEra (r:1 w:0)
-	        /// Proof: OcifStaking CurrentEra (max_values: Some(1), max_size: Some(4), added: 499, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking GeneralStakerInfo (r:1 w:1)
-	        /// Proof: OcifStaking GeneralStakerInfo (max_values: None, max_size: Some(269), added: 2744, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking CoreEraStake (r:1 w:1)
-	        /// Proof: OcifStaking CoreEraStake (max_values: None, max_size: Some(54), added: 2529, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking Ledger (r:1 w:1)
-	        /// Proof: OcifStaking Ledger (max_values: None, max_size: Some(265), added: 2740, mode: MaxEncodedLen)
-	        /// Storage: Balances Locks (r:1 w:1)
-	        /// Proof: Balances Locks (max_values: None, max_size: Some(1299), added: 3774, mode: MaxEncodedLen)
-	        /// Storage: Balances Freezes (r:1 w:0)
-	        /// Proof: Balances Freezes (max_values: None, max_size: Some(49), added: 2524, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking GeneralEraInfo (r:1 w:1)
-	        /// Proof: OcifStaking GeneralEraInfo (max_values: None, max_size: Some(92), added: 2567, mode: MaxEncodedLen)
-	    </span><span class="kw">fn </span>unstake() -&gt; Weight {
-		  <span class="comment">// Proof Size summary in bytes:
-		  //  Measured:  `397`
-		  //  Estimated: `4764`
-		  // Minimum execution time: 45_000_000 picoseconds.
-		  </span>Weight::from_parts(<span class="number">46_000_000</span>, <span class="number">4764</span>)
-			    .saturating_add(RocksDbWeight::get().reads(<span class="number">9_u64</span>))
-			    .saturating_add(RocksDbWeight::get().writes(<span class="number">5_u64</span>))
-	    }
-	        <span class="doccomment">/// Storage: OcifStaking Halted (r:1 w:0)
-	        /// Proof: OcifStaking Halted (max_values: Some(1), max_size: Some(1), added: 496, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking Ledger (r:1 w:1)
-	        /// Proof: OcifStaking Ledger (max_values: None, max_size: Some(265), added: 2740, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking CurrentEra (r:1 w:0)
-	        /// Proof: OcifStaking CurrentEra (max_values: Some(1), max_size: Some(4), added: 499, mode: MaxEncodedLen)
-	        /// Storage: Balances Locks (r:1 w:1)
-	        /// Proof: Balances Locks (max_values: None, max_size: Some(1299), added: 3774, mode: MaxEncodedLen)
-	        /// Storage: Balances Freezes (r:1 w:0)
-	        /// Proof: Balances Freezes (max_values: None, max_size: Some(49), added: 2524, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking GeneralEraInfo (r:1 w:1)
-	        /// Proof: OcifStaking GeneralEraInfo (max_values: None, max_size: Some(92), added: 2567, mode: MaxEncodedLen)
-	    </span><span class="kw">fn </span>withdraw_unstaked() -&gt; Weight {
-		  <span class="comment">// Proof Size summary in bytes:
-		  //  Measured:  `449`
-		  //  Estimated: `4764`
-		  // Minimum execution time: 63_000_000 picoseconds.
-		  </span>Weight::from_parts(<span class="number">69_000_000</span>, <span class="number">4764</span>)
-			    .saturating_add(RocksDbWeight::get().reads(<span class="number">6_u64</span>))
-			    .saturating_add(RocksDbWeight::get().writes(<span class="number">3_u64</span>))
-	    }
-	        <span class="doccomment">/// Storage: OcifStaking Halted (r:1 w:0)
-	        /// Proof: OcifStaking Halted (max_values: Some(1), max_size: Some(1), added: 496, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking GeneralStakerInfo (r:1 w:1)
-	        /// Proof: OcifStaking GeneralStakerInfo (max_values: None, max_size: Some(269), added: 2744, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking CurrentEra (r:1 w:0)
-	        /// Proof: OcifStaking CurrentEra (max_values: Some(1), max_size: Some(4), added: 499, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking CoreEraStake (r:1 w:0)
-	        /// Proof: OcifStaking CoreEraStake (max_values: None, max_size: Some(54), added: 2529, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking GeneralEraInfo (r:1 w:0)
-	        /// Proof: OcifStaking GeneralEraInfo (max_values: None, max_size: Some(92), added: 2567, mode: MaxEncodedLen)
-	    </span><span class="kw">fn </span>staker_claim_rewards() -&gt; Weight {
-		  <span class="comment">// Proof Size summary in bytes:
-		  //  Measured:  `374`
-		  //  Estimated: `3734`
-		  // Minimum execution time: 24_000_000 picoseconds.
-		  </span>Weight::from_parts(<span class="number">26_000_000</span>, <span class="number">3734</span>)
-			    .saturating_add(RocksDbWeight::get().reads(<span class="number">5_u64</span>))
-			    .saturating_add(RocksDbWeight::get().writes(<span class="number">1_u64</span>))
-	    }
-	        <span class="doccomment">/// Storage: OcifStaking Halted (r:1 w:0)
-	        /// Proof: OcifStaking Halted (max_values: Some(1), max_size: Some(1), added: 496, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking CurrentEra (r:1 w:0)
-	        /// Proof: OcifStaking CurrentEra (max_values: Some(1), max_size: Some(4), added: 499, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking CoreEraStake (r:1 w:1)
-	        /// Proof: OcifStaking CoreEraStake (max_values: None, max_size: Some(54), added: 2529, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking GeneralEraInfo (r:1 w:0)
-	        /// Proof: OcifStaking GeneralEraInfo (max_values: None, max_size: Some(92), added: 2567, mode: MaxEncodedLen)
-	    </span><span class="kw">fn </span>core_claim_rewards() -&gt; Weight {
-		  <span class="comment">// Proof Size summary in bytes:
-		  //  Measured:  `308`
-		  //  Estimated: `3557`
-		  // Minimum execution time: 22_000_000 picoseconds.
-		  </span>Weight::from_parts(<span class="number">22_000_000</span>, <span class="number">3557</span>)
-			    .saturating_add(RocksDbWeight::get().reads(<span class="number">4_u64</span>))
-			    .saturating_add(RocksDbWeight::get().writes(<span class="number">1_u64</span>))
-	    }
-	        <span class="doccomment">/// Storage: OcifStaking Halted (r:1 w:1)
-	        /// Proof: OcifStaking Halted (max_values: Some(1), max_size: Some(1), added: 496, mode: MaxEncodedLen)
-	    </span><span class="kw">fn </span>halt_unhalt_pallet() -&gt; Weight {
-		  <span class="comment">// Proof Size summary in bytes:
-		  //  Measured:  `4`
-		  //  Estimated: `1486`
-		  // Minimum execution time: 8_000_000 picoseconds.
-		  </span>Weight::from_parts(<span class="number">9_000_000</span>, <span class="number">1486</span>)
-			    .saturating_add(RocksDbWeight::get().reads(<span class="number">1_u64</span>))
-			    .saturating_add(RocksDbWeight::get().writes(<span class="number">1_u64</span>))
-	    }
-	        <span class="doccomment">/// Storage: OcifStaking Halted (r:1 w:0)
-	        /// Proof: OcifStaking Halted (max_values: Some(1), max_size: Some(1), added: 496, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking RegisteredCore (r:1 w:0)
-	        /// Proof: OcifStaking RegisteredCore (max_values: None, max_size: Some(477), added: 2952, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking CurrentEra (r:1 w:0)
-	        /// Proof: OcifStaking CurrentEra (max_values: Some(1), max_size: Some(4), added: 499, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking GeneralStakerInfo (r:2 w:2)
-	        /// Proof: OcifStaking GeneralStakerInfo (max_values: None, max_size: Some(269), added: 2744, mode: MaxEncodedLen)
-	        /// Storage: OcifStaking CoreEraStake (r:2 w:2)
-	        /// Proof: OcifStaking CoreEraStake (max_values: None, max_size: Some(54), added: 2529, mode: MaxEncodedLen)
-	    </span><span class="kw">fn </span>move_stake() -&gt; Weight {
-		  <span class="comment">// Proof Size summary in bytes:
-		  //  Measured:  `302`
-		  //  Estimated: `6478`
-		  // Minimum execution time: 32_000_000 picoseconds.
-		  </span>Weight::from_parts(<span class="number">33_000_000</span>, <span class="number">6478</span>)
-			    .saturating_add(RocksDbWeight::get().reads(<span class="number">7_u64</span>))
-			    .saturating_add(RocksDbWeight::get().writes(<span class="number">4_u64</span>))
-	    }
-  }
+<span class="comment">// For backwards compatibility and tests.
+</span><span class="kw">impl </span>WeightInfo <span class="kw">for </span>() {
+	<span class="doccomment">/// Storage: `OcifStaking::Halted` (r:1 w:0)
+	/// Proof: `OcifStaking::Halted` (`max_values`: Some(1), `max_size`: Some(1), added: 496, mode: `MaxEncodedLen`)
+	/// Storage: `ParachainInfo::ParachainId` (r:1 w:0)
+	/// Proof: `ParachainInfo::ParachainId` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::RegisteredCore` (r:1 w:1)
+	/// Proof: `OcifStaking::RegisteredCore` (`max_values`: None, `max_size`: Some(477), added: 2952, mode: `MaxEncodedLen`)
+	/// Storage: `System::Account` (r:1 w:1)
+	/// Proof: `System::Account` (`max_values`: None, `max_size`: Some(128), added: 2603, mode: `MaxEncodedLen`)
+	/// The range of component `n` is `[0, 20]`.
+	/// The range of component `d` is `[0, 300]`.
+	/// The range of component `i` is `[0, 100]`.
+	</span><span class="kw">fn </span>register_core(_n: u32, _d: u32, _i: u32, ) -&gt; Weight {
+		<span class="comment">// Proof Size summary in bytes:
+		//  Measured:  `213`
+		//  Estimated: `3942`
+		// Minimum execution time: 22_000_000 picoseconds.
+		</span>Weight::from_parts(<span class="number">24_293_021</span>, <span class="number">3942</span>)
+			.saturating_add(RocksDbWeight::get().reads(<span class="number">4_u64</span>))
+			.saturating_add(RocksDbWeight::get().writes(<span class="number">2_u64</span>))
+	}
+	<span class="doccomment">/// Storage: `OcifStaking::Halted` (r:1 w:0)
+	/// Proof: `OcifStaking::Halted` (`max_values`: Some(1), `max_size`: Some(1), added: 496, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::RegisteredCore` (r:1 w:1)
+	/// Proof: `OcifStaking::RegisteredCore` (`max_values`: None, `max_size`: Some(477), added: 2952, mode: `MaxEncodedLen`)
+	/// The range of component `n` is `[0, 20]`.
+	/// The range of component `d` is `[0, 300]`.
+	/// The range of component `i` is `[0, 100]`.
+	</span><span class="kw">fn </span>change_core_metadata(n: u32, d: u32, i: u32, ) -&gt; Weight {
+		<span class="comment">// Proof Size summary in bytes:
+		//  Measured:  `86`
+		//  Estimated: `3942`
+		// Minimum execution time: 9_000_000 picoseconds.
+		</span>Weight::from_parts(<span class="number">9_593_278</span>, <span class="number">3942</span>)
+			<span class="comment">// Standard Error: 890
+			</span>.saturating_add(Weight::from_parts(<span class="number">4_471</span>, <span class="number">0</span>).saturating_mul(n.into()))
+			<span class="comment">// Standard Error: 61
+			</span>.saturating_add(Weight::from_parts(<span class="number">856</span>, <span class="number">0</span>).saturating_mul(d.into()))
+			<span class="comment">// Standard Error: 182
+			</span>.saturating_add(Weight::from_parts(<span class="number">1_028</span>, <span class="number">0</span>).saturating_mul(i.into()))
+			.saturating_add(RocksDbWeight::get().reads(<span class="number">2_u64</span>))
+			.saturating_add(RocksDbWeight::get().writes(<span class="number">1_u64</span>))
+	}
+	<span class="doccomment">/// Storage: `OcifStaking::Halted` (r:1 w:0)
+	/// Proof: `OcifStaking::Halted` (`max_values`: Some(1), `max_size`: Some(1), added: 496, mode: `MaxEncodedLen`)
+	/// Storage: `ParachainInfo::ParachainId` (r:1 w:0)
+	/// Proof: `ParachainInfo::ParachainId` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::RegisteredCore` (r:1 w:1)
+	/// Proof: `OcifStaking::RegisteredCore` (`max_values`: None, `max_size`: Some(477), added: 2952, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::CurrentEra` (r:1 w:0)
+	/// Proof: `OcifStaking::CurrentEra` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::GeneralStakerInfo` (r:1 w:0)
+	/// Proof: `OcifStaking::GeneralStakerInfo` (`max_values`: None, `max_size`: Some(269), added: 2744, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::CoreEraStake` (r:1 w:1)
+	/// Proof: `OcifStaking::CoreEraStake` (`max_values`: None, `max_size`: Some(54), added: 2529, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::GeneralEraInfo` (r:1 w:1)
+	/// Proof: `OcifStaking::GeneralEraInfo` (`max_values`: None, `max_size`: Some(92), added: 2567, mode: `MaxEncodedLen`)
+	/// Storage: `System::Account` (r:1 w:1)
+	/// Proof: `System::Account` (`max_values`: None, `max_size`: Some(128), added: 2603, mode: `MaxEncodedLen`)
+	/// Storage: `MessageQueue::BookStateFor` (r:1 w:1)
+	/// Proof: `MessageQueue::BookStateFor` (`max_values`: None, `max_size`: Some(55), added: 2530, mode: `MaxEncodedLen`)
+	/// Storage: `MessageQueue::ServiceHead` (r:1 w:1)
+	/// Proof: `MessageQueue::ServiceHead` (`max_values`: Some(1), `max_size`: Some(6), added: 501, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::UnregisteredCoreStakeInfo` (r:0 w:1)
+	/// Proof: `OcifStaking::UnregisteredCoreStakeInfo` (`max_values`: None, `max_size`: Some(42), added: 2517, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::UnregisteredCoreStakers` (r:0 w:1)
+	/// Proof: `OcifStaking::UnregisteredCoreStakers` (`max_values`: None, `max_size`: Some(320022), added: 322497, mode: `MaxEncodedLen`)
+	/// Storage: `MessageQueue::Pages` (r:0 w:1)
+	/// Proof: `MessageQueue::Pages` (`max_values`: None, `max_size`: Some(134194), added: 136669, mode: `MaxEncodedLen`)
+	</span><span class="kw">fn </span>unregister_core() -&gt; Weight {
+		<span class="comment">// Proof Size summary in bytes:
+		//  Measured:  `343`
+		//  Estimated: `3942`
+		// Minimum execution time: 44_000_000 picoseconds.
+		</span>Weight::from_parts(<span class="number">45_000_000</span>, <span class="number">3942</span>)
+			.saturating_add(RocksDbWeight::get().reads(<span class="number">10_u64</span>))
+			.saturating_add(RocksDbWeight::get().writes(<span class="number">9_u64</span>))
+	}
+	<span class="doccomment">/// Storage: `OcifStaking::Halted` (r:1 w:0)
+	/// Proof: `OcifStaking::Halted` (`max_values`: Some(1), `max_size`: Some(1), added: 496, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::RegisteredCore` (r:1 w:0)
+	/// Proof: `OcifStaking::RegisteredCore` (`max_values`: None, `max_size`: Some(477), added: 2952, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::Ledger` (r:1 w:1)
+	/// Proof: `OcifStaking::Ledger` (`max_values`: None, `max_size`: Some(265), added: 2740, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::CurrentEra` (r:1 w:0)
+	/// Proof: `OcifStaking::CurrentEra` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::CoreEraStake` (r:1 w:1)
+	/// Proof: `OcifStaking::CoreEraStake` (`max_values`: None, `max_size`: Some(54), added: 2529, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::GeneralStakerInfo` (r:1 w:1)
+	/// Proof: `OcifStaking::GeneralStakerInfo` (`max_values`: None, `max_size`: Some(269), added: 2744, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::GeneralEraInfo` (r:1 w:1)
+	/// Proof: `OcifStaking::GeneralEraInfo` (`max_values`: None, `max_size`: Some(92), added: 2567, mode: `MaxEncodedLen`)
+	/// Storage: `Balances::Locks` (r:1 w:1)
+	/// Proof: `Balances::Locks` (`max_values`: None, `max_size`: Some(1299), added: 3774, mode: `MaxEncodedLen`)
+	/// Storage: `Balances::Freezes` (r:1 w:0)
+	/// Proof: `Balances::Freezes` (`max_values`: None, `max_size`: Some(49), added: 2524, mode: `MaxEncodedLen`)
+	</span><span class="kw">fn </span>stake() -&gt; Weight {
+		<span class="comment">// Proof Size summary in bytes:
+		//  Measured:  `86`
+		//  Estimated: `4764`
+		// Minimum execution time: 34_000_000 picoseconds.
+		</span>Weight::from_parts(<span class="number">35_000_000</span>, <span class="number">4764</span>)
+			.saturating_add(RocksDbWeight::get().reads(<span class="number">9_u64</span>))
+			.saturating_add(RocksDbWeight::get().writes(<span class="number">5_u64</span>))
+	}
+	<span class="doccomment">/// Storage: `OcifStaking::Halted` (r:1 w:0)
+	/// Proof: `OcifStaking::Halted` (`max_values`: Some(1), `max_size`: Some(1), added: 496, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::RegisteredCore` (r:1 w:0)
+	/// Proof: `OcifStaking::RegisteredCore` (`max_values`: None, `max_size`: Some(477), added: 2952, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::CurrentEra` (r:1 w:0)
+	/// Proof: `OcifStaking::CurrentEra` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::GeneralStakerInfo` (r:1 w:1)
+	/// Proof: `OcifStaking::GeneralStakerInfo` (`max_values`: None, `max_size`: Some(269), added: 2744, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::CoreEraStake` (r:1 w:1)
+	/// Proof: `OcifStaking::CoreEraStake` (`max_values`: None, `max_size`: Some(54), added: 2529, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::Ledger` (r:1 w:1)
+	/// Proof: `OcifStaking::Ledger` (`max_values`: None, `max_size`: Some(265), added: 2740, mode: `MaxEncodedLen`)
+	/// Storage: `Balances::Locks` (r:1 w:1)
+	/// Proof: `Balances::Locks` (`max_values`: None, `max_size`: Some(1299), added: 3774, mode: `MaxEncodedLen`)
+	/// Storage: `Balances::Freezes` (r:1 w:0)
+	/// Proof: `Balances::Freezes` (`max_values`: None, `max_size`: Some(49), added: 2524, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::GeneralEraInfo` (r:1 w:1)
+	/// Proof: `OcifStaking::GeneralEraInfo` (`max_values`: None, `max_size`: Some(92), added: 2567, mode: `MaxEncodedLen`)
+	</span><span class="kw">fn </span>unstake() -&gt; Weight {
+		<span class="comment">// Proof Size summary in bytes:
+		//  Measured:  `397`
+		//  Estimated: `4764`
+		// Minimum execution time: 36_000_000 picoseconds.
+		</span>Weight::from_parts(<span class="number">37_000_000</span>, <span class="number">4764</span>)
+			.saturating_add(RocksDbWeight::get().reads(<span class="number">9_u64</span>))
+			.saturating_add(RocksDbWeight::get().writes(<span class="number">5_u64</span>))
+	}
+	<span class="doccomment">/// Storage: `OcifStaking::Halted` (r:1 w:0)
+	/// Proof: `OcifStaking::Halted` (`max_values`: Some(1), `max_size`: Some(1), added: 496, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::Ledger` (r:1 w:1)
+	/// Proof: `OcifStaking::Ledger` (`max_values`: None, `max_size`: Some(265), added: 2740, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::CurrentEra` (r:1 w:0)
+	/// Proof: `OcifStaking::CurrentEra` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
+	/// Storage: `Balances::Locks` (r:1 w:1)
+	/// Proof: `Balances::Locks` (`max_values`: None, `max_size`: Some(1299), added: 3774, mode: `MaxEncodedLen`)
+	/// Storage: `Balances::Freezes` (r:1 w:0)
+	/// Proof: `Balances::Freezes` (`max_values`: None, `max_size`: Some(49), added: 2524, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::GeneralEraInfo` (r:1 w:1)
+	/// Proof: `OcifStaking::GeneralEraInfo` (`max_values`: None, `max_size`: Some(92), added: 2567, mode: `MaxEncodedLen`)
+	</span><span class="kw">fn </span>withdraw_unstaked() -&gt; Weight {
+		<span class="comment">// Proof Size summary in bytes:
+		//  Measured:  `449`
+		//  Estimated: `4764`
+		// Minimum execution time: 31_000_000 picoseconds.
+		</span>Weight::from_parts(<span class="number">32_000_000</span>, <span class="number">4764</span>)
+			.saturating_add(RocksDbWeight::get().reads(<span class="number">6_u64</span>))
+			.saturating_add(RocksDbWeight::get().writes(<span class="number">3_u64</span>))
+	}
+	<span class="doccomment">/// Storage: `OcifStaking::Halted` (r:1 w:0)
+	/// Proof: `OcifStaking::Halted` (`max_values`: Some(1), `max_size`: Some(1), added: 496, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::GeneralStakerInfo` (r:1 w:1)
+	/// Proof: `OcifStaking::GeneralStakerInfo` (`max_values`: None, `max_size`: Some(269), added: 2744, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::CurrentEra` (r:1 w:0)
+	/// Proof: `OcifStaking::CurrentEra` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::CoreEraStake` (r:1 w:0)
+	/// Proof: `OcifStaking::CoreEraStake` (`max_values`: None, `max_size`: Some(54), added: 2529, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::GeneralEraInfo` (r:1 w:0)
+	/// Proof: `OcifStaking::GeneralEraInfo` (`max_values`: None, `max_size`: Some(92), added: 2567, mode: `MaxEncodedLen`)
+	</span><span class="kw">fn </span>staker_claim_rewards() -&gt; Weight {
+		<span class="comment">// Proof Size summary in bytes:
+		//  Measured:  `374`
+		//  Estimated: `3734`
+		// Minimum execution time: 18_000_000 picoseconds.
+		</span>Weight::from_parts(<span class="number">19_000_000</span>, <span class="number">3734</span>)
+			.saturating_add(RocksDbWeight::get().reads(<span class="number">5_u64</span>))
+			.saturating_add(RocksDbWeight::get().writes(<span class="number">1_u64</span>))
+	}
+	<span class="doccomment">/// Storage: `OcifStaking::Halted` (r:1 w:0)
+	/// Proof: `OcifStaking::Halted` (`max_values`: Some(1), `max_size`: Some(1), added: 496, mode: `MaxEncodedLen`)
+	/// Storage: `ParachainInfo::ParachainId` (r:1 w:0)
+	/// Proof: `ParachainInfo::ParachainId` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::CurrentEra` (r:1 w:0)
+	/// Proof: `OcifStaking::CurrentEra` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::CoreEraStake` (r:1 w:1)
+	/// Proof: `OcifStaking::CoreEraStake` (`max_values`: None, `max_size`: Some(54), added: 2529, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::GeneralEraInfo` (r:1 w:0)
+	/// Proof: `OcifStaking::GeneralEraInfo` (`max_values`: None, `max_size`: Some(92), added: 2567, mode: `MaxEncodedLen`)
+	</span><span class="kw">fn </span>core_claim_rewards() -&gt; Weight {
+		<span class="comment">// Proof Size summary in bytes:
+		//  Measured:  `377`
+		//  Estimated: `3557`
+		// Minimum execution time: 18_000_000 picoseconds.
+		</span>Weight::from_parts(<span class="number">19_000_000</span>, <span class="number">3557</span>)
+			.saturating_add(RocksDbWeight::get().reads(<span class="number">5_u64</span>))
+			.saturating_add(RocksDbWeight::get().writes(<span class="number">1_u64</span>))
+	}
+	<span class="doccomment">/// Storage: `OcifStaking::Halted` (r:1 w:1)
+	/// Proof: `OcifStaking::Halted` (`max_values`: Some(1), `max_size`: Some(1), added: 496, mode: `MaxEncodedLen`)
+	</span><span class="kw">fn </span>halt_unhalt_pallet() -&gt; Weight {
+		<span class="comment">// Proof Size summary in bytes:
+		//  Measured:  `4`
+		//  Estimated: `1486`
+		// Minimum execution time: 5_000_000 picoseconds.
+		</span>Weight::from_parts(<span class="number">5_000_000</span>, <span class="number">1486</span>)
+			.saturating_add(RocksDbWeight::get().reads(<span class="number">1_u64</span>))
+			.saturating_add(RocksDbWeight::get().writes(<span class="number">1_u64</span>))
+	}
+	<span class="doccomment">/// Storage: `OcifStaking::Halted` (r:1 w:0)
+	/// Proof: `OcifStaking::Halted` (`max_values`: Some(1), `max_size`: Some(1), added: 496, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::RegisteredCore` (r:1 w:0)
+	/// Proof: `OcifStaking::RegisteredCore` (`max_values`: None, `max_size`: Some(477), added: 2952, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::CurrentEra` (r:1 w:0)
+	/// Proof: `OcifStaking::CurrentEra` (`max_values`: Some(1), `max_size`: Some(4), added: 499, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::GeneralStakerInfo` (r:2 w:2)
+	/// Proof: `OcifStaking::GeneralStakerInfo` (`max_values`: None, `max_size`: Some(269), added: 2744, mode: `MaxEncodedLen`)
+	/// Storage: `OcifStaking::CoreEraStake` (r:2 w:2)
+	/// Proof: `OcifStaking::CoreEraStake` (`max_values`: None, `max_size`: Some(54), added: 2529, mode: `MaxEncodedLen`)
+	</span><span class="kw">fn </span>move_stake() -&gt; Weight {
+		<span class="comment">// Proof Size summary in bytes:
+		//  Measured:  `302`
+		//  Estimated: `6478`
+		// Minimum execution time: 24_000_000 picoseconds.
+		</span>Weight::from_parts(<span class="number">25_000_000</span>, <span class="number">6478</span>)
+			.saturating_add(RocksDbWeight::get().reads(<span class="number">7_u64</span>))
+			.saturating_add(RocksDbWeight::get().writes(<span class="number">4_u64</span>))
+	}
+}
 </code></pre></div></section></main></body></html>
